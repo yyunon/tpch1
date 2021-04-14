@@ -1,0 +1,18 @@
+#-----------------------------------------------------------
+# Vivado v2020.1 (64-bit)
+# SW Build 2902540 on Wed May 27 19:54:35 MDT 2020
+# IP Build 2902112 on Wed May 27 22:43:36 MDT 2020
+# Start of session at: Mon Apr 12 02:50:30 2021
+# Process ID: 342256
+# Current directory: /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch6/1DDR/verif/scripts
+# Command line: vivado
+# Log file: /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch6/1DDR/verif/scripts/vivado.log
+# Journal file: /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch6/1DDR/verif/scripts/vivado.jou
+#-----------------------------------------------------------
+start_gui
+source ./open_waves.tcl
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch6/1DDR/verif/scripts/tb.wcfg
+save_wave_config {/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch6/1DDR/verif/scripts/tb.wcfg}
+save_wave_config {/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch6/1DDR/verif/scripts/tb.wcfg}
+close_sim
+close_project

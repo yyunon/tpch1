@@ -1,0 +1,6 @@
+*/work/
+*/xsim.dir/
+*.log
+*.pb
+*.swp
+.hdl_checker.config
