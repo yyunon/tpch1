@@ -27,8 +27,8 @@ USE work.Stream_pkg.ALL;
 USE work.Tpch_pkg.ALL;
 --USE work.fixed_generic_pkg_mod.ALL;
 
-LIBRARY ieee_proposed;
-USE ieee_proposed.fixed_pkg.ALL;
+--LIBRARY ieee_proposed;
+--USE ieee_proposed.fixed_pkg.ALL;
 ENTITY SumOp IS
   GENERIC (
 
