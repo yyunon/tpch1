@@ -35,45 +35,47 @@ Z4 OV;C;2020.1;71
 o-permissive -quiet -work /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/.hdl_checker/default_library -defercheck -nocheck -explicit
 Z5 tExplicit 1 CvgOpt 0
 Epricesummary
-Z6 w1618408267
+Z6 w1618421494
 R1
 R2
 R3
-!i122 1
+!i122 97
 R0
-Z7 8/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/PriceSummary.gen.vhd
-Z8 F/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/PriceSummary.gen.vhd
+8/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/PriceSummary.gen.vhd
+F/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/PriceSummary.gen.vhd
 l0
 L21 1
-VhAogRZjg<Xo]?WIb`TmiV0
-!s100 mYba_Xi?mWDjZko]mfcD33
+VTRHJj?Q5V6jKIMPNW2hnC3
+!s100 W9cO2Bc^T31NHDQJE1zO>2
 R4
 32
-Z9 !s110 1618408978
+!s110 1618421497
 !i10b 1
-Z10 !s108 1618408978.000000
-Z11 !s90 -modelsimini|/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/.hdl_checker/modelsim.ini|-quiet|-work|/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/.hdl_checker/default_library|-check_synthesis|-lint|-rangecheck|-pedanticerrors|-explicit|/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/PriceSummary.gen.vhd|
+!s108 1618421496.000000
+!s90 -modelsimini|/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/.hdl_checker/modelsim.ini|-quiet|-work|/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/.hdl_checker/default_library|-check_synthesis|-lint|-rangecheck|-pedanticerrors|-explicit|/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/PriceSummary.gen.vhd|
 !s107 /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/PriceSummary.gen.vhd|
 !i113 1
-Z12 o-quiet -work /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/.hdl_checker/default_library -check_synthesis -lint -rangecheck -pedanticerrors -explicit
+Z7 o-quiet -work /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/.hdl_checker/default_library -check_synthesis -lint -rangecheck -pedanticerrors -explicit
 R5
 Aimplementation
 R1
 R2
 R3
 DEx4 work 12 pricesummary 0 22 hAogRZjg<Xo]?WIb`TmiV0
-!i122 1
+!i122 70
 l159
-L158 3
-VkZzbW0J_]9nTgK^05c8P43
-!s100 4O]C1QRSlji7^AI5K][fG2
+L158 4
+VGiFW1CH4c>h^im:Q@jV_?1
+!s100 =6<fJ9D1KONRn2efN[f1a0
 R4
 32
-R9
+!s110 1618410436
 !i10b 1
-R10
-R11
-Z13 !s107 /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/PriceSummary.gen.vhd|
+!s108 1618410436.000000
+!s90 -modelsimini|/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/.hdl_checker/modelsim.ini|-quiet|-work|/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/.hdl_checker/default_library|-check_synthesis|-lint|-rangecheck|-pedanticerrors|-explicit|/tmp/tmpaaoa5pm5.vhd|
+!s107 /tmp/tmpaaoa5pm5.vhd|
 !i113 1
-R12
+R7
 R5
+F/tmp/tmpaaoa5pm5.vhd
+8/tmp/tmpaaoa5pm5.vhd

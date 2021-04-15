@@ -129,6 +129,150 @@ ENTITY PriceSummary IS
     l_shipdate_cmd_firstIdx : OUT STD_LOGIC_VECTOR(INDEX_WIDTH - 1 DOWNTO 0);
     l_shipdate_cmd_lastIdx : OUT STD_LOGIC_VECTOR(INDEX_WIDTH - 1 DOWNTO 0);
     l_shipdate_cmd_tag : OUT STD_LOGIC_VECTOR(TAG_WIDTH - 1 DOWNTO 0);
+    l_returnflag_o_valid : OUT STD_LOGIC;
+    l_returnflag_o_ready : IN STD_LOGIC;
+    l_returnflag_o_dvalid : OUT STD_LOGIC;
+    l_returnflag_o_last : OUT STD_LOGIC;
+    l_returnflag_o_length : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+    l_returnflag_o_count : OUT STD_LOGIC_VECTOR(0 DOWNTO 0);
+    l_returnflag_o_chars_valid : OUT STD_LOGIC;
+    l_returnflag_o_chars_ready : IN STD_LOGIC;
+    l_returnflag_o_chars_dvalid : OUT STD_LOGIC;
+    l_returnflag_o_chars_last : OUT STD_LOGIC;
+    l_returnflag_o_chars : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
+    l_returnflag_o_chars_count : OUT STD_LOGIC_VECTOR(0 DOWNTO 0);
+    l_linestatus_o_valid : OUT STD_LOGIC;
+    l_linestatus_o_ready : IN STD_LOGIC;
+    l_linestatus_o_dvalid : OUT STD_LOGIC;
+    l_linestatus_o_last : OUT STD_LOGIC;
+    l_linestatus_o_length : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+    l_linestatus_o_count : OUT STD_LOGIC_VECTOR(0 DOWNTO 0);
+    l_linestatus_o_chars_valid : OUT STD_LOGIC;
+    l_linestatus_o_chars_ready : IN STD_LOGIC;
+    l_linestatus_o_chars_dvalid : OUT STD_LOGIC;
+    l_linestatus_o_chars_last : OUT STD_LOGIC;
+    l_linestatus_o_chars : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
+    l_linestatus_o_chars_count : OUT STD_LOGIC_VECTOR(0 DOWNTO 0);
+    l_sum_qty_valid : OUT STD_LOGIC;
+    l_sum_qty_ready : IN STD_LOGIC;
+    l_sum_qty_dvalid : OUT STD_LOGIC;
+    l_sum_qty_last : OUT STD_LOGIC;
+    l_sum_qty : OUT STD_LOGIC_VECTOR(63 DOWNTO 0);
+    l_sum_base_price_valid : OUT STD_LOGIC;
+    l_sum_base_price_ready : IN STD_LOGIC;
+    l_sum_base_price_dvalid : OUT STD_LOGIC;
+    l_sum_base_price_last : OUT STD_LOGIC;
+    l_sum_base_price : OUT STD_LOGIC_VECTOR(63 DOWNTO 0);
+    l_sum_disc_price_valid : OUT STD_LOGIC;
+    l_sum_disc_price_ready : IN STD_LOGIC;
+    l_sum_disc_price_dvalid : OUT STD_LOGIC;
+    l_sum_disc_price_last : OUT STD_LOGIC;
+    l_sum_disc_price : OUT STD_LOGIC_VECTOR(63 DOWNTO 0);
+    l_sum_charge_valid : OUT STD_LOGIC;
+    l_sum_charge_ready : IN STD_LOGIC;
+    l_sum_charge_dvalid : OUT STD_LOGIC;
+    l_sum_charge_last : OUT STD_LOGIC;
+    l_sum_charge : OUT STD_LOGIC_VECTOR(63 DOWNTO 0);
+    l_avg_qty_valid : OUT STD_LOGIC;
+    l_avg_qty_ready : IN STD_LOGIC;
+    l_avg_qty_dvalid : OUT STD_LOGIC;
+    l_avg_qty_last : OUT STD_LOGIC;
+    l_avg_qty : OUT STD_LOGIC_VECTOR(63 DOWNTO 0);
+    l_avg_price_valid : OUT STD_LOGIC;
+    l_avg_price_ready : IN STD_LOGIC;
+    l_avg_price_dvalid : OUT STD_LOGIC;
+    l_avg_price_last : OUT STD_LOGIC;
+    l_avg_price : OUT STD_LOGIC_VECTOR(63 DOWNTO 0);
+    l_avg_disc_valid : OUT STD_LOGIC;
+    l_avg_disc_ready : IN STD_LOGIC;
+    l_avg_disc_dvalid : OUT STD_LOGIC;
+    l_avg_disc_last : OUT STD_LOGIC;
+    l_avg_disc : OUT STD_LOGIC_VECTOR(63 DOWNTO 0);
+    l_count_order_valid : OUT STD_LOGIC;
+    l_count_order_ready : IN STD_LOGIC;
+    l_count_order_dvalid : OUT STD_LOGIC;
+    l_count_order_last : OUT STD_LOGIC;
+    l_count_order : OUT STD_LOGIC_VECTOR(63 DOWNTO 0);
+    l_returnflag_o_unl_valid : IN STD_LOGIC;
+    l_returnflag_o_unl_ready : OUT STD_LOGIC;
+    l_returnflag_o_unl_tag : IN STD_LOGIC_VECTOR(TAG_WIDTH - 1 DOWNTO 0);
+    l_linestatus_o_unl_valid : IN STD_LOGIC;
+    l_linestatus_o_unl_ready : OUT STD_LOGIC;
+    l_linestatus_o_unl_tag : IN STD_LOGIC_VECTOR(TAG_WIDTH - 1 DOWNTO 0);
+    l_sum_qty_unl_valid : IN STD_LOGIC;
+    l_sum_qty_unl_ready : OUT STD_LOGIC;
+    l_sum_qty_unl_tag : IN STD_LOGIC_VECTOR(TAG_WIDTH - 1 DOWNTO 0);
+    l_sum_base_price_unl_valid : IN STD_LOGIC;
+    l_sum_base_price_unl_ready : OUT STD_LOGIC;
+    l_sum_base_price_unl_tag : IN STD_LOGIC_VECTOR(TAG_WIDTH - 1 DOWNTO 0);
+    l_sum_disc_price_unl_valid : IN STD_LOGIC;
+    l_sum_disc_price_unl_ready : OUT STD_LOGIC;
+    l_sum_disc_price_unl_tag : IN STD_LOGIC_VECTOR(TAG_WIDTH - 1 DOWNTO 0);
+    l_sum_charge_unl_valid : IN STD_LOGIC;
+    l_sum_charge_unl_ready : OUT STD_LOGIC;
+    l_sum_charge_unl_tag : IN STD_LOGIC_VECTOR(TAG_WIDTH - 1 DOWNTO 0);
+    l_avg_qty_unl_valid : IN STD_LOGIC;
+    l_avg_qty_unl_ready : OUT STD_LOGIC;
+    l_avg_qty_unl_tag : IN STD_LOGIC_VECTOR(TAG_WIDTH - 1 DOWNTO 0);
+    l_avg_price_unl_valid : IN STD_LOGIC;
+    l_avg_price_unl_ready : OUT STD_LOGIC;
+    l_avg_price_unl_tag : IN STD_LOGIC_VECTOR(TAG_WIDTH - 1 DOWNTO 0);
+    l_avg_disc_unl_valid : IN STD_LOGIC;
+    l_avg_disc_unl_ready : OUT STD_LOGIC;
+    l_avg_disc_unl_tag : IN STD_LOGIC_VECTOR(TAG_WIDTH - 1 DOWNTO 0);
+    l_count_order_unl_valid : IN STD_LOGIC;
+    l_count_order_unl_ready : OUT STD_LOGIC;
+    l_count_order_unl_tag : IN STD_LOGIC_VECTOR(TAG_WIDTH - 1 DOWNTO 0);
+    l_returnflag_o_cmd_valid : OUT STD_LOGIC;
+    l_returnflag_o_cmd_ready : IN STD_LOGIC;
+    l_returnflag_o_cmd_firstIdx : OUT STD_LOGIC_VECTOR(INDEX_WIDTH - 1 DOWNTO 0);
+    l_returnflag_o_cmd_lastIdx : OUT STD_LOGIC_VECTOR(INDEX_WIDTH - 1 DOWNTO 0);
+    l_returnflag_o_cmd_tag : OUT STD_LOGIC_VECTOR(TAG_WIDTH - 1 DOWNTO 0);
+    l_linestatus_o_cmd_valid : OUT STD_LOGIC;
+    l_linestatus_o_cmd_ready : IN STD_LOGIC;
+    l_linestatus_o_cmd_firstIdx : OUT STD_LOGIC_VECTOR(INDEX_WIDTH - 1 DOWNTO 0);
+    l_linestatus_o_cmd_lastIdx : OUT STD_LOGIC_VECTOR(INDEX_WIDTH - 1 DOWNTO 0);
+    l_linestatus_o_cmd_tag : OUT STD_LOGIC_VECTOR(TAG_WIDTH - 1 DOWNTO 0);
+    l_sum_qty_cmd_valid : OUT STD_LOGIC;
+    l_sum_qty_cmd_ready : IN STD_LOGIC;
+    l_sum_qty_cmd_firstIdx : OUT STD_LOGIC_VECTOR(INDEX_WIDTH - 1 DOWNTO 0);
+    l_sum_qty_cmd_lastIdx : OUT STD_LOGIC_VECTOR(INDEX_WIDTH - 1 DOWNTO 0);
+    l_sum_qty_cmd_tag : OUT STD_LOGIC_VECTOR(TAG_WIDTH - 1 DOWNTO 0);
+    l_sum_base_price_cmd_valid : OUT STD_LOGIC;
+    l_sum_base_price_cmd_ready : IN STD_LOGIC;
+    l_sum_base_price_cmd_firstIdx : OUT STD_LOGIC_VECTOR(INDEX_WIDTH - 1 DOWNTO 0);
+    l_sum_base_price_cmd_lastIdx : OUT STD_LOGIC_VECTOR(INDEX_WIDTH - 1 DOWNTO 0);
+    l_sum_base_price_cmd_tag : OUT STD_LOGIC_VECTOR(TAG_WIDTH - 1 DOWNTO 0);
+    l_sum_disc_price_cmd_valid : OUT STD_LOGIC;
+    l_sum_disc_price_cmd_ready : IN STD_LOGIC;
+    l_sum_disc_price_cmd_firstIdx : OUT STD_LOGIC_VECTOR(INDEX_WIDTH - 1 DOWNTO 0);
+    l_sum_disc_price_cmd_lastIdx : OUT STD_LOGIC_VECTOR(INDEX_WIDTH - 1 DOWNTO 0);
+    l_sum_disc_price_cmd_tag : OUT STD_LOGIC_VECTOR(TAG_WIDTH - 1 DOWNTO 0);
+    l_sum_charge_cmd_valid : OUT STD_LOGIC;
+    l_sum_charge_cmd_ready : IN STD_LOGIC;
+    l_sum_charge_cmd_firstIdx : OUT STD_LOGIC_VECTOR(INDEX_WIDTH - 1 DOWNTO 0);
+    l_sum_charge_cmd_lastIdx : OUT STD_LOGIC_VECTOR(INDEX_WIDTH - 1 DOWNTO 0);
+    l_sum_charge_cmd_tag : OUT STD_LOGIC_VECTOR(TAG_WIDTH - 1 DOWNTO 0);
+    l_avg_qty_cmd_valid : OUT STD_LOGIC;
+    l_avg_qty_cmd_ready : IN STD_LOGIC;
+    l_avg_qty_cmd_firstIdx : OUT STD_LOGIC_VECTOR(INDEX_WIDTH - 1 DOWNTO 0);
+    l_avg_qty_cmd_lastIdx : OUT STD_LOGIC_VECTOR(INDEX_WIDTH - 1 DOWNTO 0);
+    l_avg_qty_cmd_tag : OUT STD_LOGIC_VECTOR(TAG_WIDTH - 1 DOWNTO 0);
+    l_avg_price_cmd_valid : OUT STD_LOGIC;
+    l_avg_price_cmd_ready : IN STD_LOGIC;
+    l_avg_price_cmd_firstIdx : OUT STD_LOGIC_VECTOR(INDEX_WIDTH - 1 DOWNTO 0);
+    l_avg_price_cmd_lastIdx : OUT STD_LOGIC_VECTOR(INDEX_WIDTH - 1 DOWNTO 0);
+    l_avg_price_cmd_tag : OUT STD_LOGIC_VECTOR(TAG_WIDTH - 1 DOWNTO 0);
+    l_avg_disc_cmd_valid : OUT STD_LOGIC;
+    l_avg_disc_cmd_ready : IN STD_LOGIC;
+    l_avg_disc_cmd_firstIdx : OUT STD_LOGIC_VECTOR(INDEX_WIDTH - 1 DOWNTO 0);
+    l_avg_disc_cmd_lastIdx : OUT STD_LOGIC_VECTOR(INDEX_WIDTH - 1 DOWNTO 0);
+    l_avg_disc_cmd_tag : OUT STD_LOGIC_VECTOR(TAG_WIDTH - 1 DOWNTO 0);
+    l_count_order_cmd_valid : OUT STD_LOGIC;
+    l_count_order_cmd_ready : IN STD_LOGIC;
+    l_count_order_cmd_firstIdx : OUT STD_LOGIC_VECTOR(INDEX_WIDTH - 1 DOWNTO 0);
+    l_count_order_cmd_lastIdx : OUT STD_LOGIC_VECTOR(INDEX_WIDTH - 1 DOWNTO 0);
+    l_count_order_cmd_tag : OUT STD_LOGIC_VECTOR(TAG_WIDTH - 1 DOWNTO 0);
     start : IN STD_LOGIC;
     stop : IN STD_LOGIC;
     reset : IN STD_LOGIC;
@@ -266,353 +410,6 @@ ARCHITECTURE Implementation OF PriceSummary IS
   CONSTANT ONES : STD_LOGIC_VECTOR(EPC - 1 DOWNTO 0) := (OTHERS => '1');
 
 BEGIN
-
-  --  +---------------------+  +---------------------+  +---------------------+  +---------------------+ 
-  --|                     |  |                     |  |                     |  |                     | 
-  --|      extendedprice  |  |      discount       |  |     shipdate        |  |          quantity   | 
-  --|         512         |  |        512          |  |        512          |  |           512       | 
-  --|                     |  |                     |  |                     |  |                     | 
-  --+---------------------+  +---------------------+  +---------------------+  +---------------------+ 
-  --           |                        |                        |                        |            
-  --           |                        |                        |                        |            
-  --           |                        |                        |                        |            
-  --           |                        |                        |                        |            
-  --           |                        |                        |                        |            
-  --           |                        |                        |                        |            
-  --           |                        |                        |                        |            
-  --           |                        |                        |                        |            
-  --           |                        |                        |                        |            
-  -- +-------------------------++-----------------------++-----------------------++-----------------------+
-  -- | Sync. all the streams   || Sync. all the streams || Sync. all the streams || Sync. all the streams |
-  -- +-------------------------++-----------------------++-----------------------++-----------------------+
-  --            |                        |                       |                       |             
-  --            |                        |                       |                       |             
-  --            |64x4                    |64x4                   | 64x4                  | 64x4        
-  --            |                        |                       |                       |             
-  --            |                        +                       +                       |             
-  --            |                          |    |     |      |                           |             
-  --            +------                    |    |     |      |                    -------+             
-  --                                     +---+ +---+ +|--+ +---+                                       
-  --                                     |   | |   | |   | |   |                                       
-  --                                     |   | |   | |   | |   |                                       
-  --                                     |PU | |PU | |PU | |PU |                                       
-  --                                     |   | |   | |   | |   |                                       
-  --                                     |   | |   | |   | |   |                                       
-  --                                     |   | |   | |   | |   |                                       
-  --                                     +---+ +---+ +---+ +---+                                       
-  -- Input buffers to synchronizers.
-  discount_buffer : StreamBuffer
-  GENERIC MAP(
-    DATA_WIDTH => 64 * EPC + 2,
-    MIN_DEPTH => SYNC_IN_BUFFER_DEPTH -- plus last and dvalid : Maybe later count 
-  )
-  PORT MAP(
-    clk => kcd_clk,
-    reset => kcd_reset OR reset,
-    in_valid => l_discount_valid,
-    in_ready => l_discount_ready,
-    in_data(DATA_WIDTH * EPC + 1) => l_discount_last,
-    in_data(DATA_WIDTH * EPC) => l_discount_dvalid,
-    in_data(DATA_WIDTH * EPC - 1 DOWNTO 0) => l_discount,
-    out_valid => buf_l_discount_valid,
-    out_ready => buf_l_discount_ready,
-    out_data(DATA_WIDTH * EPC + 1) => buf_l_discount_last,
-    out_data(DATA_WIDTH * EPC) => buf_l_discount_dvalid,
-    out_data(DATA_WIDTH * EPC - 1 DOWNTO 0) => buf_l_discount
-
-  );
-
-  quantity_buffer : StreamBuffer
-  GENERIC MAP(
-    DATA_WIDTH => 64 * EPC + 2,
-    MIN_DEPTH => SYNC_IN_BUFFER_DEPTH -- plus last and dvalid : Maybe later count 
-  )
-  PORT MAP(
-    clk => kcd_clk,
-    reset => kcd_reset OR reset,
-    in_valid => l_quantity_valid,
-    in_ready => l_quantity_ready,
-    in_data(DATA_WIDTH * EPC + 1) => l_quantity_last,
-    in_data(DATA_WIDTH * EPC) => l_quantity_dvalid,
-    in_data(DATA_WIDTH * EPC - 1 DOWNTO 0) => l_quantity,
-    out_valid => buf_l_quantity_valid,
-    out_ready => buf_l_quantity_ready,
-    out_data(DATA_WIDTH * EPC + 1) => buf_l_quantity_last,
-    out_data(DATA_WIDTH * EPC) => buf_l_quantity_dvalid,
-    out_data(DATA_WIDTH * EPC - 1 DOWNTO 0) => buf_l_quantity
-
-  );
-  extendedprice_buffer : StreamBuffer
-  GENERIC MAP(
-    DATA_WIDTH => 64 * EPC + 2,
-    MIN_DEPTH => SYNC_IN_BUFFER_DEPTH -- plus last and dvalid : Maybe later count 
-  )
-  PORT MAP(
-    clk => kcd_clk,
-    reset => kcd_reset OR reset,
-    in_valid => l_extendedprice_valid,
-    in_ready => l_extendedprice_ready,
-    in_data(DATA_WIDTH * EPC + 1) => l_extendedprice_last,
-    in_data(DATA_WIDTH * EPC) => l_extendedprice_dvalid,
-    in_data(DATA_WIDTH * EPC - 1 DOWNTO 0) => l_extendedprice,
-    out_valid => buf_l_extendedprice_valid,
-    out_ready => buf_l_extendedprice_ready,
-    out_data(DATA_WIDTH * EPC + 1) => buf_l_extendedprice_last,
-    out_data(DATA_WIDTH * EPC) => buf_l_extendedprice_dvalid,
-    out_data(DATA_WIDTH * EPC - 1 DOWNTO 0) => buf_l_extendedprice
-
-  );
-
-  shipdate_buffer : StreamBuffer
-  GENERIC MAP(
-    DATA_WIDTH => 32 * EPC + 2,
-    MIN_DEPTH => SYNC_IN_BUFFER_DEPTH -- plus last and dvalid : Maybe later count 
-  )
-  PORT MAP(
-    clk => kcd_clk,
-    reset => kcd_reset OR reset,
-    in_valid => l_shipdate_valid,
-    in_ready => l_shipdate_ready,
-    in_data(DATA_WIDTH * EPC/2 + 1) => l_shipdate_last,
-    in_data(DATA_WIDTH * EPC/2) => l_shipdate_dvalid,
-    in_data(DATA_WIDTH * EPC/2 - 1 DOWNTO 0) => l_shipdate,
-    out_valid => buf_l_shipdate_valid,
-    out_ready => buf_l_shipdate_ready,
-    out_data(DATA_WIDTH * EPC/2 + 1) => buf_l_shipdate_last,
-    out_data(DATA_WIDTH * EPC/2) => buf_l_shipdate_dvalid,
-    out_data(DATA_WIDTH * EPC/2 - 1 DOWNTO 0) => buf_l_shipdate
-
-  );
-
-  -- Sync. is not necessary for single epc.
-  single_epc :
-  IF EPC = 1 GENERATE
-    quantity_valid(0) <= buf_l_quantity_valid;
-    quantity_ready(0) <= buf_l_quantity_ready;
-
-    discount_valid(0) <= buf_l_discount_valid;
-    discount_ready(0) <= buf_l_discount_ready;
-
-    extendedprice_valid(0) <= buf_l_extendedprice_valid;
-    extendedprice_ready(0) <= buf_l_extendedprice_ready;
-
-    shipdate_valid(0) <= buf_l_shipdate_valid;
-    shipdate_ready(0) <= buf_l_shipdate_ready;
-
-  END GENERATE;
-
-  gen_sync_multi_epc :
-  IF EPC > 1 GENERATE
-    quantity_sync : StreamSync
-    GENERIC MAP(
-      NUM_INPUTS => 1,
-      NUM_OUTPUTS => EPC
-    )
-    PORT MAP(
-      clk => kcd_clk,
-      reset => kcd_reset OR reset,
-
-      in_valid(0) => buf_l_quantity_valid,
-      in_ready(0) => buf_l_quantity_ready,
-      out_valid => quantity_valid,
-      out_ready => quantity_ready
-    );
-
-    discount_sync : StreamSync
-    GENERIC MAP(
-      NUM_INPUTS => 1,
-      NUM_OUTPUTS => EPC
-    )
-    PORT MAP(
-      clk => kcd_clk,
-      reset => kcd_reset OR reset,
-
-      in_valid(0) => buf_l_discount_valid,
-      in_ready(0) => buf_l_discount_ready,
-      out_valid => discount_valid,
-      out_ready => discount_ready
-    );
-
-    shipdate_sync : StreamSync
-    GENERIC MAP(
-      NUM_INPUTS => 1,
-      NUM_OUTPUTS => EPC
-    )
-    PORT MAP(
-      clk => kcd_clk,
-      reset => kcd_reset OR reset,
-
-      in_valid(0) => buf_l_shipdate_valid,
-      in_ready(0) => buf_l_shipdate_ready,
-      out_valid => shipdate_valid,
-      out_ready => shipdate_ready
-    );
-
-    extendedprice_sync : StreamSync
-    GENERIC MAP(
-      NUM_INPUTS => 1,
-      NUM_OUTPUTS => EPC
-    )
-    PORT MAP(
-      clk => kcd_clk,
-      reset => kcd_reset OR reset,
-
-      in_valid(0) => buf_l_extendedprice_valid,
-      in_ready(0) => buf_l_extendedprice_ready,
-      out_valid => extendedprice_valid,
-      out_ready => extendedprice_ready
-    );
-  END GENERATE;
-
-  assign_last_valid_signals :
-  FOR I IN 0 TO EPC - 1 GENERATE
-
-    discount_dvalid(I) <= buf_l_discount_dvalid;
-    extendedprice_dvalid(I) <= buf_l_extendedprice_dvalid;
-    shipdate_dvalid(I) <= buf_l_shipdate_dvalid;
-    quantity_dvalid(I) <= buf_l_quantity_dvalid;
-
-    discount_last(I) <= buf_l_discount_last;
-    extendedprice_last(I) <= buf_l_extendedprice_last;
-    shipdate_last(I) <= buf_l_shipdate_last;
-    quantity_last(I) <= buf_l_quantity_last;
-  END GENERATE;
-
-  input_buffer_to_pu :
-  FOR I IN 0 TO EPC - 1 GENERATE
-    -- Output buf.
-    --------------------------------------------------------------------
-    discount_buffer_pu_0 : StreamBuffer
-    GENERIC MAP(
-      DATA_WIDTH => 64 + 2,
-      MIN_DEPTH => SYNC_OUT_BUFFER_DEPTH -- plus last and dvalid : Maybe later count 
-    )
-    PORT MAP(
-      clk => kcd_clk,
-      reset => kcd_reset OR reset,
-      in_valid => discount_valid(I),
-      in_ready => discount_ready(I),
-      in_data(DATA_WIDTH + 1) => discount_last(I),
-      in_data(DATA_WIDTH) => discount_dvalid(I),
-      in_data(DATA_WIDTH - 1 DOWNTO 0) => buf_l_discount((I + 1) * 64 - 1 DOWNTO I * 64),
-      out_valid => dec_l_discount_valid(I),
-      out_ready => dec_l_discount_ready(I),
-      out_data(DATA_WIDTH + 1) => dec_l_discount_last(I),
-      out_data(DATA_WIDTH) => dec_l_discount_dvalid(I),
-      out_data(DATA_WIDTH - 1 DOWNTO 0) => dec_l_discount((I + 1) * 64 - 1 DOWNTO I * 64)
-    );
-    quantity_buffer_pu_0 : StreamBuffer
-    GENERIC MAP(
-      DATA_WIDTH => 64 + 2,
-      MIN_DEPTH => SYNC_OUT_BUFFER_DEPTH -- plus last and dvalid : Maybe later count 
-    )
-    PORT MAP(
-      clk => kcd_clk,
-      reset => kcd_reset OR reset,
-      in_valid => quantity_valid(I),
-      in_ready => quantity_ready(I),
-      in_data(DATA_WIDTH + 1) => quantity_last(I),
-      in_data(DATA_WIDTH) => quantity_dvalid(I),
-      in_data(DATA_WIDTH - 1 DOWNTO 0) => buf_l_quantity((I + 1) * 64 - 1 DOWNTO I * 64),
-      out_valid => dec_l_quantity_valid(I),
-      out_ready => dec_l_quantity_ready(I),
-      out_data(DATA_WIDTH + 1) => dec_l_quantity_last(I),
-      out_data(DATA_WIDTH) => dec_l_quantity_dvalid(I),
-      out_data(DATA_WIDTH - 1 DOWNTO 0) => dec_l_quantity((I + 1) * 64 - 1 DOWNTO I * 64)
-    );
-    extendedprice_buffer_pu_0 : StreamBuffer
-    GENERIC MAP(
-      DATA_WIDTH => 64 + 2,
-      MIN_DEPTH => SYNC_OUT_BUFFER_DEPTH -- plus last and dvalid : Maybe later count 
-    )
-    PORT MAP(
-      clk => kcd_clk,
-      reset => kcd_reset OR reset,
-      in_valid => extendedprice_valid(I),
-      in_ready => extendedprice_ready(I),
-      in_data(DATA_WIDTH + 1) => extendedprice_last(I),
-      in_data(DATA_WIDTH) => extendedprice_dvalid(I),
-      in_data(DATA_WIDTH - 1 DOWNTO 0) => buf_l_extendedprice((I + 1) * 64 - 1 DOWNTO I * 64),
-      out_valid => dec_l_extendedprice_valid(I),
-      out_ready => dec_l_extendedprice_ready(I),
-      out_data(DATA_WIDTH + 1) => dec_l_extendedprice_last(I),
-      out_data(DATA_WIDTH) => dec_l_extendedprice_dvalid(I),
-      out_data(DATA_WIDTH - 1 DOWNTO 0) => dec_l_extendedprice((I + 1) * 64 - 1 DOWNTO I * 64)
-    );
-    shipdate_buffer_pu_0 : StreamBuffer
-    GENERIC MAP(
-      DATA_WIDTH => 32 + 2,
-      MIN_DEPTH => SYNC_OUT_BUFFER_DEPTH -- plus last and dvalid : Maybe later count 
-    )
-    PORT MAP(
-      clk => kcd_clk,
-      reset => kcd_reset OR reset,
-      in_valid => shipdate_valid(I),
-      in_ready => shipdate_ready(I),
-      in_data(DATA_WIDTH/2 + 1) => shipdate_last(I),
-      in_data(DATA_WIDTH/2) => shipdate_dvalid(I),
-      in_data(DATA_WIDTH/2 - 1 DOWNTO 0) => buf_l_shipdate((I + 1) * 32 - 1 DOWNTO I * 32),
-      out_valid => dec_l_shipdate_valid(I),
-      out_ready => dec_l_shipdate_ready(I),
-      out_data(DATA_WIDTH/2 + 1) => dec_l_shipdate_last(I),
-      out_data(DATA_WIDTH/2) => dec_l_shipdate_dvalid(I),
-      out_data(DATA_WIDTH/2 - 1 DOWNTO 0) => dec_l_shipdate((I + 1) * 32 - 1 DOWNTO I * 32)
-    );
-  END GENERATE;
-
-  parallel_pu_gen :
-  FOR I IN 0 TO EPC - 1 GENERATE
-    processing_unit_0 : PU
-    GENERIC MAP(
-      FIXED_LEFT_INDEX => FIXED_LEFT_INDEX,
-      FIXED_RIGHT_INDEX => FIXED_RIGHT_INDEX,
-      DATA_WIDTH => 64,
-      INDEX_WIDTH => INDEX_WIDTH,
-      CONVERTERS => "FLOAT_TO_FIXED", -- TODO: Implement this
-      ILA => ""
-    )
-    PORT MAP(
-      clk => kcd_clk,
-      reset => kcd_reset OR reset,
-
-      l_quantity_valid => dec_l_quantity_valid(I),
-      l_quantity_ready => dec_l_quantity_ready(I),
-      l_quantity_dvalid => dec_l_quantity_dvalid(I),
-      l_quantity_last => dec_l_quantity_last(I),
-      l_quantity => dec_l_quantity((I + 1) * 64 - 1 DOWNTO I * 64),
-
-      l_extendedprice_valid => dec_l_extendedprice_valid(I),
-      l_extendedprice_ready => dec_l_extendedprice_ready(I),
-      l_extendedprice_dvalid => dec_l_extendedprice_dvalid(I),
-      l_extendedprice_last => dec_l_extendedprice_last(I),
-      l_extendedprice => dec_l_extendedprice((I + 1) * 64 - 1 DOWNTO I * 64),
-
-      l_discount_valid => dec_l_discount_valid(I),
-      l_discount_ready => dec_l_discount_ready(I),
-      l_discount_dvalid => dec_l_discount_dvalid(I),
-      l_discount_last => dec_l_discount_last(I),
-      l_discount => dec_l_discount((I + 1) * 64 - 1 DOWNTO I * 64),
-
-      l_shipdate_valid => dec_l_shipdate_valid(I),
-      l_shipdate_ready => dec_l_shipdate_ready(I),
-      l_shipdate_dvalid => dec_l_shipdate_dvalid(I),
-      l_shipdate_last => dec_l_shipdate_last(I),
-      l_shipdate => dec_l_shipdate((I + 1) * 32 - 1 DOWNTO I * 32),
-
-      sum_out_valid => sum_out_valid_stages(I),
-      sum_out_ready => sum_out_ready_stages(I),
-      sum_out_data => sum_out_data_stages((I + 1) * 64 - 1 DOWNTO I * 64)
-    );
-    -------------------------------------------------------------------------------
-  END GENERATE;
-  temp_inp_1 <= to_sfixed(sum_out_data_stages(DATA_WIDTH - 1 DOWNTO 0), FIXED_LEFT_INDEX, FIXED_RIGHT_INDEX);
-  temp_inp_2 <= to_sfixed(sum_out_data_stages(2 * DATA_WIDTH - 1 DOWNTO DATA_WIDTH), FIXED_LEFT_INDEX, FIXED_RIGHT_INDEX);
-  temp_inp_3 <= to_sfixed(sum_out_data_stages(3 * DATA_WIDTH - 1 DOWNTO 2 * DATA_WIDTH), FIXED_LEFT_INDEX, FIXED_RIGHT_INDEX);
-  temp_inp_4 <= to_sfixed(sum_out_data_stages(4 * DATA_WIDTH - 1 DOWNTO 3 * DATA_WIDTH), FIXED_LEFT_INDEX, FIXED_RIGHT_INDEX);
-  temp_inp_5 <= to_sfixed(sum_out_data_stages(5 * DATA_WIDTH - 1 DOWNTO 4 * DATA_WIDTH), FIXED_LEFT_INDEX, FIXED_RIGHT_INDEX);
-  temp_inp_6 <= to_sfixed(sum_out_data_stages(6 * DATA_WIDTH - 1 DOWNTO 5 * DATA_WIDTH), FIXED_LEFT_INDEX, FIXED_RIGHT_INDEX);
-  temp_inp_7 <= to_sfixed(sum_out_data_stages(7 * DATA_WIDTH - 1 DOWNTO 6 * DATA_WIDTH), FIXED_LEFT_INDEX, FIXED_RIGHT_INDEX);
-  temp_inp_8 <= to_sfixed(sum_out_data_stages(8 * DATA_WIDTH - 1 DOWNTO 7 * DATA_WIDTH), FIXED_LEFT_INDEX, FIXED_RIGHT_INDEX);
   WITH state SELECT state_slv <=
     "000" WHEN STATE_COMMAND,
     "011" WHEN STATE_CALCULATING,
@@ -622,16 +419,23 @@ BEGIN
   combinatorial_proc : PROCESS (
     l_firstIdx,
     l_lastIdx,
-    l_quantity_cmd_ready,
-    l_quantity_unl_valid,
-    l_discount_cmd_ready,
-    l_discount_unl_valid,
-    l_shipdate_cmd_ready,
-    l_shipdate_unl_valid,
-    l_extendedprice_cmd_ready,
-    l_extendedprice_unl_valid,
 
-    sum_out_valid_stages,
+    l_quantity_unl_valid,
+    l_extendedprice_unl_valid,
+    l_discount_unl_valid,
+    l_tax_unl_valid,
+    l_returnflag_unl_valid,
+    l_linestatus_unl_valid,
+    l_shipdate_unl_valid,
+    l_quantity_cmd_ready,
+    l_extendedprice_cmd_ready,
+    l_discount_cmd_ready,
+    l_tax_cmd_ready,
+    l_returnflag_cmd_ready,
+    l_linestatus_cmd_ready,
+    l_shipdate_cmd_ready,
+
+    copy_done_valid,
 
     state,
     start,
@@ -645,31 +449,45 @@ BEGIN
     l_quantity_cmd_lastIdx <= (OTHERS => '0');
     l_quantity_cmd_tag <= (OTHERS => '0');
 
-    l_quantity_unl_ready <= '0'; -- Do not accept "unlocks".
-
     l_discount_cmd_valid <= '0';
     l_discount_cmd_firstIdx <= (OTHERS => '0');
     l_discount_cmd_lastIdx <= (OTHERS => '0');
     l_discount_cmd_tag <= (OTHERS => '0');
-
-    l_discount_unl_ready <= '0'; -- Do not accept "unlocks".
 
     l_shipdate_cmd_valid <= '0';
     l_shipdate_cmd_firstIdx <= (OTHERS => '0');
     l_shipdate_cmd_lastIdx <= (OTHERS => '0');
     l_shipdate_cmd_tag <= (OTHERS => '0');
 
-    l_shipdate_unl_ready <= '0'; -- Do not accept "unlocks".
+    l_returnflag_cmd_valid <= '0';
+    l_returnflag_cmd_firstIdx <= (OTHERS => '0');
+    l_returnflag_cmd_lastIdx <= (OTHERS => '0');
+    l_returnflag_cmd_tag <= (OTHERS => '0');
+
+    l_tax_cmd_valid <= '0';
+    l_tax_cmd_firstIdx <= (OTHERS => '0');
+    l_tax_cmd_lastIdx <= (OTHERS => '0');
+    l_tax_cmd_tag <= (OTHERS => '0');
 
     l_extendedprice_cmd_valid <= '0';
     l_extendedprice_cmd_firstIdx <= (OTHERS => '0');
     l_extendedprice_cmd_lastIdx <= (OTHERS => '0');
     l_extendedprice_cmd_tag <= (OTHERS => '0');
 
-    l_extendedprice_unl_ready <= '0'; -- Do not accept "unlocks".
+    l_linestatus_cmd_valid <= '0';
+    l_linestatus_cmd_firstIdx <= (OTHERS => '0');
+    l_linestatus_cmd_lastIdx <= (OTHERS => '0');
+    l_linestatus_cmd_tag <= (OTHERS => '0');
+
     state_next <= state; -- Retain current state.
 
-    sum_out_ready_stages <= (OTHERS => '0');
+    l_quantity_unl_ready <= '0';
+    l_extendedprice_unl_ready <= '0';
+    l_discount_unl_ready <= '0';
+    l_tax_unl_ready <= '0';
+    l_returnflag_unl_ready <= '0';
+    l_linestatus_unl_ready <= '0';
+    l_shipdate_unl_ready <= '0';
 
     CASE state IS
       WHEN STATE_IDLE =>
@@ -709,7 +527,22 @@ BEGIN
         l_discount_cmd_lastIdx <= l_lastIdx;
         l_discount_cmd_tag <= (OTHERS => '0');
 
-        IF l_quantity_cmd_ready = '1' AND l_extendedprice_cmd_ready = '1' AND l_shipdate_cmd_ready = '1' AND l_discount_cmd_ready = '1' THEN
+        l_tax_cmd_valid <= '1';
+        l_tax_cmd_firstIdx <= l_firstIdx;
+        l_tax_cmd_lastIdx <= l_lastIdx;
+        l_tax_cmd_tag <= (OTHERS => '0');
+
+        l_shipdate_cmd_valid <= '1';
+        l_shipdate_cmd_firstIdx <= l_firstIdx;
+        l_shipdate_cmd_lastIdx <= l_lastIdx;
+        l_shipdate_cmd_tag <= (OTHERS => '0');
+
+        l_linestatus_cmd_valid <= '1';
+        l_linestatus_cmd_firstIdx <= l_firstIdx;
+        l_linestatus_cmd_lastIdx <= l_lastIdx;
+        l_linestatus_cmd_tag <= (OTHERS => '0');
+
+        IF l_quantity_cmd_ready = '1' AND l_extendedprice_cmd_ready = '1' AND l_shipdate_cmd_ready = '1' AND l_discount_cmd_ready = '1' AND l_linestatus_cmd_ready = '1' AND l_tax_cmd_ready = '1' AND l_returnflag = '1' THEN
           state_next <= STATE_CALCULATING;
         END IF;
 
@@ -719,9 +552,9 @@ BEGIN
         busy <= '1';
         idle <= '0';
 
-        sum_out_ready_stages <= (OTHERS => '1');
+        copy_done <= (OTHERS => '1');
 
-        IF sum_out_valid_stages = ONES THEN
+        IF copy_done_valid = ONES THEN
           state_next <= STATE_UNLOCK;
         END IF;
 
@@ -738,9 +571,12 @@ BEGIN
         l_discount_unl_ready <= '1';
         l_shipdate_unl_ready <= '1';
         l_extendedprice_unl_ready <= '1';
+        l_tax_unl_ready <= '1';
+        l_linestatus_unl_ready <= '1';
+        l_returnflag_unl_ready <= '1';
         -- Handshake when it is valid and go to the done state.
         -- if s_store_sk_unl_valid = '1' then
-        IF l_discount_unl_valid = '1' AND l_quantity_unl_valid = '1' AND l_shipdate_unl_valid = '1' AND l_extendedprice_unl_valid = '1' THEN
+        IF l_discount_unl_valid = '1' AND l_quantity_unl_valid = '1' AND l_shipdate_unl_valid = '1' AND l_extendedprice_unl_valid = '1' AND l_linestatus_unl_valid = '1' AND l_tax_unl_valid = '1' AND l_returnflag_unl_valid = '1' THEN
           state_next <= STATE_DONE;
         END IF;
 
@@ -769,38 +605,6 @@ BEGIN
       status_1 <= (31 DOWNTO EPC => '0') & sum_out_valid_stages;
       result_out_data := (OTHERS => '0');
       temp_acc := (OTHERS => '0');
-
-      IF sum_out_valid_stages = ONES THEN
-        temp_acc := temp_inp_1 + temp_inp_2 + temp_inp_3 + temp_inp_4 + temp_inp_5 + temp_inp_6 + temp_inp_7 + temp_inp_8;
-        result_out_data := to_slv(resize(arg => temp_acc, left_index => FIXED_LEFT_INDEX, right_index => FIXED_RIGHT_INDEX, round_style => fixed_round_style, overflow_style => fixed_overflow_style));
-        result <= result_out_data;
-        rhigh <= result_out_data(63 DOWNTO 32);
-        rlow <= result_out_data(31 DOWNTO 0);
-      END IF;
-      IF (sum_out_valid_stages(0) = '0') THEN
-        r1 <= to_slv(resize(arg => temp_inp_1, left_index => FIXED_LEFT_INDEX, right_index => FIXED_RIGHT_INDEX, round_style => fixed_round_style, overflow_style => fixed_overflow_style));
-      END IF;
-      IF (sum_out_valid_stages(1) = '0') THEN
-        r2 <= to_slv(resize(arg => temp_inp_2, left_index => FIXED_LEFT_INDEX, right_index => FIXED_RIGHT_INDEX, round_style => fixed_round_style, overflow_style => fixed_overflow_style));
-      END IF;
-      IF (sum_out_valid_stages(2) = '0') THEN
-        r3 <= to_slv(resize(arg => temp_inp_3, left_index => FIXED_LEFT_INDEX, right_index => FIXED_RIGHT_INDEX, round_style => fixed_round_style, overflow_style => fixed_overflow_style));
-      END IF;
-      IF (sum_out_valid_stages(3) = '0') THEN
-        r4 <= to_slv(resize(arg => temp_inp_4, left_index => FIXED_LEFT_INDEX, right_index => FIXED_RIGHT_INDEX, round_style => fixed_round_style, overflow_style => fixed_overflow_style));
-      END IF;
-      IF (sum_out_valid_stages(4) = '0') THEN
-        r5 <= to_slv(resize(arg => temp_inp_5, left_index => FIXED_LEFT_INDEX, right_index => FIXED_RIGHT_INDEX, round_style => fixed_round_style, overflow_style => fixed_overflow_style));
-      END IF;
-      IF (sum_out_valid_stages(5) = '0') THEN
-        r6 <= to_slv(resize(arg => temp_inp_6, left_index => FIXED_LEFT_INDEX, right_index => FIXED_RIGHT_INDEX, round_style => fixed_round_style, overflow_style => fixed_overflow_style));
-      END IF;
-      IF (sum_out_valid_stages(6) = '0') THEN
-        r7 <= to_slv(resize(arg => temp_inp_7, left_index => FIXED_LEFT_INDEX, right_index => FIXED_RIGHT_INDEX, round_style => fixed_round_style, overflow_style => fixed_overflow_style));
-      END IF;
-      IF (sum_out_valid_stages(7) = '0') THEN
-        r8 <= to_slv(resize(arg => temp_inp_8, left_index => FIXED_LEFT_INDEX, right_index => FIXED_RIGHT_INDEX, round_style => fixed_round_style, overflow_style => fixed_overflow_style));
-      END IF;
 
       IF kcd_reset = '1' OR reset = '1' THEN
         state <= STATE_IDLE;

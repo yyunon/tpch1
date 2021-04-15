@@ -13084,7 +13084,7 @@
      "name": "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/PriceSummary.gen.vhd",
      "__class__": "Path"
     },
-    "mtime": 1618408267.931851,
+    "mtime": 1618421494.5182152,
     "flags": {
      "source_specific": [],
      "single": [],
@@ -33476,7 +33476,12 @@
       "__class__": "RequiredDesignUnit"
      }
     ],
-    "diags": []
+    "diags": [],
+    "library": {
+     "name": "not_in_project",
+     "case_sensitive": true,
+     "__class__": "Identifier"
+    }
    },
    {
     "path": {
@@ -108643,7 +108648,12 @@
       "__class__": "RequiredDesignUnit"
      }
     ],
-    "diags": []
+    "diags": [],
+    "library": {
+     "name": "not_in_project",
+     "case_sensitive": true,
+     "__class__": "Identifier"
+    }
    },
    {
     "path": {
@@ -117626,48 +117636,6 @@
        "__class__": "Path"
       },
       "name": {
-       "name": "std_logic_misc",
-       "case_sensitive": false,
-       "__class__": "VhdlIdentifier"
-      },
-      "library": {
-       "name": "ieee",
-       "case_sensitive": false,
-       "__class__": "VhdlIdentifier"
-      },
-      "locations": [
-       [
-        4,
-        4
-       ]
-      ],
-      "__class__": "RequiredDesignUnit"
-     },
-     {
-      "owner": {
-       "name": "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/4DDR/design/vhdl/mmio_pkg.gen.vhd",
-       "__class__": "Path"
-      },
-      "name": {
-       "name": "vhdmmio_pkg",
-       "case_sensitive": false,
-       "__class__": "VhdlIdentifier"
-      },
-      "library": null,
-      "locations": [
-       [
-        8,
-        4
-       ]
-      ],
-      "__class__": "RequiredDesignUnit"
-     },
-     {
-      "owner": {
-       "name": "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/4DDR/design/vhdl/mmio_pkg.gen.vhd",
-       "__class__": "Path"
-      },
-      "name": {
        "name": "std_logic_1164",
        "case_sensitive": false,
        "__class__": "VhdlIdentifier"
@@ -117684,9 +117652,60 @@
        ]
       ],
       "__class__": "RequiredDesignUnit"
+     },
+     {
+      "owner": {
+       "name": "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/4DDR/design/vhdl/mmio_pkg.gen.vhd",
+       "__class__": "Path"
+      },
+      "name": {
+       "name": "vhdmmio_pkg",
+       "case_sensitive": false,
+       "__class__": "VhdlIdentifier"
+      },
+      "library": {
+       "name": "not_in_project",
+       "case_sensitive": true,
+       "__class__": "Identifier"
+      },
+      "locations": [
+       [
+        8,
+        4
+       ]
+      ],
+      "__class__": "RequiredDesignUnit"
+     },
+     {
+      "owner": {
+       "name": "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/4DDR/design/vhdl/mmio_pkg.gen.vhd",
+       "__class__": "Path"
+      },
+      "name": {
+       "name": "std_logic_misc",
+       "case_sensitive": false,
+       "__class__": "VhdlIdentifier"
+      },
+      "library": {
+       "name": "ieee",
+       "case_sensitive": false,
+       "__class__": "VhdlIdentifier"
+      },
+      "locations": [
+       [
+        4,
+        4
+       ]
+      ],
+      "__class__": "RequiredDesignUnit"
      }
     ],
-    "diags": []
+    "diags": [],
+    "library": {
+     "name": "not_in_project",
+     "case_sensitive": true,
+     "__class__": "Identifier"
+    }
    },
    {
     "path": {
@@ -121567,7 +121586,7 @@
      "name": "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/mmio.gen.vhd",
      "__class__": "Path"
     },
-    "mtime": 1618408267.931851,
+    "mtime": 1618433812.1079392,
     "flags": {
      "source_specific": [],
      "single": [],
@@ -122546,7 +122565,7 @@
      "name": "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/mmio_pkg.gen.vhd",
      "__class__": "Path"
     },
-    "mtime": 1618408267.931851,
+    "mtime": 1618428630.0880547,
     "flags": {
      "source_specific": [],
      "single": [],
@@ -122642,32 +122661,73 @@
       "__class__": "RequiredDesignUnit"
      }
     ],
-    "diags": []
+    "diags": [],
+    "library": {
+     "name": "not_in_project",
+     "case_sensitive": true,
+     "__class__": "Identifier"
+    }
    }
   ],
   "inferred_libraries": [
    {
-    "name": "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/PriceSummary.gen.vhd",
+    "name": "/tmp/tmpxiolm4se.vhd",
     "__class__": "Path"
    },
    {
-    "name": "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/ReduceStage.vhd",
+    "name": "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/cl_fletcher_aws_1DDR.sv",
     "__class__": "Path"
    },
    {
-    "name": "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/MergeOp.vhd",
+    "name": "/tmp/tmpcy9izkvl.vhd",
     "__class__": "Path"
    },
    {
-    "name": "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/parallel_patterns/ParallelPatterns_pkg.vhd",
+    "name": "/tmp/tmph4pr3fhv.vhd",
     "__class__": "Path"
    },
    {
-    "name": "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/SumOp.vhd",
+    "name": "/tmp/tmp4ch35kx7.vhd",
     "__class__": "Path"
    },
    {
-    "name": "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/4DDR/design/vhdl/hardware/parallel_patterns/ParallelPatterns_pkg.vhd",
+    "name": "/tmp/tmpd6_kt9ia.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmp0f1hi8zm.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmp5z2mlm6c.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmp77ntolhg.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpg1pxsxqu.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpzl1hmtdr.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmp3yj57dph.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmp6wb_sdqn.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpozxbzzrz.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpkcr5bnoo.vhd",
     "__class__": "Path"
    },
    {
@@ -122675,15 +122735,39 @@
     "__class__": "Path"
    },
    {
-    "name": "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/ReduceMultiStreams.vhd",
+    "name": "/tmp/tmpxxkdb65x.vhd",
     "__class__": "Path"
    },
    {
-    "name": "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/PU.vhd",
+    "name": "/tmp/tmp024l19ft.vhd",
     "__class__": "Path"
    },
    {
-    "name": "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/Float_to_Fixed.vhd",
+    "name": "/tmp/tmphwx4ap8s.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpoajkwu3i.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmp_8fjk_me.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpm1842s1u.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpkfptpltu.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpcg0jrk7s.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpsoxxuhsi.vhd",
     "__class__": "Path"
    },
    {
@@ -122695,7 +122779,399 @@
     "__class__": "Path"
    },
    {
+    "name": "/tmp/tmphqvbhndd.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpy648bm7z.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmp7gh60sn5.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpwk5ogtc7.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpzsg7tgy0.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpe67xjam3.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmp5c15wow8.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpd9bmt4sz.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpahn6gn46.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/ReduceMultiStreams.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmphio0_9im.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpaaoa5pm5.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpddbj4e58.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpul3pjyfj.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmppwtd3vka.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/ReduceStage.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpfx0tlvz9.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpy3_h85qj.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmps67mlvx8.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpfl_66acf.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpnvjzplj4.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmp3ltx2b27.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmp2hypfr05.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/Float_to_Fixed.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpg7y2mol8.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmph6u9j7jx.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpybq694wa.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmp30058x0s.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/SumOp.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpzkciggv3.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmp9egvn8gr.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmp0f25f5ew.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmphmrtjha0.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpzw_27dz4.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpta4u7rsg.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpfx7vjsz_.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpvoy2l0iw.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmppy_bkw0y.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmp9tnk4c64.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/4DDR/design/vhdl/vhdmmio_pkg.gen.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpmz0zew_k.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmp5q85og0d.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpalk96sip.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpt7evvmvr.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmp1v0uwtn5.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpq7hbnmfm.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmplyqfip3v.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmp3ef72jdo.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmp9qd2_m33.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpfabj8ic2.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpeov3jt7x.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmppb45bepj.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmp5vq5jcwi.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpkia0mkod.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpioni02kn.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpjstrwx0s.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpf49u0u35.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpxswari__.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpdyreiy_w.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmp4zy_cu6c.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpwnc_szm7.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/4DDR/design/vhdl/mmio_pkg.gen.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpln1fmg9e.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpccoqkz0w.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmp5gzmwih6.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmp6pgrucwb.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/MergeOp.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpvkbrphc7.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/mmio_pkg.gen.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpc8xh38np.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpyi8ktx3z.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpsj7ttgia.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpmxwsyhl_.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpipyf0mp5.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpi0_v30zk.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmp50sov0fw.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/PU.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpxt07oxu_.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmplmwghwy4.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmphxjty_hw.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/PriceSummary.gen.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/parallel_patterns/ParallelPatterns_pkg.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpgnquvfj0.vhd",
+    "__class__": "Path"
+   },
+   {
     "name": "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/4DDR/design/vhdl/Forecast_pkg.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmplfo2vfdc.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpx9lxpspr.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpzwkro1r8.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpoue3hct1.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/mmio.gen.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmp_2awu8d2.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpbyarz6gn.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpf4d5m14k.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/vhdmmio_pkg.gen.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/4DDR/design/vhdl/hardware/parallel_patterns/ParallelPatterns_pkg.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpedeujhny.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmp5ud0te_8.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpk1btfy_e.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmpxcj2b45y.vhd",
+    "__class__": "Path"
+   },
+   {
+    "name": "/tmp/tmp_av1gje8.vhd",
     "__class__": "Path"
    }
   ],
@@ -123041,6 +123517,25 @@
      ]
     ],
     "__class__": "VerilogDesignUnit"
+   },
+   {
+    "owner": {
+     "name": "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/writer_interface/mmio.gen.vhd",
+     "__class__": "Path"
+    },
+    "type_": "entity",
+    "name": {
+     "name": "mmio",
+     "case_sensitive": false,
+     "__class__": "VhdlIdentifier"
+    },
+    "locations": [
+     [
+      11,
+      7
+     ]
+    ],
+    "__class__": "VhdlDesignUnit"
    },
    {
     "owner": {
@@ -124348,6 +124843,25 @@
     "locations": [
      [
       19,
+      8
+     ]
+    ],
+    "__class__": "VhdlDesignUnit"
+   },
+   {
+    "owner": {
+     "name": "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/writer_interface/vhdmmio_pkg.gen.vhd",
+     "__class__": "Path"
+    },
+    "type_": "package",
+    "name": {
+     "name": "vhdmmio_pkg",
+     "case_sensitive": false,
+     "__class__": "VhdlIdentifier"
+    },
+    "locations": [
+     [
+      5,
       8
      ]
     ],
@@ -126806,25 +127320,6 @@
    },
    {
     "owner": {
-     "name": "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/PriceSummary.vhd",
-     "__class__": "Path"
-    },
-    "type_": "entity",
-    "name": {
-     "name": "PriceSummary",
-     "case_sensitive": false,
-     "__class__": "VhdlIdentifier"
-    },
-    "locations": [
-     [
-      18,
-      7
-     ]
-    ],
-    "__class__": "VhdlDesignUnit"
-   },
-   {
-    "owner": {
      "name": "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/4DDR/design/vhdl/hardware/arrays/test/arraywriter/prim32_epc_tc.vhd",
      "__class__": "Path"
     },
@@ -128269,25 +128764,6 @@
    },
    {
     "owner": {
-     "name": "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/PriceSummary.gen.vhd",
-     "__class__": "Path"
-    },
-    "type_": "entity",
-    "name": {
-     "name": "PriceSummary",
-     "case_sensitive": false,
-     "__class__": "VhdlIdentifier"
-    },
-    "locations": [
-     [
-      20,
-      7
-     ]
-    ],
-    "__class__": "VhdlDesignUnit"
-   },
-   {
-    "owner": {
      "name": "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/ip/cl_axi_interconnect_1m2s/ipshared/b752/hdl/generic_baseblocks_v2_1_vl_rfs.v",
      "__class__": "Path"
     },
@@ -128338,6 +128814,25 @@
     "locations": [
      [
       18,
+      7
+     ]
+    ],
+    "__class__": "VhdlDesignUnit"
+   },
+   {
+    "owner": {
+     "name": "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/PriceSummary.gen.vhd",
+     "__class__": "Path"
+    },
+    "type_": "entity",
+    "name": {
+     "name": "PriceSummary",
+     "case_sensitive": false,
+     "__class__": "VhdlIdentifier"
+    },
+    "locations": [
+     [
+      20,
       7
      ]
     ],
@@ -129004,6 +129499,25 @@
      [
       26,
       7
+     ]
+    ],
+    "__class__": "VhdlDesignUnit"
+   },
+   {
+    "owner": {
+     "name": "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/writer_interface/mmio_pkg.gen.vhd",
+     "__class__": "Path"
+    },
+    "type_": "package",
+    "name": {
+     "name": "mmio_pkg",
+     "case_sensitive": false,
+     "__class__": "VhdlIdentifier"
+    },
+    "locations": [
+     [
+      10,
+      8
      ]
     ],
     "__class__": "VhdlDesignUnit"
@@ -130416,25 +130930,6 @@
    },
    {
     "owner": {
-     "name": "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/mmio_pkg.gen.vhd",
-     "__class__": "Path"
-    },
-    "type_": "package",
-    "name": {
-     "name": "mmio_pkg",
-     "case_sensitive": false,
-     "__class__": "VhdlIdentifier"
-    },
-    "locations": [
-     [
-      10,
-      8
-     ]
-    ],
-    "__class__": "VhdlDesignUnit"
-   },
-   {
-    "owner": {
      "name": "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/4DDR/design/vhdl/hardware/parallel_patterns/FilterStream.vhd",
      "__class__": "Path"
     },
@@ -130448,6 +130943,25 @@
      [
       9,
       7
+     ]
+    ],
+    "__class__": "VhdlDesignUnit"
+   },
+   {
+    "owner": {
+     "name": "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/mmio_pkg.gen.vhd",
+     "__class__": "Path"
+    },
+    "type_": "package",
+    "name": {
+     "name": "mmio_pkg",
+     "case_sensitive": false,
+     "__class__": "VhdlIdentifier"
+    },
+    "locations": [
+     [
+      10,
+      8
      ]
     ],
     "__class__": "VhdlDesignUnit"
@@ -130542,6 +131056,25 @@
     "locations": [
      [
       25,
+      7
+     ]
+    ],
+    "__class__": "VhdlDesignUnit"
+   },
+   {
+    "owner": {
+     "name": "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/writer_interface/PriceSummaryWriter.gen.vhd",
+     "__class__": "Path"
+    },
+    "type_": "entity",
+    "name": {
+     "name": "PriceSummaryWriter",
+     "case_sensitive": false,
+     "__class__": "VhdlIdentifier"
+    },
+    "locations": [
+     [
+      20,
       7
      ]
     ],
@@ -130941,25 +131474,6 @@
     "locations": [
      [
       16,
-      7
-     ]
-    ],
-    "__class__": "VhdlDesignUnit"
-   },
-   {
-    "owner": {
-     "name": "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/mmio.gen.vhd",
-     "__class__": "Path"
-    },
-    "type_": "entity",
-    "name": {
-     "name": "mmio",
-     "case_sensitive": false,
-     "__class__": "VhdlIdentifier"
-    },
-    "locations": [
-     [
-      11,
       7
      ]
     ],
@@ -131724,6 +132238,25 @@
      ]
     ],
     "__class__": "VerilogDesignUnit"
+   },
+   {
+    "owner": {
+     "name": "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/PriceSummary.vhd",
+     "__class__": "Path"
+    },
+    "type_": "entity",
+    "name": {
+     "name": "PriceSummary",
+     "case_sensitive": false,
+     "__class__": "VhdlIdentifier"
+    },
+    "locations": [
+     [
+      18,
+      7
+     ]
+    ],
+    "__class__": "VhdlDesignUnit"
    },
    {
     "owner": {
@@ -133126,6 +133659,25 @@
     "locations": [
      [
       24,
+      7
+     ]
+    ],
+    "__class__": "VhdlDesignUnit"
+   },
+   {
+    "owner": {
+     "name": "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/mmio.gen.vhd",
+     "__class__": "Path"
+    },
+    "type_": "entity",
+    "name": {
+     "name": "mmio",
+     "case_sensitive": false,
+     "__class__": "VhdlIdentifier"
+    },
+    "locations": [
+     [
+      11,
       7
      ]
     ],
