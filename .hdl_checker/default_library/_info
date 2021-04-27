@@ -9,73 +9,308 @@ z2
 !i10f 100
 cModel Technology
 Z0 d/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1
-Pforecast_pkg
-DPx8 synopsys 10 attributes 0 22 dc>JdEHRM@6GGENe5bZ?D1
-DPx4 ieee 14 std_logic_misc 0 22 dN]HY6l5ohPcZ:TaC@B;53
-Z1 DPx4 ieee 11 numeric_std 0 22 aU^R8eGcicLcUFIaBQSL>3
-Z2 DPx3 std 6 textio 0 22 zE1`LPoLg^DX3Oz^4Fj1K3
-Z3 DPx4 ieee 14 std_logic_1164 0 22 cVAk:aDinOX8^VGI1ekP<3
-!i122 0
-w1618325957
+Pparallelpatterns_pkg
+Z1 DPx8 synopsys 10 attributes 0 22 dc>JdEHRM@6GGENe5bZ?D1
+Z2 DPx4 ieee 14 std_logic_misc 0 22 dN]HY6l5ohPcZ:TaC@B;53
+Z3 DPx4 ieee 11 numeric_std 0 22 aU^R8eGcicLcUFIaBQSL>3
+Z4 DPx3 std 6 textio 0 22 zE1`LPoLg^DX3Oz^4Fj1K3
+Z5 DPx4 ieee 14 std_logic_1164 0 22 cVAk:aDinOX8^VGI1ekP<3
+!i122 498
+w1619404092
 R0
-8/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/4DDR/design/vhdl/Forecast_pkg.vhd
-F/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/4DDR/design/vhdl/Forecast_pkg.vhd
+8/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/parallel_patterns/ParallelPatterns_pkg.vhd
+F/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/parallel_patterns/ParallelPatterns_pkg.vhd
+l0
+L26 1
+VBZlMiUzI903>`mX5AP8::3
+!s100 NANSfT<Qd9UhHKU>DgYV]0
+Z6 OV;C;2020.1;71
+32
+Z7 !s110 1619508373
+!i10b 1
+Z8 !s108 1619508373.000000
+!s90 -modelsimini|/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/.hdl_checker/modelsim.ini|-quiet|-work|/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/.hdl_checker/default_library|-defercheck|-nocheck|-permissive|-explicit|/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/parallel_patterns/ParallelPatterns_pkg.vhd|
+!s107 /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/parallel_patterns/ParallelPatterns_pkg.vhd|
+!i113 1
+Z9 o-permissive -quiet -work /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/.hdl_checker/default_library -defercheck -nocheck -explicit
+Z10 tExplicit 1 CvgOpt 0
+Epu
+Z11 w1619406757
+Z12 DPx4 work 8 tpch_pkg 0 22 Qe8iEgUfdnI1=B8UUOc6f3
+Z13 DPx4 work 20 parallelpatterns_pkg 0 22 BZlMiUzI903>`mX5AP8::3
+Z14 DPx4 work 10 stream_pkg 0 22 @;@f>CMn1bGTeOYbz_TP_3
+R3
+R1
+R2
+R4
+R5
+!i122 499
+R0
+Z15 8/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/PU.vhd
+Z16 F/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/PU.vhd
+l0
+L12 1
+VkhoHo9BVPhZ^g:BM:IcV=2
+!s100 cj7@Q6Vez?jno^eU?j`@^0
+R6
+32
+R7
+!i10b 1
+R8
+Z17 !s90 -modelsimini|/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/.hdl_checker/modelsim.ini|-quiet|-work|/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/.hdl_checker/default_library|-check_synthesis|-lint|-rangecheck|-pedanticerrors|-explicit|/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/PU.vhd|
+Z18 !s107 /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/PU.vhd|
+!i113 1
+Z19 o-quiet -work /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/.hdl_checker/default_library -check_synthesis -lint -rangecheck -pedanticerrors -explicit
+R10
+Abehavioral
+R12
+R13
+R14
+R3
+R1
+R2
+R4
+R5
+DEx4 work 2 pu 0 22 khoHo9BVPhZ^g:BM:IcV=2
+!i122 499
+l437
+L163 919
+VD>_U;]XNPMABMY6XINYmL3
+!s100 deh<]A@>J_;0?]d[c1DE[3
+R6
+32
+R7
+!i10b 1
+R8
+R17
+R18
+!i113 1
+R19
+R10
+Ereducestage
+w1619509773
+R12
+R14
+R1
+R2
+R13
+DPx4 ieee 17 fixed_float_types 0 22 j<WD5SZ6`I4KC;8P]h@_10
+DPx4 ieee 17 fixed_generic_pkg 0 22 Rl?j<5:i_L<aE9]<7A]V?0
+DPx13 ieee_proposed 9 fixed_pkg 0 22 ^>PE^?le`@`U>X4g@UbL11
+R3
+R4
+R5
+!i122 509
+R0
+8/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/ReduceStage.vhd
+F/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/ReduceStage.vhd
+l0
+L15 1
+V@A<h1_f1lZNUYJGn0MNK32
+!s100 @e3`Z?CMY>bOb7HgDlnoO1
+R6
+32
+!s110 1619509774
+!i10b 1
+!s108 1619509774.000000
+!s90 -modelsimini|/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/.hdl_checker/modelsim.ini|-quiet|-work|/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/.hdl_checker/default_library|-check_synthesis|-lint|-rangecheck|-pedanticerrors|-explicit|/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/ReduceStage.vhd|
+!s107 /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/ReduceStage.vhd|
+!i113 1
+R19
+R10
+Ereducestream
+Z20 w1619404094
+Z21 DPx4 work 20 parallelpatterns_pkg 0 22 NA<;W^F]fK<0Dh2gK:5E^3
+R1
+R2
+R14
+R3
+R4
+R5
+!i122 133
+R0
+Z22 8/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/parallel_patterns/ReduceStream.vhd
+Z23 F/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/parallel_patterns/ReduceStream.vhd
+l0
+L8 1
+VU_c_mK4>2IPK8Q>3bzU<^3
+!s100 X30z_GffKG_eF<2cmfg:F2
+R6
+32
+Z24 !s110 1619404094
+!i10b 1
+Z25 !s108 1619404094.000000
+Z26 !s90 -modelsimini|/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/.hdl_checker/modelsim.ini|-quiet|-work|/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/.hdl_checker/default_library|-check_synthesis|-lint|-rangecheck|-pedanticerrors|-explicit|/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/parallel_patterns/ReduceStream.vhd|
+Z27 !s107 /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/parallel_patterns/ReduceStream.vhd|
+!i113 1
+R19
+R10
+Abehavioral
+R21
+R1
+R2
+R14
+R3
+R4
+R5
+DEx4 work 12 reducestream 0 22 U_c_mK4>2IPK8Q>3bzU<^3
+!i122 133
+l93
+L70 138
+V04TTbzb_;bFZ?fid:WKVf0
+!s100 DLY^0V5>10MFfdmm16nUh2
+R6
+32
+R24
+!i10b 1
+R25
+R26
+R27
+!i113 1
+R19
+R10
+Pstream_pkg
+R3
+R1
+R2
+R4
+R5
+!i122 497
+Z28 w1618325840
+R0
+Z29 8/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/vhlib/stream/Stream_pkg.vhd
+Z30 F/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/vhlib/stream/Stream_pkg.vhd
+l0
+L20 1
+V@;@f>CMn1bGTeOYbz_TP_3
+!s100 H^bnO5B8FSCTl4z79U=Xe1
+R6
+32
+b1
+R7
+!i10b 1
+Z31 !s108 1619508372.000000
+Z32 !s90 -modelsimini|/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/.hdl_checker/modelsim.ini|-quiet|-work|/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/.hdl_checker/default_library|-defercheck|-nocheck|-permissive|-explicit|/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/vhlib/stream/Stream_pkg.vhd|
+Z33 !s107 /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/vhlib/stream/Stream_pkg.vhd|
+!i113 1
+R9
+R10
+Bbody
+R14
+R3
+R1
+R2
+R4
+R5
+!i122 497
+l0
+L440 1
+V[IzFCKMQ=c1hY`D`00<UA1
+!s100 9BWeX6E9dE>dIJHnMf5Vf0
+R6
+32
+R7
+!i10b 1
+R31
+R32
+R33
+!i113 1
+R9
+R10
+Estreamaccumulator
+Z34 w1619403444
+R1
+R2
+Z35 DPx4 work 8 tpch_pkg 0 22 2D:OGk7gHHULmVBG87X>[3
+R3
+R4
+R5
+!i122 47
+R0
+Z36 8/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/parallel_patterns/StreamAccumulator.vhd
+Z37 F/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/parallel_patterns/StreamAccumulator.vhd
+l0
+L30 1
+VPa9XRjVzzYAG:LYZbAT0C0
+!s100 KzIS=A9YXVQ[8DboU5YC]3
+R6
+32
+Z38 !s110 1619403445
+!i10b 1
+Z39 !s108 1619403445.000000
+Z40 !s90 -modelsimini|/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/.hdl_checker/modelsim.ini|-quiet|-work|/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/.hdl_checker/default_library|-check_synthesis|-lint|-rangecheck|-pedanticerrors|-explicit|/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/parallel_patterns/StreamAccumulator.vhd|
+Z41 !s107 /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/parallel_patterns/StreamAccumulator.vhd|
+!i113 1
+R19
+R10
+Abehavioral
+R1
+R2
+R35
+R3
+R4
+R5
+DEx4 work 17 streamaccumulator 0 22 Pa9XRjVzzYAG:LYZbAT0C0
+!i122 47
+l101
+L78 116
+VOePo^d9=C_3T>G<4Rb>Mf3
+!s100 I5c:ea<S:=fIVd@eMCXYb3
+R6
+32
+R38
+!i10b 1
+R39
+R40
+R41
+!i113 1
+R19
+R10
+Ptpch_pkg
+R1
+R2
+R3
+R4
+R5
+!i122 496
+Z42 w1619404438
+R0
+Z43 8/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/Tpch_pkg.vhd
+Z44 F/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/Tpch_pkg.vhd
 l0
 L10 1
-V]?ZL1ROTnNn?1Vm][;oS^1
-!s100 99h3XcjjmJ610[W=X5=D]0
-Z4 OV;C;2020.1;71
+VQe8iEgUfdnI1=B8UUOc6f3
+!s100 9Io??HUg8]1l_k1Kcg7A@3
+R6
 32
-!s110 1618408977
+b1
+Z45 !s110 1619508372
 !i10b 1
-!s108 1618408977.000000
-!s90 -modelsimini|/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/.hdl_checker/modelsim.ini|-quiet|-work|/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/.hdl_checker/default_library|-defercheck|-nocheck|-permissive|-explicit|/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/4DDR/design/vhdl/Forecast_pkg.vhd|
-!s107 /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/4DDR/design/vhdl/Forecast_pkg.vhd|
+Z46 !s108 1619508371.000000
+Z47 !s90 -modelsimini|/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/.hdl_checker/modelsim.ini|-quiet|-work|/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/.hdl_checker/default_library|-defercheck|-nocheck|-permissive|-explicit|/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/Tpch_pkg.vhd|
+Z48 !s107 /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/Tpch_pkg.vhd|
 !i113 1
-o-permissive -quiet -work /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/.hdl_checker/default_library -defercheck -nocheck -explicit
-Z5 tExplicit 1 CvgOpt 0
-Epricesummary
-Z6 w1618421494
+R9
+R10
+Bbody
+R12
 R1
 R2
 R3
-!i122 97
-R0
-8/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/PriceSummary.gen.vhd
-F/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/PriceSummary.gen.vhd
+R4
+R5
+!i122 496
 l0
-L21 1
-VTRHJj?Q5V6jKIMPNW2hnC3
-!s100 W9cO2Bc^T31NHDQJE1zO>2
-R4
+L471 1
+V[GVA681FEOl1h@P<;MI3;2
+!s100 ?SnmHM_YCa4fAK2<fRh=32
+R6
 32
-!s110 1618421497
+R45
 !i10b 1
-!s108 1618421496.000000
-!s90 -modelsimini|/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/.hdl_checker/modelsim.ini|-quiet|-work|/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/.hdl_checker/default_library|-check_synthesis|-lint|-rangecheck|-pedanticerrors|-explicit|/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/PriceSummary.gen.vhd|
-!s107 /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/PriceSummary.gen.vhd|
+R46
+R47
+R48
 !i113 1
-Z7 o-quiet -work /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/.hdl_checker/default_library -check_synthesis -lint -rangecheck -pedanticerrors -explicit
-R5
-Aimplementation
-R1
-R2
-R3
-DEx4 work 12 pricesummary 0 22 hAogRZjg<Xo]?WIb`TmiV0
-!i122 70
-l159
-L158 4
-VGiFW1CH4c>h^im:Q@jV_?1
-!s100 =6<fJ9D1KONRn2efN[f1a0
-R4
-32
-!s110 1618410436
-!i10b 1
-!s108 1618410436.000000
-!s90 -modelsimini|/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/.hdl_checker/modelsim.ini|-quiet|-work|/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/.hdl_checker/default_library|-check_synthesis|-lint|-rangecheck|-pedanticerrors|-explicit|/tmp/tmpaaoa5pm5.vhd|
-!s107 /tmp/tmpaaoa5pm5.vhd|
-!i113 1
-R7
-R5
-F/tmp/tmpaaoa5pm5.vhd
-8/tmp/tmpaaoa5pm5.vhd
+R9
+R10

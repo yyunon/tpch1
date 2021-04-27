@@ -1,149 +1,80 @@
 #Define your project's libraries and source files here.
 #This section is compulsory.
 Libraries:
-    #The name of the library.
-    - name: work
+  #The name of the library.
+  - name: work
     #The paths where the source files for this library can be found. Use "**" to match arbitrarily nested directories.
-      paths: 
-        
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/vhlib/util/*.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/vhlib/stream/*.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/vhlib/util/UtilMisc_pkg.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/vhlib/util/UtilInt_pkg.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/vhlib/util/UtilConv_pkg.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/vhlib/stream/Stream_pkg.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/interconnect/Interconnect_pkg.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/arrow/Arrow_pkg.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/axi/AxiWriteConverter.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/axi/AxiReadConverter.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/interconnect/BusWriteArbiterVec.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/interconnect/BusWriteBuffer.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/vhlib/stream/StreamPrefixSum.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/buffers/Buffer_pkg.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/buffers/BufferWriterPrePadder.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/vhlib/stream/StreamPipelineControl.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/vhlib/stream/StreamPipelineBarrel.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/vhlib/stream/StreamReshaper.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/buffers/BufferWriterPreCmdGen.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/buffers/BufferWriterPre.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/buffers/BufferWriterCmdGenBusReq.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/buffers/BufferWriter.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/vhlib/stream/StreamElementCounter.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/arrays/ArrayConfigParse_pkg.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/arrays/ArrayConfig_pkg.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/arrays/Array_pkg.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/arrays/ArrayWriterListSync.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/vhlib/util/UtilStr_pkg.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/arrays/ArrayWriterListPrim.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/arrays/ArrayWriterLevel.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/arrays/ArrayWriterArb.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/arrays/ArrayWriter.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/vhlib/stream/StreamArb.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/interconnect/BusReadArbiterVec.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/arrays/ArrayReaderStruct.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/arrays/ArrayReaderNull.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/arrays/ArrayReaderListPrim.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/interconnect/BusReadBuffer.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/buffers/BufferReaderRespCtrl.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/buffers/BufferReaderResp.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/vhlib/stream/StreamGearboxSerializer.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/vhlib/stream/StreamGearboxParallelizer.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/vhlib/stream/StreamGearbox.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/buffers/BufferReaderPost.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/buffers/BufferReaderCmdGenBusReq.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/buffers/BufferReaderCmd.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/buffers/BufferReader.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/arrays/ArrayReaderUnlockCombine.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/vhlib/stream/StreamSync.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/vhlib/stream/StreamNormalizer.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/vhlib/stream/StreamSlice.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/vhlib/util/UtilRam1R1W.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/vhlib/stream/StreamFIFOCounter.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/vhlib/util/UtilRam_pkg.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/vhlib/stream/StreamFIFO.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/vhlib/stream/StreamBuffer.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/arrays/ArrayReaderListSyncDecoder.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/arrays/ArrayReaderListSync.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/arrays/ArrayReaderList.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/arrays/ArrayReaderLevel.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/arrays/ArrayReaderArb.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/arrays/ArrayReader.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/PriceSummary_l.gen.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/vhdmmio_pkg.gen.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/mmio_pkg.gen.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/mmio.gen.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/arrays/ArrayCmdCtrlMerger.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/parallel_patterns/ParallelPatterns_pkg.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/parallel_patterns/*.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/Tpch_pkg.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/PriceSummary.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/PriceSummary_Nucleus.gen.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/PriceSummary_Mantle.gen.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/axi/Axi_pkg.vhd"
-        - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/AxiTop.gen.vhd"
+    paths:
+      - "/home/yyunon/thesis_journals/resources/tpc-flecher/tpch6/hardware/vhdl/*.vhd"
+      - "/home/yyunon/thesis_journals/resources/fletcher/hardware/arrays/*.vhd"
+      - "/home/yyunon/thesis_journals/resources/fletcher/hardware/arrow/*.vhd"
+      - "/home/yyunon/thesis_journals/resources/fletcher/hardware/axi/*.vhd"
+      - "/home/yyunon/thesis_journals/resources/fletcher/hardware/buffers/*.vhd"
+      - "/home/yyunon/thesis_journals/resources/fletcher/hardware/interconnect/*.vhd"
+      - "/home/yyunon/thesis_journals/resources/fletcher/hardware/parallel_patterns/*.vhd"
+      - "/home/yyunon/thesis_journals/resources/fletcher/hardware/profile/*.vhd"
+      - "/home/yyunon/thesis_journals/resources/fletcher/hardware/test/*.vhd"
+      - "/home/yyunon/thesis_journals/resources/fletcher/hardware/wrapper/*.vhd"
+      - "/home/yyunon/thesis_journals/resources/fletcher/hardware/parallel_patterns/*.vhd"
+      - "/home/yyunon/thesis_journals/resources/fletcher/hardware/vhlib/stream/*.vhd"
+      - "/home/yyunon/thesis_journals/resources/fletcher/hardware/vhlib/util/*.vhd"
+      - "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/*.vhd"
 
-    #Point to the IEEE standard libraries
-    - name: ieee
-      paths:
-        - "/home/yyunon/vhdl/93/IEEE/*.vhd"
-        - "/home/yyunon/vhdl/93/IEEE/*.vhdl"
+  #Point to the IEEE standard libraries
+  - name: ieee
+    paths:
+      - "/home/yyunon/vhdl/93/IEEE/*.vhd"
+      - "/home/yyunon/vhdl/93/IEEE/*.vhdl"
 
-    #Point to the IEEE standard libraries
-    - name: ieee_proposed
-      paths:
-        - "/home/yyunon/vhdl/2008/IEEE/*.vhd"
-        - "/home/yyunon/vhdl/2008/IEEE/*.vhdl"
+  #Point to the IEEE standard libraries
+  - name: ieee_proposed
+    paths:
+      - "/home/yyunon/vhdl/2008/IEEE/*.vhd"
+      - "/home/yyunon/vhdl/2008/IEEE/*.vhdl"
 
 Preferences:
-    #Enable/disable typechecking
-    TypeCheck: True
+  #Enable/disable typechecking
+  TypeCheck: True
 
+  #Display errors over multiple lines
+  MultiLineErrors: True
 
-    #Display errors over multiple lines
-    MultiLineErrors: True
+  #Enable/disable check-as-you-type
+  CheckOnChange: True
 
+  #Enable/disable linting
+  Lint: True
 
-    #Enable/disable check-as-you-type
-    CheckOnChange: True
-
-
-    #Enable/disable linting
-    Lint: True
-
-
-    #Display the first sintax error only in a file
-    FirstSyntaxErrorOnly: True
-
+  #Display the first sintax error only in a file
+  FirstSyntaxErrorOnly: True
 
 #Linter rule configuration.
 #Rules can be enabled or disabled.
 #Rules also have a severity. It may be one of Info, Warning, Critical or Error.
 Lint:
-    #Threshold, below which messages are not displayed.
-    Threshold: Warning
+  #Threshold, below which messages are not displayed.
+  Threshold: Warning
 
+  #Long form rule configuration. Both enabled/disabled status and severity can be configured this way.
+  DeclaredNotAssigned:
+    enabled: True
+    severity: Warning #Default severity Warning
 
-    #Long form rule configuration. Both enabled/disabled status and severity can be configured this way.
-    DeclaredNotAssigned: 
-        enabled:  True
-        severity: Warning #Default severity Warning
-
-
-    #Short form. Only enabled/disabled status can be specified. Severity is the default for the rule.
-    DeclaredNotRead:             True #Default severity Warning
-    ReadNotAssigned:             True #Default severity Critical
-    SensitivityListCheck:        True #Default severity Warning
-    ExtraSensitivityListCheck:   True #Default severity Warning
-    DuplicateSensitivity:        True #Default severity Warning
-    LatchCheck:                  True #Default severity Critical
-    VariableNotRead:             True #Default severity Warning
-    VariableNotWritten:          True #Default severity Warning
-    PortNotRead:                 True #Default severity Warning
-    PortNotWritten:              True #Default severity Critical
-    NoPrimaryUnit:               True #Default severity Warning
-    DuplicateLibraryImport:      True #Default severity Warning
-    DuplicatePackageUsage:       True #Default severity Warning
-    DeprecatedPackages:          True #Default severity Warning
-    ImplicitLibraries:           True #Default severity Warning
-    DisconnectedPorts:           True #Default severity Critical
-    IntNoRange:                  True #Default severity Warning
+  #Short form. Only enabled/disabled status can be specified. Severity is the default for the rule.
+  DeclaredNotRead: True #Default severity Warning
+  ReadNotAssigned: True #Default severity Critical
+  SensitivityListCheck: True #Default severity Warning
+  ExtraSensitivityListCheck: True #Default severity Warning
+  DuplicateSensitivity: True #Default severity Warning
+  LatchCheck: True #Default severity Critical
+  VariableNotRead: True #Default severity Warning
+  VariableNotWritten: True #Default severity Warning
+  PortNotRead: True #Default severity Warning
+  PortNotWritten: True #Default severity Critical
+  NoPrimaryUnit: True #Default severity Warning
+  DuplicateLibraryImport: True #Default severity Warning
+  DuplicatePackageUsage: True #Default severity Warning
+  DeprecatedPackages: True #Default severity Warning
+  ImplicitLibraries: True #Default severity Warning
+  DisconnectedPorts: True #Default severity Critical
+  IntNoRange: True #Default severity Warning

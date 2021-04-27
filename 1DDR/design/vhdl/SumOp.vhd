@@ -18,113 +18,116 @@
 -- 
 ----------------------------------------------------------------------------------
 
-LIBRARY ieee;
-USE ieee.std_logic_1164.ALL;
-USE ieee.numeric_std.ALL;
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
 
-LIBRARY work;
-USE work.Stream_pkg.ALL;
-USE work.Tpch_pkg.ALL;
+library work;
+use work.Stream_pkg.all;
+use work.Tpch_pkg.all;
 --USE work.fixed_generic_pkg_mod.ALL;
 
---LIBRARY ieee_proposed;
---USE ieee_proposed.fixed_pkg.ALL;
-ENTITY SumOp IS
-  GENERIC (
+library ieee_proposed;
+use ieee_proposed.fixed_pkg.all;
+entity SumOp is
+  generic (
 
     -- Width of the stream data vector.
-    FIXED_LEFT_INDEX : INTEGER;
-    FIXED_RIGHT_INDEX : INTEGER;
-    DATA_WIDTH : NATURAL;
-    DATA_TYPE : STRING := ""
+    FIXED_LEFT_INDEX  : integer;
+    FIXED_RIGHT_INDEX : integer;
+    NUM_LANES         : integer;
+    DATA_WIDTH        : natural;
+    DATA_TYPE         : string := ""
 
   );
-  PORT (
+  port (
 
     -- Rising-edge sensitive clock.
-    clk : IN STD_LOGIC;
+    clk        : in std_logic;
 
     -- Active-high synchronous reset.
-    reset : IN STD_LOGIC;
+    reset      : in std_logic;
 
     --OP1 Input stream.
-    op1_valid : IN STD_LOGIC;
-    op1_dvalid : IN STD_LOGIC := '1';
-    op1_ready : OUT STD_LOGIC;
-    op1_data : IN STD_LOGIC_VECTOR(DATA_WIDTH - 1 DOWNTO 0);
+    op1_valid  : in std_logic;
+    op1_dvalid : in std_logic := '1';
+    op1_ready  : out std_logic;
+    op1_data   : in std_logic_vector(NUM_LANES * DATA_WIDTH - 1 downto 0);
 
     --OP2 Input stream.
-    op2_valid : IN STD_LOGIC;
-    op2_dvalid : IN STD_LOGIC := '1';
-    op2_ready : OUT STD_LOGIC;
-    op2_data : IN STD_LOGIC_VECTOR(DATA_WIDTH - 1 DOWNTO 0);
+    op2_valid  : in std_logic;
+    op2_dvalid : in std_logic := '1';
+    op2_ready  : out std_logic;
+    op2_data   : in std_logic_vector(NUM_LANES * DATA_WIDTH - 1 downto 0);
 
     -- Output stream.
-    out_valid : OUT STD_LOGIC;
-    out_ready : IN STD_LOGIC;
-    out_data : OUT STD_LOGIC_VECTOR(DATA_WIDTH - 1 DOWNTO 0);
-    out_dvalid : OUT STD_LOGIC
+    out_valid  : out std_logic;
+    out_ready  : in std_logic;
+    out_data   : out std_logic_vector(NUM_LANES * DATA_WIDTH - 1 downto 0);
+    out_dvalid : out std_logic
   );
-END SumOp;
+end SumOp;
 
-ARCHITECTURE Behavioral OF SumOp IS
+architecture Behavioral of SumOp is
 
   --subtype float64 is float(11 downto -52);
-  SIGNAL temp_buffer : sfixed(FIXED_LEFT_INDEX DOWNTO FIXED_RIGHT_INDEX);
-  SIGNAL ops_valid : STD_LOGIC;
-  SIGNAL ops_ready : STD_LOGIC;
+  signal temp_buffer : sfixed(FIXED_LEFT_INDEX downto FIXED_RIGHT_INDEX);
+  signal ops_valid   : std_logic;
+  signal ops_ready   : std_logic;
 
-  SIGNAL result : STD_LOGIC_VECTOR(DATA_WIDTH - 1 DOWNTO 0);
+  signal result      : std_logic_vector(NUM_LANES * DATA_WIDTH - 1 downto 0);
 
-BEGIN
+begin
   -- Synchronize the operand streams.
   op_in_sync : StreamSync
-  GENERIC MAP(
-    NUM_INPUTS => 2,
+  generic map(
+    NUM_INPUTS  => 2,
     NUM_OUTPUTS => 1
   )
-  PORT MAP(
-    clk => clk,
-    reset => reset,
+  port map(
+    clk          => clk,
+    reset        => reset,
 
-    in_valid(0) => op1_valid,
-    in_valid(1) => op2_valid,
-    in_ready(0) => op1_ready,
-    in_ready(1) => op2_ready,
+    in_valid(0)  => op1_valid,
+    in_valid(1)  => op2_valid,
+    in_ready(0)  => op1_ready,
+    in_ready(1)  => op2_ready,
 
     out_valid(0) => ops_valid,
     out_ready(0) => ops_ready
   );
-
-  float_comb_process :
-  IF DATA_TYPE = "FLOAT64" GENERATE
-    PROCESS (op1_data, op2_data) IS
-      VARIABLE temp_buffer_1 : sfixed(FIXED_LEFT_INDEX DOWNTO FIXED_RIGHT_INDEX);
-      VARIABLE temp_buffer_2 : sfixed(FIXED_LEFT_INDEX DOWNTO FIXED_RIGHT_INDEX);
-      VARIABLE temp_res : sfixed(FIXED_LEFT_INDEX + 1 DOWNTO FIXED_RIGHT_INDEX);
-    BEGIN
-      temp_buffer_1 := to_sfixed(op1_data, temp_buffer_1'high, temp_buffer_1'low);
-      temp_buffer_2 := to_sfixed(op2_data, temp_buffer_2'high, temp_buffer_2'low);
-      temp_res := temp_buffer_1 + temp_buffer_2;
-      temp_buffer <= resize(arg => temp_res, left_index => FIXED_LEFT_INDEX, right_index => FIXED_RIGHT_INDEX, round_style => fixed_round_style, overflow_style => fixed_overflow_style);
-    END PROCESS;
-    PROCESS (temp_buffer) IS
-    BEGIN
-      result <= to_slv(temp_buffer);
-    END PROCESS;
-  END GENERATE;
+  sum_slice_gen :
+  for s in 0 to NUM_LANES - 1 generate
+    float_comb_process :
+    if DATA_TYPE = "FIXED64" generate
+      process (op1_data, op2_data) is
+        variable temp_buffer_1 : sfixed(FIXED_LEFT_INDEX downto FIXED_RIGHT_INDEX);
+        variable temp_buffer_2 : sfixed(FIXED_LEFT_INDEX downto FIXED_RIGHT_INDEX);
+        variable temp_res      : sfixed(FIXED_LEFT_INDEX + 1 downto FIXED_RIGHT_INDEX);
+      begin
+        temp_buffer_1 := to_sfixed(op1_data((s + 1) * DATA_WIDTH - 1 downto s * DATA_WIDTH), temp_buffer_1'high, temp_buffer_1'low);
+        temp_buffer_2 := to_sfixed(op2_data((s + 1) * DATA_WIDTH - 1 downto s * DATA_WIDTH), temp_buffer_2'high, temp_buffer_2'low);
+        temp_res      := temp_buffer_1 + temp_buffer_2;
+        temp_buffer <= resize(arg => temp_res, left_index => FIXED_LEFT_INDEX, right_index => FIXED_RIGHT_INDEX, round_style => fixed_round_style, overflow_style => fixed_overflow_style);
+      end process;
+      process (temp_buffer) is
+      begin
+        result <= to_slv(temp_buffer((s + 1) * DATA_WIDTH - 1 downto s * DATA_WIDTH));
+      end process;
+    end generate;
+  end generate;
 
   int_comb_process :
-  IF DATA_TYPE = "INT64" GENERATE
-    PROCESS (op1_data, op2_data) IS
-    BEGIN
-      result <= STD_LOGIC_VECTOR(signed(op1_data) + signed(op2_data));
-    END PROCESS;
-  END GENERATE;
+  if DATA_TYPE = "INT64" generate
+    process (op1_data, op2_data) is
+    begin
+      result <= std_logic_vector(signed(op1_data) + signed(op2_data));
+    end process;
+  end generate;
 
-  out_data <= STD_LOGIC_VECTOR(result);
-  out_valid <= ops_valid;
-  out_dvalid <= op1_dvalid AND op2_dvalid;
-  ops_ready <= out_ready;
+  out_data   <= std_logic_vector(result);
+  out_valid  <= ops_valid;
+  out_dvalid <= op1_dvalid and op2_dvalid;
+  ops_ready  <= out_ready;
 
-END Behavioral;
+end Behavioral;

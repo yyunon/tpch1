@@ -18,229 +18,236 @@
 -- 
 ----------------------------------------------------------------------------------
 
-LIBRARY ieee;
-USE ieee.std_logic_1164.ALL;
-USE ieee.numeric_std.ALL;
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
 
---LIBRARY ieee_proposed;
---USE ieee_proposed.fixed_pkg.ALL;
+library ieee_proposed;
+use ieee_proposed.fixed_pkg.all;
 
-LIBRARY work;
-USE work.Stream_pkg.ALL;
-USE work.ParallelPatterns_pkg.ALL;
-USE work.Tpch_pkg.ALL;
+library work;
+use work.Stream_pkg.all;
+use work.ParallelPatterns_pkg.all;
+use work.Tpch_pkg.all;
 --USE work.fixed_generic_pkg_mod.ALL;
-ENTITY MergeOp IS
-  GENERIC (
+entity MergeOp is
+  generic (
 
     -- Width of the stream data vector.
-    FIXED_LEFT_INDEX : INTEGER;
-    FIXED_RIGHT_INDEX : INTEGER;
-    DATA_WIDTH : NATURAL;
-    INPUT_MIN_DEPTH : NATURAL;
-    OUTPUT_MIN_DEPTH : NATURAL;
-    OPERATOR : STRING := ""
+    FIXED_LEFT_INDEX  : integer;
+    FIXED_RIGHT_INDEX : integer;
+    DATA_WIDTH        : natural;
+    NUM_INPUTS        : natural := 2;
+    NUM_OUTPUTS       : natural := 1;
+    INPUT_MIN_DEPTH   : natural;
+    OUTPUT_MIN_DEPTH  : natural;
+    OPERATOR          : string := ""
 
   );
-  PORT (
+  port (
 
     -- Rising-edge sensitive clock.
-    clk : IN STD_LOGIC;
+    clk           : in std_logic;
 
     -- Active-high synchronous reset.
-    reset : IN STD_LOGIC;
+    reset         : in std_logic;
 
     --OP1 Input stream.
-    op1_valid : IN STD_LOGIC;
-    op1_last : IN STD_LOGIC;
-    op1_dvalid : IN STD_LOGIC := '1';
-    op1_data : IN STD_LOGIC_VECTOR(DATA_WIDTH - 1 DOWNTO 0);
-    op1_ready : OUT STD_LOGIC;
-
-    --OP2 Input stream.
-    op2_valid : IN STD_LOGIC;
-    op2_last : IN STD_LOGIC;
-    op2_dvalid : IN STD_LOGIC := '1';
-    op2_ready : OUT STD_LOGIC;
-    op2_data : IN STD_LOGIC_VECTOR(DATA_WIDTH - 1 DOWNTO 0);
-
+    inputs_valid  : in TUPLE(NUM_INPUTS - 1 downto 0);
+    inputs_last   : in TUPLE(NUM_INPUTS - 1 downto 0);
+    inputs_dvalid : in TUPLE(NUM_INPUTS - 1 downto 0);
+    inputs_data   : in TUPLE_DATA_64(NUM_INPUTS - 1 downto 0);
+    inputs_ready  : out TUPLE(NUM_INPUTS - 1 downto 0);
     -- Output stream.
-    out_valid : OUT STD_LOGIC;
-    out_last : OUT STD_LOGIC;
-    out_ready : IN STD_LOGIC;
-    out_data : OUT STD_LOGIC_VECTOR(DATA_WIDTH - 1 DOWNTO 0);
-    out_dvalid : OUT STD_LOGIC
+    out_valid     : out std_logic;
+    out_last      : out std_logic;
+    out_ready     : in std_logic;
+    out_data      : out std_logic_vector(DATA_WIDTH - 1 downto 0);
+    out_dvalid    : out std_logic
   );
-END MergeOp;
+end MergeOp;
 
-ARCHITECTURE Behavioral OF MergeOp IS
+architecture Behavioral of MergeOp is
 
-  SIGNAL out_s_valid : STD_LOGIC;
-  SIGNAL out_s_ready : STD_LOGIC;
+  signal out_s_valid    : std_logic;
+  signal out_s_ready    : std_logic;
 
-  SIGNAL buf_op1_valid : STD_LOGIC;
-  SIGNAL buf_op1_dvalid : STD_LOGIC;
-  SIGNAL buf_op1_last : STD_LOGIC := '0';
-  SIGNAL buf_op1_ready : STD_LOGIC;
-  SIGNAL buf_op1_data : STD_LOGIC_VECTOR(DATA_WIDTH - 1 DOWNTO 0);
+  signal buf_op1_valid  : std_logic;
+  signal buf_op1_dvalid : std_logic;
+  signal buf_op1_last   : std_logic := '0';
+  signal buf_op1_ready  : std_logic;
+  signal buf_op1_data   : std_logic_vector(DATA_WIDTH - 1 downto 0);
 
-  SIGNAL buf_op2_valid : STD_LOGIC;
-  SIGNAL buf_op2_dvalid : STD_LOGIC;
-  SIGNAL buf_op2_last : STD_LOGIC := '0';
-  SIGNAL buf_op2_ready : STD_LOGIC;
-  SIGNAL buf_op2_data : STD_LOGIC_VECTOR(DATA_WIDTH - 1 DOWNTO 0);
+  --OP1 Input stream.
+  signal op1_valid      : std_logic;
+  signal op1_last       : std_logic;
+  signal op1_dvalid     : std_logic := '1';
+  signal op1_data       : std_logic_vector(DATA_WIDTH - 1 downto 0);
+  signal op1_ready      : std_logic;
 
-  SIGNAL ops_valid : STD_LOGIC;
-  SIGNAL ops_dvalid : STD_LOGIC;
-  SIGNAL ops_last : STD_LOGIC := '0';
-  SIGNAL ops_ready : STD_LOGIC;
-  SIGNAL ops_data : STD_LOGIC_VECTOR(DATA_WIDTH - 1 DOWNTO 0);
+  --OP2 Input stream.
+  signal op2_valid      : std_logic;
+  signal op2_last       : std_logic;
+  signal op2_dvalid     : std_logic := '1';
+  signal op2_ready      : std_logic;
+  signal op2_data       : std_logic_vector(DATA_WIDTH - 1 downto 0);
 
-BEGIN
+  --OP3 Input stream.
+  signal op3_valid      : std_logic;
+  signal op3_last       : std_logic;
+  signal op3_dvalid     : std_logic := '1';
+  signal op3_ready      : std_logic;
+  signal op3_data       : std_logic_vector(DATA_WIDTH - 1 downto 0);
 
-  op1_buf : StreamBuffer
-  GENERIC MAP(
-    DATA_WIDTH => DATA_WIDTH + 2,
-    MIN_DEPTH => INPUT_MIN_DEPTH
-  )
-  PORT MAP(
-    clk => clk,
-    reset => reset,
-    in_valid => op1_valid,
-    in_ready => op1_ready,
-    in_data(65) => op1_last,
-    in_data(64) => op1_dvalid,
-    in_data(63 DOWNTO 0) => op1_data,
-    out_valid => buf_op1_valid,
-    out_ready => buf_op1_ready,
-    out_data(65) => buf_op1_last,
-    out_data(64) => buf_op1_dvalid,
-    out_data(63 DOWNTO 0) => buf_op1_data
-  );
+  signal buf_op2_valid  : std_logic;
+  signal buf_op2_dvalid : std_logic;
+  signal buf_op2_last   : std_logic := '0';
+  signal buf_op2_ready  : std_logic;
+  signal buf_op2_data   : std_logic_vector(DATA_WIDTH - 1 downto 0);
 
-  op2_buf : StreamBuffer
-  GENERIC MAP(
-    DATA_WIDTH => DATA_WIDTH + 2,
-    MIN_DEPTH => INPUT_MIN_DEPTH
-  )
-  PORT MAP(
-    clk => clk,
-    reset => reset,
-    in_valid => op2_valid,
-    in_ready => op2_ready,
-    in_data(65) => op2_last,
-    in_data(64) => op2_dvalid,
-    in_data(63 DOWNTO 0) => op2_data,
-    out_valid => buf_op2_valid,
-    out_ready => buf_op2_ready,
-    out_data(65) => buf_op2_last,
-    out_data(64) => buf_op2_dvalid,
-    out_data(63 DOWNTO 0) => buf_op2_data
-  );
+  signal ops_valid      : std_logic;
+  signal ops_dvalid     : std_logic;
+  signal ops_last       : std_logic := '0';
+  signal ops_ready      : std_logic;
+  signal ops_data       : std_logic_vector(DATA_WIDTH - 1 downto 0);
+
+begin
 
   out_buf : StreamBuffer
-  GENERIC MAP(
+  generic map(
     DATA_WIDTH => DATA_WIDTH + 2,
-    MIN_DEPTH => INPUT_MIN_DEPTH
+    MIN_DEPTH  => INPUT_MIN_DEPTH
   )
-  PORT MAP(
-    clk => clk,
-    reset => reset,
-    in_valid => out_s_valid,
-    in_ready => out_s_ready,
-    in_data(65) => ops_last,
-    in_data(64) => ops_dvalid,
-    in_data(63 DOWNTO 0) => ops_data,
-    out_valid => out_valid,
-    out_ready => out_ready,
-    out_data(65) => out_last,
-    out_data(64) => out_dvalid,
-    out_data(63 DOWNTO 0) => out_data
+  port map(
+    clk                   => clk,
+    reset                 => reset,
+    in_valid              => out_s_valid,
+    in_ready              => out_s_ready,
+    in_data(65)           => ops_last,
+    in_data(64)           => ops_dvalid,
+    in_data(63 downto 0)  => ops_data,
+    out_valid             => out_valid,
+    out_ready             => out_ready,
+    out_data(65)          => out_last,
+    out_data(64)          => out_dvalid,
+    out_data(63 downto 0) => out_data
   );
-  discount_sync : StreamSync
-  GENERIC MAP(
-    NUM_INPUTS => 2,
+
+  sync_streams : StreamSync
+  generic map(
+    NUM_INPUTS  => NUM_INPUTS,
     NUM_OUTPUTS => 1
   )
-  PORT MAP(
-    clk => clk,
-    reset => reset,
+  port map(
+    clk          => clk,
+    reset        => reset,
 
-    in_valid(0) => buf_op1_valid,
-    in_valid(1) => buf_op2_valid,
-    in_ready(0) => buf_op1_ready,
-    in_ready(1) => buf_op2_ready,
+    in_valid     => flatten_tuple(inputs_valid),
+    in_ready     => flatten_tuple(inputs_ready),
     out_valid(0) => ops_valid,
     out_ready(0) => ops_ready
   );
+  discount_fixed_process :
+  if OPERATOR = "DISCOUNT" generate
+    decode_inputs :
+    process (inputs_data, inputs_dvalid, inputs_last, inputs_data)
+    begin
+      op1_data   <= inputs_data(DATA_WIDTH - 1 downto 0);
+      op1_dvalid <= inputs_dvalid(0);
+      op1_last   <= inputs_last(0);
+      op2_data   <= inputs_data(2 * DATA_WIDTH - 1 downto DATA_WIDTH);
+      op2_dvalid <= inputs_dvalid(1);
+      op2_last   <= inputs_last(1);
+    end process;
+    mult_process :
+    process (op1_data, op2_data, ops_valid, out_s_ready) is
+      variable temp_buffer_1 : sfixed(fixed_left_index downto fixed_right_index);
+      variable temp_buffer_2 : sfixed(fixed_left_index downto fixed_right_index);
+      variable temp_buffer_3 : sfixed(fixed_left_index downto fixed_right_index);
+      variable temp_res      : sfixed(2 * fixed_left_index + 1 downto 2 * fixed_right_index);
+    begin
+      out_s_valid <= '0';
+      ops_ready   <= '0';
+      ops_dvalid  <= '0';
+      --ops_last_s <= '0';
+      if ops_valid = '1' and out_s_ready = '1' then
+        out_s_valid <= '1';
+        ops_ready   <= '1';
+        temp_buffer_1 := to_sfixed(op1_data, temp_buffer_1'high, temp_buffer_1'low);
+        temp_buffer_2 := to_sfixed(op2_data, temp_buffer_2'high, temp_buffer_2'low);
+        temp_res      := temp_buffer_1 * temp_buffer_2;
+        ops_data <= to_slv(resize(arg => temp_res, left_index => fixed_left_index, right_index => fixed_right_index, round_style => fixed_round_style, overflow_style => fixed_overflow_style));
+      end if;
+    end process;
+    ops_dvalid <= op1_dvalid and op2_dvalid;
+    ops_last   <= op1_last and op2_last;
+  end generate;
+  charge_fixed_process :
+  if OPERATOR = "CHARGE" generate
+    decode_inputs :
+    process (inputs_data, inputs_dvalid, inputs_last, inputs_data)
+    begin
+      op1_data   <= inputs_data(DATA_WIDTH - 1 downto 0);
+      op1_dvalid <= inputs_dvalid(0);
+      op1_last   <= inputs_last(0);
+      op2_data   <= inputs_data(2 * DATA_WIDTH - 1 downto DATA_WIDTH);
+      op2_dvalid <= inputs_dvalid(1);
+      op2_last   <= inputs_last(1);
+      op3_data   <= inputs_data(3 * data_width - 1 downto 2 * data_width);
+      op3_dvalid <= inputs_dvalid(2);
+      op3_last   <= inputs_last(2);
+    end process;
+    mult_process :
+    process (op1_data, op2_data, op3_data, ops_valid, out_s_ready) is
+      variable temp_buffer_1 : sfixed(fixed_left_index downto fixed_right_index);
+      variable temp_buffer_2 : sfixed(fixed_left_index downto fixed_right_index);
+      variable temp_buffer_3 : sfixed(fixed_left_index downto fixed_right_index);
+      variable temp_buffer_4 : sfixed(fixed_left_index downto fixed_right_index);
+      variable temp_res      : sfixed(2 * fixed_left_index + 1 downto 2 * fixed_right_index);
+      variable temp_res_2    : sfixed(2 * fixed_left_index + 1 downto 2 * fixed_right_index);
+    begin
+      out_s_valid <= '0';
+      ops_ready   <= '0';
+      ops_dvalid  <= '0';
+      --ops_last_s <= '0';
+      if ops_valid = '1' and out_s_ready = '1' then
+        out_s_valid <= '1';
+        ops_ready   <= '1';
+        temp_buffer_1 := to_sfixed(op1_data, temp_buffer_1'high, temp_buffer_1'low);
+        temp_buffer_2 := to_sfixed(op2_data, temp_buffer_2'high, temp_buffer_2'low);
+        temp_buffer_3 := to_sfixed(op3_data, temp_buffer_3'high, temp_buffer_3'low);
+        temp_res      := temp_buffer_1 * temp_buffer_2;
+        temp_buffer_4 := to_slv(resize(arg => temp_res, left_index => fixed_left_index, right_index => fixed_right_index, round_style => fixed_round_style, overflow_style => fixed_overflow_style));
+        temp_res_2    := temp_buffer_4 * temp_buffer_3;
+        ops_data <= to_slv(resize(arg => temp_res_2, left_index => fixed_left_index, right_index => fixed_right_index, round_style => fixed_round_style, overflow_style => fixed_overflow_style));
+      end if;
+    end process;
+    ops_dvalid <= op1_dvalid and op2_dvalid and op3_dvalid;
+    ops_last   <= op1_last and op2_last and op3_last;
+  end generate;
+  revenue_fixed_process :
+  if OPERATOR = "REVENUE" generate
+    mult_process :
+    process (op1_data, op2_data, ops_valid, out_s_ready) is
+      variable temp_buffer_1 : sfixed(FIXED_LEFT_INDEX downto FIXED_RIGHT_INDEX);
+      variable temp_buffer_2 : sfixed(FIXED_LEFT_INDEX downto FIXED_RIGHT_INDEX);
+      variable temp_res      : sfixed(2 * FIXED_LEFT_INDEX + 1 downto 2 * FIXED_RIGHT_INDEX);
+    begin
+      out_s_valid <= '0';
+      ops_ready   <= '0';
+      ops_dvalid  <= '0';
+      --ops_last_s <= '0';
+      if ops_valid = '1' and out_s_ready = '1' then
+        out_s_valid <= '1';
+        ops_ready   <= '1';
+        temp_buffer_1 := to_sfixed(op1_data, temp_buffer_1'high, temp_buffer_1'low);
+        temp_buffer_2 := to_sfixed(op2_data, temp_buffer_2'high, temp_buffer_2'low);
+        temp_res      := temp_buffer_1 * temp_buffer_2;
+        ops_data <= to_slv(resize(arg => temp_res, left_index => FIXED_LEFT_INDEX, right_index => FIXED_RIGHT_INDEX, round_style => fixed_round_style, overflow_style => fixed_overflow_style));
+      end if;
+    end process;
+    ops_dvalid <= op1_dvalid and op2_dvalid;
+    ops_last   <= op1_last and op2_last;
+  end generate;
 
-  revenue_fixed_process :
-  IF OPERATOR = "CHARGE" GENERATE
-    mult_process :
-    PROCESS (buf_op1_data, buf_op2_data, ops_valid, out_s_ready) IS
-      VARIABLE temp_buffer_1 : sfixed(FIXED_LEFT_INDEX DOWNTO FIXED_RIGHT_INDEX);
-      VARIABLE temp_buffer_2 : sfixed(FIXED_LEFT_INDEX DOWNTO FIXED_RIGHT_INDEX);
-      VARIABLE temp_res : sfixed(2 * FIXED_LEFT_INDEX + 1 DOWNTO 2 * FIXED_RIGHT_INDEX);
-    BEGIN
-      out_s_valid <= '0';
-      ops_ready <= '0';
-      ops_dvalid <= '0';
-      --ops_last_s <= '0';
-      IF ops_valid = '1' AND out_s_ready = '1' THEN
-        out_s_valid <= '1';
-        ops_ready <= '1';
-        temp_buffer_1 := to_sfixed(buf_op1_data, temp_buffer_1'high, temp_buffer_1'low);
-        temp_buffer_2 := to_sfixed(buf_op2_data, temp_buffer_2'high, temp_buffer_2'low);
-        temp_res := temp_buffer_1 * temp_buffer_2;
-        ops_data <= to_slv(resize(arg => temp_res, left_index => FIXED_LEFT_INDEX, right_index => FIXED_RIGHT_INDEX, round_style => fixed_round_style, overflow_style => fixed_overflow_style));
-      END IF;
-    END PROCESS;
-  END GENERATE;
-  revenue_fixed_process :
-  IF OPERATOR = "DISCOUNT" GENERATE
-    mult_process :
-    PROCESS (buf_op1_data, buf_op2_data, ops_valid, out_s_ready) IS
-      VARIABLE temp_buffer_1 : sfixed(FIXED_LEFT_INDEX DOWNTO FIXED_RIGHT_INDEX);
-      VARIABLE temp_buffer_2 : sfixed(FIXED_LEFT_INDEX DOWNTO FIXED_RIGHT_INDEX);
-      VARIABLE temp_res : sfixed(2 * FIXED_LEFT_INDEX + 1 DOWNTO 2 * FIXED_RIGHT_INDEX);
-    BEGIN
-      out_s_valid <= '0';
-      ops_ready <= '0';
-      ops_dvalid <= '0';
-      --ops_last_s <= '0';
-      IF ops_valid = '1' AND out_s_ready = '1' THEN
-        out_s_valid <= '1';
-        ops_ready <= '1';
-        temp_buffer_1 := to_sfixed(buf_op1_data, temp_buffer_1'high, temp_buffer_1'low);
-        temp_buffer_2 := to_sfixed(buf_op2_data, temp_buffer_2'high, temp_buffer_2'low);
-        temp_res := temp_buffer_1 * temp_buffer_2;
-        ops_data <= to_slv(resize(arg => temp_res, left_index => FIXED_LEFT_INDEX, right_index => FIXED_RIGHT_INDEX, round_style => fixed_round_style, overflow_style => fixed_overflow_style));
-      END IF;
-    END PROCESS;
-  END GENERATE;
-  revenue_fixed_process :
-  IF OPERATOR = "REVENUE" GENERATE
-    mult_process :
-    PROCESS (buf_op1_data, buf_op2_data, ops_valid, out_s_ready) IS
-      VARIABLE temp_buffer_1 : sfixed(FIXED_LEFT_INDEX DOWNTO FIXED_RIGHT_INDEX);
-      VARIABLE temp_buffer_2 : sfixed(FIXED_LEFT_INDEX DOWNTO FIXED_RIGHT_INDEX);
-      VARIABLE temp_res : sfixed(2 * FIXED_LEFT_INDEX + 1 DOWNTO 2 * FIXED_RIGHT_INDEX);
-    BEGIN
-      out_s_valid <= '0';
-      ops_ready <= '0';
-      ops_dvalid <= '0';
-      --ops_last_s <= '0';
-      IF ops_valid = '1' AND out_s_ready = '1' THEN
-        out_s_valid <= '1';
-        ops_ready <= '1';
-        temp_buffer_1 := to_sfixed(buf_op1_data, temp_buffer_1'high, temp_buffer_1'low);
-        temp_buffer_2 := to_sfixed(buf_op2_data, temp_buffer_2'high, temp_buffer_2'low);
-        temp_res := temp_buffer_1 * temp_buffer_2;
-        ops_data <= to_slv(resize(arg => temp_res, left_index => FIXED_LEFT_INDEX, right_index => FIXED_RIGHT_INDEX, round_style => fixed_round_style, overflow_style => fixed_overflow_style));
-      END IF;
-    END PROCESS;
-  END GENERATE;
-  ops_dvalid <= buf_op1_dvalid AND buf_op2_dvalid;
-  ops_last <= buf_op1_last AND buf_op2_last;
-
-END Behavioral;
+end Behavioral;

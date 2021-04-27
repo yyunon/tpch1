@@ -14,6 +14,8 @@ entity PU is
     FIXED_LEFT_INDEX  : integer;
     FIXED_RIGHT_INDEX : integer;
     DATA_WIDTH        : natural;
+    TAG_WIDTH         : natural;
+    LEN_WIDTH         : natural;
     INDEX_WIDTH       : integer;
     CONVERTERS        : string := "";
     ILA               : string := ""
@@ -77,6 +79,7 @@ entity PU is
     l_shipdate_dvalid           : in std_logic;
     l_shipdate_last             : in std_logic;
     l_shipdate                  : in std_logic_vector(31 downto 0);
+
     l_returnflag_o_valid        : out std_logic;
     l_returnflag_o_ready        : in std_logic;
     l_returnflag_o_dvalid       : out std_logic;
@@ -89,6 +92,7 @@ entity PU is
     l_returnflag_o_chars_last   : out std_logic;
     l_returnflag_o_chars        : out std_logic_vector(7 downto 0);
     l_returnflag_o_chars_count  : out std_logic_vector(0 downto 0);
+
     l_linestatus_o_valid        : out std_logic;
     l_linestatus_o_ready        : in std_logic;
     l_linestatus_o_dvalid       : out std_logic;
@@ -101,54 +105,136 @@ entity PU is
     l_linestatus_o_chars_last   : out std_logic;
     l_linestatus_o_chars        : out std_logic_vector(7 downto 0);
     l_linestatus_o_chars_count  : out std_logic_vector(0 downto 0);
+
     l_sum_qty_valid             : out std_logic;
     l_sum_qty_ready             : in std_logic;
     l_sum_qty_dvalid            : out std_logic;
     l_sum_qty_last              : out std_logic;
     l_sum_qty                   : out std_logic_vector(63 downto 0);
+
     l_sum_base_price_valid      : out std_logic;
     l_sum_base_price_ready      : in std_logic;
     l_sum_base_price_dvalid     : out std_logic;
     l_sum_base_price_last       : out std_logic;
     l_sum_base_price            : out std_logic_vector(63 downto 0);
+
     l_sum_disc_price_valid      : out std_logic;
     l_sum_disc_price_ready      : in std_logic;
     l_sum_disc_price_dvalid     : out std_logic;
     l_sum_disc_price_last       : out std_logic;
     l_sum_disc_price            : out std_logic_vector(63 downto 0);
+
     l_sum_charge_valid          : out std_logic;
     l_sum_charge_ready          : in std_logic;
     l_sum_charge_dvalid         : out std_logic;
     l_sum_charge_last           : out std_logic;
     l_sum_charge                : out std_logic_vector(63 downto 0);
+
     l_avg_qty_valid             : out std_logic;
     l_avg_qty_ready             : in std_logic;
     l_avg_qty_dvalid            : out std_logic;
     l_avg_qty_last              : out std_logic;
     l_avg_qty                   : out std_logic_vector(63 downto 0);
+
     l_avg_price_valid           : out std_logic;
     l_avg_price_ready           : in std_logic;
     l_avg_price_dvalid          : out std_logic;
     l_avg_price_last            : out std_logic;
     l_avg_price                 : out std_logic_vector(63 downto 0);
+
     l_avg_disc_valid            : out std_logic;
     l_avg_disc_ready            : in std_logic;
     l_avg_disc_dvalid           : out std_logic;
     l_avg_disc_last             : out std_logic;
     l_avg_disc                  : out std_logic_vector(63 downto 0);
+
     l_count_order_valid         : out std_logic;
     l_count_order_ready         : in std_logic;
     l_count_order_dvalid        : out std_logic;
     l_count_order_last          : out std_logic;
-    l_count_order               : out std_logic_vector(63 downto 0)
+    l_count_order               : out std_logic_vector(63 downto 0);
+
+    cmd_in_valid                : in std_logic;
+    cmd_in_ready                : out std_logic
+
   );
 end PU;
 
 architecture Behavioral of PU is
-  -- Constants
-  -- Filter out buffers, goes in after sync.
-  constant FILTER_OUT_DEPTH                  : integer                       := 0;
+  -- State Machine
+  type state_type is (STATE_IDLE,
+    STATE_BUILD,
+    STATE_INTERFACE,
+    STATE_DONE);
+  type len_record is record
+    ready  : std_logic;
+    valid  : std_logic;
+    data   : std_logic_vector(LEN_WIDTH - 1 downto 0);
+    last   : std_logic;
+    dvalid : std_logic;
+  end record;
+  type cmd_in_record is record
+    len : unsigned(INDEX_WIDTH - 1 downto 0);
+  end record;
+  type cmd_out_record is record
+    ready : std_logic;
+  end record;
+  type regs_record is record
+    state : state_type;
+  end record;
+  type out_record is record
+    cmd : cmd_out_record;
+    len : len_record;
+  end record;
+  --State registers
+  signal r : regs_record;
+  signal d : regs_record;
 
+  type utf_record is record
+    ready  : std_logic;
+    valid  : std_logic;
+    data   : std_logic_vector(7 downto 0);
+    count  : unsigned(LEN_WIDTH - 1 downto 0);
+    last   : std_logic;
+    dvalid : std_logic;
+  end record;
+  type prim64_record is record
+    ready  : std_logic;
+    valid  : std_logic;
+    data   : std_logic_vector(63 downto 0);
+    last   : std_logic;
+    dvalid : std_logic;
+  end record;
+  type prim32_record is record
+    ready  : std_logic;
+    valid  : std_logic;
+    data   : std_logic_vector(31 downto 0);
+    last   : std_logic;
+    dvalid : std_logic;
+  end record;
+  type sregs_record is record
+    state : state_type;
+    len   : unsigned(LEN_WIDTH - 1 downto 0);
+  end record;
+  type buf_out_record is record
+    ready : std_logic;
+  end record;
+  type prim64_out_record is record
+    buf : buf_out_record;
+    num : prim64_record;
+  end record;
+  type prim32_out_record is record
+    buf : buf_out_record;
+    num : prim32_record;
+  end record;
+  type chars_out_record is record
+    buf : buf_out_record;
+    utf : utf_record;
+  end record;
+  signal rs                                  : sregs_record;
+  signal ds                                  : sregs_record;
+
+  -- Constants
   -- Merger inout buffers 
   constant MERGER_IN_DEPTH                   : integer                       := 8;
   constant MERGER_OUT_DEPTH                  : integer                       := 0;
@@ -168,7 +254,6 @@ architecture Behavioral of PU is
   constant LESSTHAN_FILTER_OUT_DEPTH         : integer                       := 2;
   constant COMPARE_FILTER_IN_DEPTH           : integer                       := 2; --DATE
   constant COMPARE_FILTER_OUT_DEPTH          : integer                       := 2; --DATE
-
   -- Outputs of converters
   signal conv_l_discount_valid               : std_logic                     := '0';
   signal conv_l_discount_ready               : std_logic                     := '0';
@@ -188,108 +273,167 @@ architecture Behavioral of PU is
   signal conv_l_quantity_last                : std_logic                     := '0';
   signal conv_l_quantity                     : std_logic_vector(63 downto 0) := (others => '0');
 
+  signal conv_l_tax_valid                    : std_logic                     := '0';
+  signal conv_l_tax_ready                    : std_logic                     := '0';
+  signal conv_l_tax_dvalid                   : std_logic                     := '0';
+  signal conv_l_tax_last                     : std_logic                     := '0';
+  signal conv_l_tax                          : std_logic_vector(63 downto 0) := (others => '0');
+
   signal dly_l_shipdate_valid                : std_logic                     := '0';
   signal dly_l_shipdate_ready                : std_logic                     := '0';
   signal dly_l_shipdate_dvalid               : std_logic                     := '0';
   signal dly_l_shipdate_last                 : std_logic                     := '0';
   signal dly_l_shipdate                      : std_logic_vector(31 downto 0) := (others => '0');
+  -- l_returnflag_chars_valid    : in std_logic;
+  -- l_returnflag_chars_ready    : out std_logic;
+  -- l_returnflag_chars_dvalid   : in std_logic;
+  -- l_returnflag_chars_last     : in std_logic;
+  -- l_returnflag_chars          : in std_logic_vector(7 downto 0);
+  -- l_returnflag_chars_count    : in std_logic_vector(0 downto 0);
+
+  signal dly_l_returnflag_chars_valid        : std_logic                     := '0';
+  signal dly_l_returnflag_chars_ready        : std_logic                     := '0';
+  signal dly_l_returnflag_chars_dvalid       : std_logic                     := '0';
+  signal dly_l_returnflag_chars_last         : std_logic                     := '0';
+  signal dly_l_returnflag_chars_count        : std_logic_vector(7 downto 0)  := (others => '0');
+  signal dly_l_returnflag_chars              : std_logic_vector(7 downto 0)  := (others => '0');
+
+  signal dly_l_linestatus_chars_valid        : std_logic                     := '0';
+  signal dly_l_linestatus_chars_ready        : std_logic                     := '0';
+  signal dly_l_linestatus_chars_dvalid       : std_logic                     := '0';
+  signal dly_l_linestatus_chars_last         : std_logic                     := '0';
+  signal dly_l_linestatus_chars_count        : std_logic_vector(7 downto 0)  := (others => '0');
+  signal dly_l_linestatus_chars              : std_logic_vector(7 downto 0)  := (others => '0');
   --
   -- Discount synchronize signals
-  signal between_in_valid                    : std_logic                     := '0';
-  signal between_in_ready                    : std_logic                     := '0';
+  signal discount_price_in_valid             : std_logic                     := '0';
+  signal discount_price_in_ready             : std_logic                     := '0';
+  signal charge_price_in_valid               : std_logic                     := '0';
+  signal charge_price_in_ready               : std_logic                     := '0';
 
-  signal merge_discount_in_valid             : std_logic                     := '0';
-  signal merge_discount_in_ready             : std_logic                     := '0';
+  signal ext_discount_price_in_valid         : std_logic                     := '0';
+  signal ext_discount_price_in_ready         : std_logic                     := '0';
+  signal ext_charge_price_in_valid           : std_logic                     := '0';
+  signal ext_charge_price_in_ready           : std_logic                     := '0';
+
+  signal discount_aggregate_in_valid         : std_logic                     := '0';
+  signal discount_aggregate_in_ready         : std_logic                     := '0';
+  signal extendedprice_aggregate_in_valid    : std_logic                     := '0';
+  signal extendedprice_aggregate_in_ready    : std_logic                     := '0';
+  --
+  -- Merger inputs
+  signal sum_charge_inputs_valid             : TUPLE(2 downto 0);
+  signal sum_charge_inputs_ready             : TUPLE(2 downto 0);
+  signal sum_charge_inputs_dvalid            : TUPLE(2 downto 0);
+  signal sum_charge_inputs_last              : TUPLE(2 downto 0);
+  signal sum_charge_inputs                   : TUPLE_DATA_64(2 downto 0);
+
+  signal sum_disc_price_inputs_valid         : TUPLE(1 downto 0);
+  signal sum_disc_price_inputs_ready         : TUPLE(1 downto 0);
+  signal sum_disc_price_inputs_dvalid        : TUPLE(1 downto 0);
+  signal sum_disc_price_inputs_last          : TUPLE(1 downto 0);
+  signal sum_disc_price_inputs               : TUPLE_DATA_64(1 downto 0);
   --
   -- Sync inputs 
-  signal sync_1_in_valid                     : std_logic                     := '0';
-  signal sync_1_in_ready                     : std_logic                     := '0';
-  signal sync_2_in_valid                     : std_logic                     := '0';
-  signal sync_2_in_ready                     : std_logic                     := '0';
-  signal sync_3_in_valid                     : std_logic                     := '0';
-  signal sync_3_in_ready                     : std_logic                     := '0';
-  --
-  -- Sync inputs 
-  signal sync_1_valid                        : std_logic                     := '0';
-  signal sync_1_ready                        : std_logic                     := '0';
-  signal sync_1_data                         : std_logic;
-  signal sync_2_valid                        : std_logic := '0';
-  signal sync_2_ready                        : std_logic := '0';
-  signal sync_2_data                         : std_logic;
-  signal sync_3_valid                        : std_logic := '0';
-  signal sync_3_ready                        : std_logic := '0';
-  signal sync_3_data                         : std_logic;
+  signal sync_1_in_valid                     : std_logic := '0';
+  signal sync_1_in_ready                     : std_logic := '0';
+  signal sync_2_in_valid                     : std_logic := '0';
+  signal sync_2_in_ready                     : std_logic := '0';
+  signal sync_3_in_valid                     : std_logic := '0';
+  signal sync_3_in_ready                     : std_logic := '0';
   --
   -- Multiplied vals
-  signal reduce_in_ready                     : std_logic := '0';
-  signal reduce_in_valid                     : std_logic := '0';
-  signal reduce_in_last                      : std_logic;
-  signal reduce_in_dvalid                    : std_logic;
-  signal reduce_in_data                      : std_logic_vector(63 downto 0);
+  signal charge_reduce_in_ready              : std_logic := '0';
+  signal charge_reduce_in_valid              : std_logic := '0';
+  signal charge_reduce_in_last               : std_logic;
+  signal charge_reduce_in_dvalid             : std_logic;
+  signal charge_reduce_in_data               : std_logic_vector(63 downto 0);
+
+  signal disc_price_reduce_in_ready          : std_logic := '0';
+  signal disc_price_reduce_in_valid          : std_logic := '0';
+  signal disc_price_reduce_in_last           : std_logic;
+  signal disc_price_reduce_in_dvalid         : std_logic;
+  signal disc_price_reduce_in_data           : std_logic_vector(63 downto 0);
   --
+  signal sum_qty_ready                       : std_logic := '0';
+  signal sum_qty_valid                       : std_logic := '0';
+  signal sum_qty_last                        : std_logic;
+  signal sum_qty_dvalid                      : std_logic;
+  signal sum_qty_data                        : std_logic_vector(63 downto 0);
+
+  signal avg_qty_ready                       : std_logic := '0';
+  signal avg_qty_valid                       : std_logic := '0';
+  signal avg_qty_last                        : std_logic;
+  signal avg_qty_dvalid                      : std_logic;
+  signal avg_qty_data                        : std_logic_vector(63 downto 0);
+
+  signal sum_base_price_ready                : std_logic := '0';
+  signal sum_base_price_valid                : std_logic := '0';
+  signal sum_base_price_last                 : std_logic;
+  signal sum_base_price_dvalid               : std_logic;
+  signal sum_base_price_data                 : std_logic_vector(63 downto 0);
+
+  signal avg_price_ready                     : std_logic := '0';
+  signal avg_price_valid                     : std_logic := '0';
+  signal avg_price_last                      : std_logic;
+  signal avg_price_dvalid                    : std_logic;
+  signal avg_price_data                      : std_logic_vector(63 downto 0);
+
+  signal sum_disc_price_ready                : std_logic := '0';
+  signal sum_disc_price_valid                : std_logic := '0';
+  signal sum_disc_price_last                 : std_logic;
+  signal sum_disc_price_dvalid               : std_logic;
+  signal sum_disc_price_data                 : std_logic_vector(63 downto 0);
+
+  signal sum_charge_ready                    : std_logic := '0';
+  signal sum_charge_valid                    : std_logic := '0';
+  signal sum_charge_last                     : std_logic;
+  signal sum_charge_dvalid                   : std_logic;
+  signal sum_charge_data                     : std_logic_vector(63 downto 0);
+
+  signal avg_disc_ready                      : std_logic := '0';
+  signal avg_disc_valid                      : std_logic := '0';
+  signal avg_disc_last                       : std_logic;
+  signal avg_disc_dvalid                     : std_logic;
+  signal avg_disc_data                       : std_logic_vector(63 downto 0);
+
+  signal count_order_ready                   : std_logic := '0';
+  signal count_order_valid                   : std_logic := '0';
+  signal count_order_last                    : std_logic;
+  signal count_order_dvalid                  : std_logic;
+  signal count_order_data                    : std_logic_vector(63 downto 0);
+
+  signal linestatus_o_chars_ready            : std_logic := '0';
+  signal linestatus_o_chars_valid            : std_logic := '0';
+  signal linestatus_o_chars_last             : std_logic;
+  signal linestatus_o_chars_dvalid           : std_logic;
+  signal linestatus_o_chars_data             : std_logic_vector(7 downto 0);
+
+  signal returnflag_o_chars_ready            : std_logic := '0';
+  signal returnflag_o_chars_valid            : std_logic := '0';
+  signal returnflag_o_chars_last             : std_logic;
+  signal returnflag_o_chars_dvalid           : std_logic;
+  signal returnflag_o_chars_data             : std_logic_vector(7 downto 0);
+
+  signal out_data_valid_s                    : std_logic;
+  signal out_data_ready_s                    : std_logic;
+  signal out_data_s                          : std_logic_vector(9 * 64 + 16 - 1 downto 0);
+  signal reduce_in_data                      : std_logic_vector(5 * 64 - 1 downto 0);
   -- Output of filter stage
+  signal filter_in_valid                     : std_logic := '0';
+  signal filter_in_ready                     : std_logic := '0';
+  signal filter_in_data                      : std_logic := '0';
+  -- signal filter_out_strb        : std_logic;
+  -- Output of filter stage buffer
   signal filter_out_valid                    : std_logic := '0';
   signal filter_out_ready                    : std_logic := '0';
   signal filter_out_last                     : std_logic;
   signal filter_out_strb                     : std_logic;
   -- signal filter_out_strb        : std_logic;
-  -- Output of filter stage buffer
-  signal buf_filter_out_valid                : std_logic := '0';
-  signal buf_filter_out_ready                : std_logic := '0';
-  signal buf_filter_out_last                 : std_logic;
-  signal buf_filter_out_strb                 : std_logic;
-  -- signal filter_out_strb        : std_logic;
+  signal probe_valid                         : std_logic;
+  signal probe_ready                         : std_logic;
   --
   constant ZERO                              : std_logic_vector(3 downto 0) := (others => '0');
-  component ila_1
-    port (
-      clk     : in std_logic;
-      probe0  : in std_logic_vector(0 downto 0);
-      probe1  : in std_logic_vector(63 downto 0);
-      probe2  : in std_logic_vector(1 downto 0);
-      probe3  : in std_logic_vector(0 downto 0);
-      probe4  : in std_logic_vector(0 downto 0);
-      probe5  : in std_logic_vector(63 downto 0);
-      probe6  : in std_logic_vector(0 downto 0);
-      probe7  : in std_logic_vector(0 downto 0);
-      probe8  : in std_logic_vector(0 downto 0);
-      probe9  : in std_logic_vector(0 downto 0);
-      probe10 : in std_logic_vector(511 downto 0);
-      probe11 : in std_logic_vector(0 downto 0);
-      probe12 : in std_logic_vector(0 downto 0);
-      probe13 : in std_logic_vector(1 downto 0);
-      probe14 : in std_logic_vector(511 downto 0);
-      probe15 : in std_logic_vector(63 downto 0);
-      probe16 : in std_logic_vector(0 downto 0);
-      probe17 : in std_logic_vector(2 downto 0);
-      probe18 : in std_logic_vector(2 downto 0);
-      probe19 : in std_logic_vector(4 downto 0);
-      probe20 : in std_logic_vector(4 downto 0);
-      probe21 : in std_logic_vector(7 downto 0);
-      probe22 : in std_logic_vector(0 downto 0);
-      probe23 : in std_logic_vector(2 downto 0);
-      probe24 : in std_logic_vector(1 downto 0);
-      probe25 : in std_logic_vector(4 downto 0);
-      probe26 : in std_logic_vector(0 downto 0);
-      probe27 : in std_logic_vector(7 downto 0);
-      probe28 : in std_logic_vector(2 downto 0);
-      probe29 : in std_logic_vector(1 downto 0);
-      probe30 : in std_logic_vector(0 downto 0);
-      probe31 : in std_logic_vector(3 downto 0);
-      probe32 : in std_logic_vector(3 downto 0);
-      probe33 : in std_logic_vector(3 downto 0);
-      probe34 : in std_logic_vector(3 downto 0);
-      probe35 : in std_logic_vector(0 downto 0);
-      probe36 : in std_logic_vector(3 downto 0);
-      probe37 : in std_logic_vector(3 downto 0);
-      probe38 : in std_logic_vector(4 downto 0);
-      probe39 : in std_logic_vector(0 downto 0);
-      probe40 : in std_logic_vector(0 downto 0);
-      probe41 : in std_logic_vector(0 downto 0);
-      probe42 : in std_logic_vector(0 downto 0);
-      probe43 : in std_logic_vector(0 downto 0)
-    );
-  end component;
 begin
   --Integrated Logic Analyzers (ILA): This module works 
   --for only one of the instances. 
@@ -372,6 +516,32 @@ begin
     out_last   => conv_l_discount_last,
     out_data   => conv_l_discount
   );
+  tax_converter : Float_to_Fixed
+  generic map(
+    FIXED_LEFT_INDEX  => FIXED_LEFT_INDEX,
+    FIXED_RIGHT_INDEX => FIXED_RIGHT_INDEX,
+    DATA_WIDTH        => DATA_WIDTH,
+    INPUT_MIN_DEPTH   => QUANTITY_CONVERTER_IN_DEPTH,
+    OUTPUT_MIN_DEPTH  => QUANTITY_CONVERTER_OUT_DEPTH,
+    CONVERTER_TYPE    => "xilinx"
+
+  )
+  port map(
+    clk        => clk,
+    reset      => reset,
+
+    in_valid   => l_tax_valid,
+    in_dvalid  => l_tax_dvalid,
+    in_ready   => l_tax_ready,
+    in_last    => l_tax_last,
+    in_data    => l_tax,
+
+    out_valid  => conv_l_tax_valid,
+    out_dvalid => conv_l_tax_dvalid,
+    out_ready  => conv_l_tax_ready,
+    out_last   => conv_l_tax_last,
+    out_data   => conv_l_tax
+  );
   quantity_converter : Float_to_Fixed
   generic map(
     FIXED_LEFT_INDEX  => FIXED_LEFT_INDEX,
@@ -431,27 +601,81 @@ begin
     DEPTH      => 9
   )
   port map(
-    clk                                 => clk,
-    reset                               => reset,
+    clk                   => clk,
+    reset                 => reset,
 
-    in_valid                            => l_shipdate_valid,
-    in_ready                            => l_shipdate_ready,
-    in_data(DATA_WIDTH /2 + 1)          => l_shipdate_last,
-    in_data(DATA_WIDTH /2)              => l_shipdate_dvalid,
-    in_data(DATA_WIDTH /2 - 1 downto 0) => l_shipdate,
+    in_valid              => l_shipdate_valid,
+    in_ready              => l_shipdate_ready,
+    in_data(33)           => l_shipdate_last,
+    in_data(32)           => l_shipdate_dvalid,
+    in_data(31 downto 0)  => l_shipdate,
 
-    out_valid                           => dly_l_shipdate_valid,
-    out_ready                           => dly_l_shipdate_ready,
-    out_data(DATA_WIDTH/2 + 1)          => dly_l_shipdate_last,
-    out_data(DATA_WIDTH/2)              => dly_l_shipdate_dvalid,
-    out_data(DATA_WIDTH/2 - 1 downto 0) => dly_l_shipdate
+    out_valid             => dly_l_shipdate_valid,
+    out_ready             => dly_l_shipdate_ready,
+    out_data(33)          => dly_l_shipdate_last,
+    out_data(32)          => dly_l_shipdate_dvalid,
+    out_data(31 downto 0) => dly_l_shipdate
 
   );
 
+  dly_returnflag : StreamSliceArray
+  generic map(
+    DATA_WIDTH => 8 + 2,
+    DEPTH      => 9
+  )
+  port map(
+    clk                  => clk,
+    reset                => reset,
+
+    in_valid             => l_returnflag_chars_valid,
+    in_ready             => l_returnflag_chars_ready,
+    in_data(9)           => l_returnflag_chars_last,
+    in_data(8)           => l_returnflag_chars_dvalid,
+    in_data(7 downto 0)  => l_returnflag_chars,
+
+    out_valid            => dly_l_returnflag_chars_valid,
+    out_ready            => dly_l_returnflag_chars_ready,
+    out_data(9)          => dly_l_returnflag_chars_last,
+    out_data(8)          => dly_l_returnflag_chars_dvalid,
+    out_data(7 downto 0) => dly_l_returnflag_chars
+
+  );
+
+  dly_linestatus : StreamSliceArray
+  generic map(
+    DATA_WIDTH => 8 + 2,
+    DEPTH      => 9
+  )
+  port map(
+    clk                  => clk,
+    reset                => reset,
+
+    in_valid             => l_linestatus_chars_valid,
+    in_ready             => l_linestatus_chars_ready,
+    in_data(9)           => l_linestatus_chars_last,
+    in_data(8)           => l_linestatus_chars_dvalid,
+    in_data(7 downto 0)  => l_linestatus_chars,
+
+    out_valid            => dly_l_linestatus_chars_valid,
+    out_ready            => dly_l_linestatus_chars_ready,
+    out_data(9)          => dly_l_linestatus_chars_last,
+    out_data(8)          => dly_l_linestatus_chars_dvalid,
+    out_data(7 downto 0) => dly_l_linestatus_chars
+
+  );
+
+  -- dly_l_returnflag_chars_valid        : std_logic                     := '0';
+  -- dly_l_returnflag_chars_ready        : std_logic                     := '0';
+  -- dly_l_returnflag_chars_dvalid       : std_logic                     := '0';
+  -- dly_l_returnflag_chars_last         : std_logic                     := '0';
+  -- dly_l_returnflag_chars_count        : std_logic_vector(7 downto 0)  := (others => '0');
+  -- dly_l_returnflag_chars              : std_logic_vector(7 downto 0)  := (others => '0');
+  -- Break discount stream in 2 different streams:
+  -- sum_disc_price, sum_charge_price, sum_discount, 
   discount_sync : StreamSync
   generic map(
     NUM_INPUTS  => 1,
-    NUM_OUTPUTS => 2
+    NUM_OUTPUTS => 3
   )
   port map(
     clk          => clk,
@@ -459,35 +683,37 @@ begin
 
     in_valid(0)  => conv_l_discount_valid,
     in_ready(0)  => conv_l_discount_ready,
-    out_valid(0) => between_in_valid,
-    out_valid(1) => merge_discount_in_valid,
-    out_ready(0) => between_in_ready,
-    out_ready(1) => merge_discount_in_ready
+
+    out_valid(0) => discount_price_in_valid,
+    out_valid(1) => charge_price_in_valid,
+    out_valid(2) => discount_aggregate_in_valid,
+    out_ready(0) => discount_price_in_ready,
+    out_ready(1) => charge_price_in_ready,
+    out_ready(2) => discount_aggregate_in_ready
   );
 
-  filter_in_sync : StreamSync
+  -- Break extendedprice stream in 2 different streams:
+  -- sum_disc_price, sum_charge_price, sum_discount, 
+  extendedprice_sync : StreamSync
   generic map(
-    NUM_INPUTS  => 3,
+    NUM_INPUTS  => 1,
     NUM_OUTPUTS => 3
   )
   port map(
     clk          => clk,
     reset        => reset,
 
-    in_valid(0)  => conv_l_quantity_valid,
-    in_valid(1)  => dly_l_shipdate_valid,
-    in_valid(2)  => between_in_valid,
-    in_ready(0)  => conv_l_quantity_ready,
-    in_ready(1)  => dly_l_shipdate_ready,
-    in_ready(2)  => between_in_ready,
+    in_valid(0)  => conv_l_extendedprice_valid,
+    in_ready(0)  => conv_l_extendedprice_ready,
 
-    out_valid(0) => sync_1_in_valid,
-    out_valid(1) => sync_2_in_valid,
-    out_valid(2) => sync_3_in_valid,
-    out_ready(0) => sync_1_in_ready,
-    out_ready(1) => sync_2_in_ready,
-    out_ready(2) => sync_3_in_ready
+    out_valid(0) => ext_discount_price_in_valid,
+    out_valid(1) => ext_charge_price_in_valid,
+    out_valid(2) => extendedprice_aggregate_in_valid,
+    out_ready(0) => ext_discount_price_in_ready,
+    out_ready(1) => ext_charge_price_in_ready,
+    out_ready(2) => extendedprice_aggregate_in_ready
   );
+
   compare : FILTER
   generic map(
     FIXED_LEFT_INDEX  => FIXED_LEFT_INDEX,
@@ -501,108 +727,355 @@ begin
     clk       => clk,
     reset     => reset,
 
-    in_valid  => sync_3_in_valid,
+    in_valid  => dly_l_shipdate_valid,
     in_dvalid => dly_l_shipdate_dvalid,
-    in_ready  => sync_3_in_ready,
+    in_ready  => dly_l_shipdate_ready,
     in_last   => dly_l_shipdate_last,
     in_data   => dly_l_shipdate,
 
-    out_valid => sync_3_valid,
-    out_ready => sync_3_ready,
-    out_data  => sync_3_data
+    out_valid => filter_in_valid,
+    out_ready => filter_in_ready,
+    out_data  => filter_in_data
   );
-
   ---------
   -- This module merges the predicate stream with another stream
   -- The MIN_DEPTH is specified for both input and output buffer. There exists
   -- a StreamSync operation for op1 and op2 inside this module.
-  merge_predicate : MergeOp
+  sum_charge_inputs_valid  <= ext_charge_price_in_valid & charge_price_in_valid & conv_l_tax_valid;
+  sum_charge_inputs_ready  <= ext_charge_price_in_ready & charge_price_in_ready & conv_l_tax_ready;
+  sum_charge_inputs_dvalid <= conv_l_extendedprice_dvalid & conv_l_discount_dvalid & conv_l_tax_dvalid;
+  sum_charge_inputs_last   <= conv_l_extendedprice_last & conv_l_discount_last & conv_l_tax_last;
+  sum_charge_inputs(0)     <= conv_l_tax;
+  sum_charge_inputs(1)     <= conv_l_discount;
+  sum_charge_inputs(2)     <= conv_l_extendedprice;
+  sum_charge_merger : MergeOp
   generic map(
     FIXED_LEFT_INDEX  => FIXED_LEFT_INDEX,
     FIXED_RIGHT_INDEX => FIXED_RIGHT_INDEX,
     DATA_WIDTH        => 64,
+    NUM_INPUTS        => 3,
+    NUM_OUTPUTS       => 1,
     INPUT_MIN_DEPTH   => MERGER_IN_DEPTH,  -- For output buffer.
     OUTPUT_MIN_DEPTH  => MERGER_OUT_DEPTH, -- For output buffer.
-    OPERATOR          => "MULT_FIXED"
+    OPERATOR          => "CHARGE"
   )
   port map(
-    clk        => clk,
-    reset      => reset,
+    clk           => clk,
+    reset         => reset,
 
-    op1_valid  => merge_discount_in_valid,
-    op1_last   => conv_l_discount_last,
-    op1_ready  => merge_discount_in_ready,
-    op1_dvalid => conv_l_discount_dvalid,
-    op1_data   => conv_l_discount,
+    inputs_valid  => sum_charge_inputs_valid,
+    inputs_last   => sum_charge_inputs_last,
+    inputs_ready  => sum_charge_inputs_ready,
+    inputs_dvalid => sum_charge_inputs_dvalid,
+    inputs_data   => sum_charge_inputs,
 
-    op2_valid  => conv_l_extendedprice_valid,
-    op2_last   => conv_l_extendedprice_last,
-    op2_ready  => conv_l_extendedprice_ready,
-    op2_dvalid => conv_l_extendedprice_dvalid,
-    op2_data   => conv_l_extendedprice,
+    out_valid     => charge_reduce_in_valid,
+    out_last      => charge_reduce_in_last,
+    out_ready     => charge_reduce_in_ready,
+    out_data      => charge_reduce_in_data,
+    out_dvalid    => charge_reduce_in_dvalid
+  );
+  ---------
+  -- This module merges the predicate stream with another stream
+  -- The MIN_DEPTH is specified for both input and output buffer. There exists
+  -- a StreamSync operation for op1 and op2 inside this module.
+  sum_disc_price_inputs_valid  <= ext_discount_price_in_valid & discount_price_in_valid;
+  sum_disc_price_inputs_ready  <= ext_discount_price_in_ready & discount_price_in_ready;
+  sum_disc_price_inputs_dvalid <= conv_l_extendedprice_dvalid & conv_l_discount_dvalid;
+  sum_disc_price_inputs_last   <= conv_l_extendedprice_last & conv_l_discount_last;
+  sum_disc_price_inputs(0)     <= conv_l_discount;
+  sum_disc_price_inputs(1)     <= conv_l_extendedprice;
+  sum_disc_price_merger : MergeOp
+  generic map(
+    FIXED_LEFT_INDEX  => FIXED_LEFT_INDEX,
+    FIXED_RIGHT_INDEX => FIXED_RIGHT_INDEX,
+    DATA_WIDTH        => 64,
+    NUM_INPUTS        => 2,
+    NUM_OUTPUTS       => 1,
+    INPUT_MIN_DEPTH   => MERGER_IN_DEPTH,  -- For output buffer.
+    OUTPUT_MIN_DEPTH  => MERGER_OUT_DEPTH, -- For output buffer.
+    OPERATOR          => "DISCOUNT"
+  )
+  port map(
+    clk           => clk,
+    reset         => reset,
 
-    out_valid  => reduce_in_valid,
-    out_last   => reduce_in_last,
-    out_ready  => reduce_in_ready,
-    out_data   => reduce_in_data,
-    out_dvalid => reduce_in_dvalid
+    inputs_valid  => sum_disc_price_inputs_valid,
+    inputs_last   => sum_disc_price_inputs_last,
+    inputs_ready  => sum_disc_price_inputs_ready,
+    inputs_dvalid => sum_disc_price_inputs_dvalid,
+    inputs_data   => sum_disc_price_inputs,
+
+    out_valid     => disc_price_reduce_in_valid,
+    out_last      => disc_price_reduce_in_last,
+    out_ready     => disc_price_reduce_in_ready,
+    out_data      => disc_price_reduce_in_data,
+    out_dvalid    => disc_price_reduce_in_dvalid
   );
   filter_out_sync : StreamSync
   generic map(
-    NUM_INPUTS  => 4,
+    NUM_INPUTS  => 8,
     NUM_OUTPUTS => 1
   )
   port map(
     clk          => clk,
     reset        => reset,
 
-    in_valid(0)  => sync_1_valid,
-    in_valid(1)  => sync_2_valid,
-    in_valid(2)  => sync_3_valid,
-    in_valid(3)  => reduce_in_valid,
-    in_ready(0)  => sync_1_ready,
-    in_ready(1)  => sync_2_ready,
-    in_ready(2)  => sync_3_ready,
-    in_ready(3)  => reduce_in_ready,
+    in_valid(0)  => filter_in_valid,
+    in_valid(1)  => charge_reduce_in_valid,
+    in_valid(2)  => disc_price_reduce_in_valid,
+    in_valid(3)  => extendedprice_aggregate_in_valid,
+    in_valid(4)  => discount_aggregate_in_valid,
+    in_valid(5)  => conv_l_quantity_valid,
+    in_valid(6)  => dly_l_linestatus_chars_valid,
+    in_valid(7)  => dly_l_returnflag_chars_valid,
+    in_ready(0)  => filter_in_ready,
+    in_ready(1)  => charge_reduce_in_ready,
+    in_ready(2)  => disc_price_reduce_in_ready,
+    in_ready(3)  => extendedprice_aggregate_in_ready,
+    in_ready(4)  => discount_aggregate_in_ready,
+    in_ready(5)  => conv_l_quantity_ready,
+    in_ready(6)  => dly_l_linestatus_chars_ready,
+    in_ready(7)  => dly_l_returnflag_chars_ready,
+
     out_valid(0) => filter_out_valid,
     out_ready(0) => filter_out_ready
   );
+  -----------------------------------------------
+  filter_out_strb <= filter_in_data;
+  filter_out_last <= conv_l_quantity_last and conv_l_discount_last and conv_l_extendedprice_last and disc_price_reduce_in_last and charge_reduce_in_last;
+  -----------------------------------------------
+  -----------------------------------------------
+  -- REDUCE -------------------------------------
+  -----------------------------------------------
+  -----------------------------------------------
+  -- Reduce on all of the output streams
+  reduce_in_data  <= disc_price_reduce_in_data & charge_reduce_in_data & conv_l_quantity & conv_l_extendedprice & conv_l_discount;
 
-  filter_out_buf : StreamBuffer
-  generic map(
-    DATA_WIDTH => 2,
-    MIN_DEPTH  => FILTER_OUT_DEPTH
-  )
-  port map(
-    clk         => clk,
-    reset       => reset,
-    in_valid    => filter_out_valid,
-    in_ready    => filter_out_ready,
-    in_data(1)  => sync_1_data and sync_2_data and sync_3_data,
-    in_data(0)  => reduce_in_last,
-    out_valid   => buf_filter_out_valid,
-    out_ready   => buf_filter_out_ready,
-    out_data(1) => buf_filter_out_strb,
-    out_data(0) => buf_filter_out_last
-  );
-
-  reduce_stage : ReduceStage
+  avg_discount_reduce_stage : ReduceStage
   generic map(
     FIXED_LEFT_INDEX  => FIXED_LEFT_INDEX,
     FIXED_RIGHT_INDEX => FIXED_RIGHT_INDEX,
+    NUM_KEYS          => 2,
+    NUM_SUMS          => 5,
+    NUM_AVGS          => 3,
     INDEX_WIDTH       => INDEX_WIDTH - 1
   )
   port map(
-    clk       => clk,
-    reset     => reset,
-    in_valid  => buf_filter_out_valid,
-    in_ready  => buf_filter_out_ready,
-    in_dvalid => buf_filter_out_strb,
-    in_last   => buf_filter_out_last,
-    in_data   => reduce_in_data,
-    out_valid => sum_out_valid,
-    out_ready => sum_out_ready,
-    out_data  => sum_out_data
+    clk           => clk,
+    reset         => reset,
+    key_in_dvalid => dly_l_returnflag_chars_dvalid,
+    key_in_data   => dly_l_returnflag_chars,
+    in_valid      => filter_out_valid,
+    in_ready      => filter_out_ready,
+    in_dvalid     => filter_out_strb,
+    in_last       => filter_out_last,
+    in_data       => reduce_in_data,
+    out_valid     => out_data_valid_s,
+    out_ready     => out_data_ready_s,
+    out_data      => out_data_s, -- This holds them all
+    probe_ready   => probe_ready,
+    probe_valid   => probe_valid
   );
+  sync_output_streams : StreamSync
+  generic map(
+    NUM_INPUTS  => 1,
+    NUM_OUTPUTS => 10
+  )
+  port map(
+    clk          => clk,
+    reset        => reset,
+    in_valid(0)  => out_data_valid_s,
+    in_ready(0)  => out_data_ready_s,
+    out_valid(0) => sum_qty_valid,
+    out_valid(1) => avg_qty_valid,
+    out_valid(2) => sum_base_price_valid,
+    out_valid(3) => avg_price_valid,
+    out_valid(4) => sum_disc_price_valid,
+    out_valid(5) => sum_charge_valid,
+    out_valid(6) => avg_disc_valid,
+    out_valid(7) => count_order_valid,
+    out_valid(8) => returnflag_o_chars_valid,
+    out_valid(9) => linestatus_o_chars_valid,
 
+    out_ready(0) => sum_qty_ready,
+    out_ready(1) => avg_qty_ready,
+    out_ready(2) => sum_base_price_ready,
+    out_ready(3) => avg_price_ready,
+    out_ready(4) => sum_disc_price_ready,
+    out_ready(5) => sum_charge_ready,
+    out_ready(6) => avg_disc_ready,
+    out_ready(7) => count_order_ready,
+    out_ready(8) => returnflag_o_chars_ready,
+    out_ready(9) => linestatus_o_chars_ready
+  );
+  -- Well, this does not look good!!
+  --reduce_in_data  <= disc_price_reduce_in_data & charge_reduce_in_data & conv_l_quantity & conv_l_extendedprice & conv_l_discount;
+  count_order_data        <= out_data_s(63 downto 0);
+  avg_qty_data            <= out_data_s(127 downto 64);
+  avg_price_data          <= out_data_s(191 downto 128);
+  avg_disc_data           <= out_data_s(255 downto 192);
+  sum_disc_price_data     <= out_data_s(319 downto 256);
+  sum_charge_data         <= out_data_s(383 downto 320);
+  sum_qty_data            <= out_data_s(447 downto 384);
+  sum_base_price_data     <= out_data_s(511 downto 448);
+  --sum_dsc <= out_data_s(575 downto 512);
+  returnflag_o_chars_data <= out_data_s(583 downto 576);
+  returnflag_o_chars_data <= out_data_s(591 downto 584);
+  -- Holds the interfacing logic.
+  chars_proc :
+  process (rs,
+    l_returnflag_o_chars_ready,
+    l_returnflag_chars_count,
+    l_linestatus_o_chars_ready,
+    l_linestatus_chars_count,
+    l_avg_price_ready,
+    l_avg_qty_ready,
+    l_avg_disc_ready,
+    l_sum_qty_ready,
+    l_sum_base_price_ready,
+    l_sum_disc_price_ready,
+    l_sum_charge_ready,
+    l_count_order_ready,
+    returnflag_o_chars_data,
+    linestatus_o_chars_data,
+    sum_qty_data,
+    sum_disc_price_data,
+    sum_charge_data,
+    avg_qty_data,
+    avg_disc_data,
+    avg_price_data,
+    count_order_data,
+    sum_base_price_data,
+    probe_valid,
+
+    cmd_in_valid
+    ) is
+    variable vs                 : sregs_record;
+    variable l_returnflag_o     : chars_out_record;
+    variable l_linestatus_o     : chars_out_record;
+    variable l_sum_qty_o        : prim64_record;
+    variable l_sum_base_price_o : prim64_record;
+    variable l_sum_disc_price_o : prim64_record;
+    variable l_sum_charge_o     : prim64_record;
+    variable l_avg_qty_o        : prim64_record;
+    variable l_avg_price_o      : prim64_record;
+    variable l_avg_disc_o       : prim64_record;
+    variable l_count_order_o    : prim64_record;
+  begin
+
+    vs                        := rs;
+
+    l_returnflag_o.utf.ready  := l_returnflag_o_chars_ready;
+    l_returnflag_o.utf.data   := returnflag_o_chars_data;
+    l_returnflag_o.utf.count  := unsigned(l_returnflag_chars_count);
+    l_returnflag_o.utf.last   := '0';
+    l_returnflag_o.utf.dvalid := '1';
+    l_returnflag_o.utf.valid  := '0';
+
+    l_linestatus_o.utf.ready  := l_linestatus_o_chars_ready;
+    l_linestatus_o.utf.data   := linestatus_o_chars_data;
+    l_linestatus_o.utf.count  := unsigned(l_linestatus_chars_count);
+    l_linestatus_o.utf.last   := '0';
+    l_linestatus_o.utf.dvalid := '1';
+    l_linestatus_o.utf.valid  := '0';
+
+    l_sum_base_price_o.ready  := l_sum_base_price_ready;
+    l_sum_base_price_o.data   := sum_base_price_data;
+    l_sum_base_price_o.last   := '0';
+    l_sum_base_price_o.dvalid := '1';
+    l_sum_base_price_o.valid  := '0';
+
+    l_sum_disc_price_o.ready  := l_sum_disc_price_ready;
+    l_sum_disc_price_o.data   := sum_disc_price_data;
+    l_sum_disc_price_o.last   := '0';
+    l_sum_disc_price_o.dvalid := '1';
+    l_sum_disc_price_o.valid  := '0';
+
+    l_sum_qty_o.ready         := l_sum_qty_ready;
+    l_sum_qty_o.data          := sum_qty_data;
+    l_sum_qty_o.last          := '0';
+    l_sum_qty_o.dvalid        := '1';
+    l_sum_qty_o.valid         := '0';
+
+    l_sum_charge_o.ready      := l_sum_charge_ready;
+    l_sum_charge_o.data       := sum_charge_data;
+    l_sum_charge_o.last       := '0';
+    l_sum_charge_o.dvalid     := '1';
+    l_sum_charge_o.valid      := '0';
+
+    l_avg_qty_o.ready         := l_avg_qty_ready;
+    l_avg_qty_o.data          := avg_qty_data;
+    l_avg_qty_o.last          := '0';
+    l_avg_qty_o.dvalid        := '1';
+    l_avg_qty_o.valid         := '0';
+
+    l_avg_price_o.ready       := l_avg_price_ready;
+    l_avg_price_o.data        := avg_price_data;
+    l_avg_price_o.last        := '0';
+    l_avg_price_o.dvalid      := '1';
+    l_avg_price_o.valid       := '0';
+
+    l_avg_disc_o.ready        := l_avg_disc_ready;
+    l_avg_disc_o.data         := avg_disc_data;
+    l_avg_disc_o.last         := '0';
+    l_avg_disc_o.dvalid       := '1';
+    l_avg_disc_o.valid        := '0';
+
+    l_count_order_o.ready     := l_count_order_ready;
+    l_count_order_o.data      := count_order_data;
+    l_count_order_o.last      := '0';
+    l_count_order_o.dvalid    := '1';
+    l_count_order_o.valid     := '0';
+
+    probe_ready  <= '0';
+    cmd_in_ready <= '0';
+
+    case vs.state is
+      when STATE_IDLE =>
+        cmd_in_ready <= '1';
+        if cmd_in_valid = '1' then
+          vs.state := STATE_BUILD;
+        end if;
+      when STATE_BUILD =>
+        probe_ready <= '1';
+        if probe_valid = '1' then
+          vs.state := STATE_INTERFACE;
+        end if;
+      when STATE_INTERFACE =>
+        l_returnflag_o.buf.ready  := '0';
+        l_linestatus_o.buf.ready  := '0';
+        l_returnflag_o.utf.ready  := l_returnflag_o_chars_ready;
+        l_returnflag_o.utf.data   := returnflag_o_chars_data;
+        l_returnflag_o.utf.count  := unsigned(l_returnflag_chars_count);
+        l_returnflag_o.utf.last   := '0';
+        l_returnflag_o.utf.dvalid := '1';
+        l_returnflag_o.utf.valid  := returnflag_o_chars_valid;
+
+        l_linestatus_o.utf.ready  := l_linestatus_o_chars_ready;
+        l_linestatus_o.utf.data   := linestatus_o_chars_data;
+        l_linestatus_o.utf.count  := unsigned(l_linestatus_chars_count);
+        l_linestatus_o.utf.last   := '0';
+        l_linestatus_o.utf.dvalid := '1';
+        l_linestatus_o.utf.valid  := linestatus_o_chars_valid;
+
+      when STATE_DONE =>
+    end case;
+
+    ds <= vs;
+
+  end process;
+
+  reg_proc : process (clk)
+  begin
+    if rising_edge(clk) then
+      -- Register new state
+      rs <= ds;
+
+      -- Reset
+      if reset = '1' then
+        rs.state <= STATE_IDLE;
+      end if;
+    end if;
+  end process;
 end Behavioral;

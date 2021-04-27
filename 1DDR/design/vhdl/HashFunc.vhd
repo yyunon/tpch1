@@ -3,10 +3,10 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 library work;
-use     work.Join_pkg.all;
+use     work.Tpch_pkg.all;
 use     work.Stream_pkg.all;
 
-entity HashJoin is
+entity Hash is
   generic (
     DATA_WIDTH                  : natural;
     HASH_WIDTH                  : natural;
@@ -30,9 +30,9 @@ entity HashJoin is
     out_ready                  : in std_logic;
     out_data                   : out std_logic_vector(DATA_WIDTH-1 downto 0)
   );
-end HashJoin;
+end Hash;
 
-architecture Behav of HashJoin is
+architecture Behav of Hash is
     constant ZERO : std_logic_vector(in_data'range) := (others => '0');
     signal hash_addr_out : std_logic_vector(HASH_ADDR_WIDTH - 1 downto 0); -- Mask 18 bits for hash addressing
 

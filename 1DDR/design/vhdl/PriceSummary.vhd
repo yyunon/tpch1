@@ -129,6 +129,7 @@ entity PriceSummary is
     l_shipdate_cmd_firstIdx       : out std_logic_vector(INDEX_WIDTH - 1 downto 0);
     l_shipdate_cmd_lastIdx        : out std_logic_vector(INDEX_WIDTH - 1 downto 0);
     l_shipdate_cmd_tag            : out std_logic_vector(TAG_WIDTH - 1 downto 0);
+
     l_returnflag_o_valid          : out std_logic;
     l_returnflag_o_ready          : in std_logic;
     l_returnflag_o_dvalid         : out std_logic;
@@ -300,6 +301,7 @@ end entity;
 architecture Implementation of PriceSummary is
 
   constant DATA_WIDTH            : integer := 64;
+  constant LEN_WIDTH             : integer := 8;
   constant EPC                   : integer := 8;
   constant FIXED_LEFT_INDEX      : integer := 30;
   constant FIXED_RIGHT_INDEX     : integer := FIXED_LEFT_INDEX - (DATA_WIDTH - 1);
@@ -310,14 +312,6 @@ architecture Implementation of PriceSummary is
   -- If the input stream size is not divisible by EPC check this:
   signal pu_mask                 : std_logic_vector(EPC - 1 downto 0);
   -- Enumeration type for our state machine.
-  type state_t is (STATE_IDLE,
-    STATE_COMMAND,
-    STATE_CALCULATING,
-    STATE_UNLOCK,
-    STATE_DONE);
-  signal state_slv         : std_logic_vector(2 downto 0);
-  -- Current state register and next state signal.
-  signal state, state_next : state_t;
   -- Fletcher command stream
   type cmd_record is record
     valid    : std_logic;
@@ -345,8 +339,18 @@ architecture Implementation of PriceSummary is
     str : str_record;
     unl : unl_record;
   end record;
+  type state_t is (STATE_IDLE,
+    STATE_COMMAND,
+    STATE_BUILD,
+    STATE_INTERFACE,
+    STATE_UNLOCK,
+    STATE_DONE);
+  signal state_slv         : std_logic_vector(2 downto 0);
+  -- Current state register and next state signal.
+  signal state, state_next : state_t;
 
-  constant ONES : std_logic_vector(EPC - 1 downto 0) := (others => '1');
+  signal pu_cmd_in_valid   : std_logic;
+  signal pu_cmd_in_ready   : std_logic;
 
 begin
   processing_unit_0 : PU
@@ -479,8 +483,10 @@ begin
   );
 
   with state select state_slv <=
-    "000" when STATE_COMMAND,
-    "011" when STATE_CALCULATING,
+    "000" when STATE_IDLE,
+    "001" when STATE_COMMAND,
+    "010" when STATE_BUILD,
+    "011" when STATE_INTERFACE,
     "100" when STATE_UNLOCK,
     "101" when others;
 
@@ -503,15 +509,45 @@ begin
     l_linestatus_cmd_ready,
     l_shipdate_cmd_ready,
 
-    copy_done_valid,
+    l_count_order_unl_valid,
+    l_avg_disc_unl_valid,
+    l_avg_price_unl_valid,
+    l_avg_qty_unl_valid,
+    l_sum_charge_unl_valid,
+    l_sum_disc_price_unl_valid,
+    l_sum_base_price_unl_valid,
+    l_linestatus_o_unl_valid,
+    l_sum_qty_unl_valid,
+    l_returnflag_o_unl_valid,
+
+    l_count_order_cmd_ready,
+    l_avg_disc_cmd_ready,
+    l_avg_price_cmd_ready,
+    l_avg_qty_cmd_ready,
+    l_sum_charge_cmd_ready,
+    l_sum_disc_price_cmd_ready,
+    l_sum_base_price_cmd_ready,
+    l_linestatus_o_cmd_ready,
+    l_sum_qty_cmd_ready,
+    l_returnflag_o_cmd_ready,
 
     state,
     start,
     reset,
     kcd_reset
     ) is
+    variable l_returnflag_o   : out_record;
+    variable l_linestatus_o   : out_record;
+    variable l_sum_qty        : out_record;
+    variable l_sum_base       : out_record;
+    variable l_sum_disc_price : out_record;
+    variable l_sum_charge     : out_record;
+    variable l_avg_qty        : out_record;
+    variable l_avg_price      : out_record;
+    variable l_count_order    : out_record;
   begin
 
+    --Input stream
     l_quantity_cmd_valid         <= '0';
     l_quantity_cmd_firstIdx      <= (others => '0');
     l_quantity_cmd_lastIdx       <= (others => '0');
@@ -546,16 +582,82 @@ begin
     l_linestatus_cmd_firstIdx    <= (others => '0');
     l_linestatus_cmd_lastIdx     <= (others => '0');
     l_linestatus_cmd_tag         <= (others => '0');
+    --Output stream
+    -- Disable command streams by default
+    l_returnflag_o.str.valid      := '0';
+    l_returnflag_o.unl.ready      := '0';
+    l_returnflag_o.cmd.valid      := '0';
+    l_returnflag_o.cmd.firstIdx   := l_firstIdx;
+    l_returnflag_o.cmd.lastIdx    := l_lastIdx;
+    l_returnflag_o.cmd.tag        := (others => '0');
 
-    state_next                   <= state; -- Retain current state.
+    l_linestatus_o.str.valid      := '0';
+    l_linestatus_o.unl.ready      := '0';
+    l_linestatus_o.cmd.valid      := '0';
+    l_linestatus_o.cmd.firstIdx   := l_firstIdx;
+    l_linestatus_o.cmd.lastIdx    := l_lastIdx;
+    l_linestatus_o.cmd.tag        := (others => '0');
 
-    l_quantity_unl_ready         <= '0';
-    l_extendedprice_unl_ready    <= '0';
-    l_discount_unl_ready         <= '0';
-    l_tax_unl_ready              <= '0';
-    l_returnflag_unl_ready       <= '0';
-    l_linestatus_unl_ready       <= '0';
-    l_shipdate_unl_ready         <= '0';
+    l_sum_qty.str.valid           := '0';
+    l_sum_qty.unl.ready           := '0';
+    l_sum_qty.cmd.valid           := '0';
+    l_sum_qty.cmd.firstIdx        := l_firstIdx;
+    l_sum_qty.cmd.lastIdx         := l_lastIdx;
+    l_sum_qty.cmd.tag             := (others => '0');
+
+    l_sum_base.str.valid          := '0';
+    l_sum_base.unl.ready          := '0';
+    l_sum_base.cmd.valid          := '0';
+    l_sum_base.cmd.firstIdx       := l_firstIdx;
+    l_sum_base.cmd.lastIdx        := l_lastIdx;
+    l_sum_base.cmd.tag            := (others => '0');
+
+    l_sum_disc_price.str.valid    := '0';
+    l_sum_disc_price.unl.ready    := '0';
+    l_sum_disc_price.cmd.valid    := '0';
+    l_sum_disc_price.cmd.firstIdx := l_firstIdx;
+    l_sum_disc_price.cmd.lastIdx  := l_lastIdx;
+    l_sum_disc_price.cmd.tag      := (others => '0');
+
+    l_sum_charge.str.valid        := '0';
+    l_sum_charge.unl.ready        := '0';
+    l_sum_charge.cmd.valid        := '0';
+    l_sum_charge.cmd.firstIdx     := l_firstIdx;
+    l_sum_charge.cmd.lastIdx      := l_lastIdx;
+    l_sum_charge.cmd.tag          := (others => '0');
+
+    l_avg_qty.str.valid           := '0';
+    l_avg_qty.unl.ready           := '0';
+    l_avg_qty.cmd.valid           := '0';
+    l_avg_qty.cmd.firstIdx        := l_firstIdx;
+    l_avg_qty.cmd.lastIdx         := l_lastIdx;
+    l_avg_qty.cmd.tag             := (others => '0');
+
+    l_avg_price.str.valid         := '0';
+    l_avg_price.unl.ready         := '0';
+    l_avg_price.cmd.valid         := '0';
+    l_avg_price.cmd.firstIdx      := l_firstIdx;
+    l_avg_price.cmd.lastIdx       := l_lastIdx;
+    l_avg_price.cmd.tag           := (others => '0');
+
+    l_count_order.str.valid       := '0';
+    l_count_order.unl.ready       := '0';
+    l_count_order.cmd.valid       := '0';
+    l_count_order.cmd.firstIdx    := l_firstIdx;
+    l_count_order.cmd.lastIdx     := l_lastIdx;
+    l_count_order.cmd.tag         := (others => '0');
+
+    state_next                <= state; -- Retain current state.
+
+    l_quantity_unl_ready      <= '0';
+    l_extendedprice_unl_ready <= '0';
+    l_discount_unl_ready      <= '0';
+    l_tax_unl_ready           <= '0';
+    l_returnflag_unl_ready    <= '0';
+    l_linestatus_unl_ready    <= '0';
+    l_shipdate_unl_ready      <= '0';
+
+    pu_cmd_in_valid           <= '0';
 
     case state is
       when STATE_IDLE =>
@@ -611,21 +713,33 @@ begin
         l_linestatus_cmd_tag         <= (others => '0');
 
         if l_quantity_cmd_ready = '1' and l_extendedprice_cmd_ready = '1' and l_shipdate_cmd_ready = '1' and l_discount_cmd_ready = '1' and l_linestatus_cmd_ready = '1' and l_tax_cmd_ready = '1' and l_returnflag = '1' then
-          state_next <= STATE_CALCULATING;
+          state_next <= STATE_BUILD;
         end if;
 
-      when STATE_CALCULATING =>
+      when STATE_BUILD =>
         -- Calculating: we stream in and accumulate the numbers one by one. PROBE Phase is here!
-        done      <= '0';
-        busy      <= '1';
-        idle      <= '0';
+        done            <= '0';
+        busy            <= '1';
+        idle            <= '0';
 
-        copy_done <= (others => '1');
+        pu_cmd_in_valid <= '1';
+        if pu_cmd_in_ready = '0' then
+          state_next <= STATE_INTERFACE;
+        end if;
 
-        if copy_done_valid = ONES then
+      when STATE_INTERFACE =>
+        l_returnflag_o.cmd.valid   := '1';
+        l_linestatus_o.cmd.valid   := '1';
+        l_sum_qty.cmd.valid        := '1';
+        l_sum_base.cmd.valid       := '1';
+        l_sum_disc_price.cmd.valid := '1';
+        l_sum_charge.cmd.valid     := '1';
+        l_avg_qty.cmd.valid        := '1';
+        l_avg_price.cmd.valid      := '1';
+        l_count_order.cmd.valid    := '1';
+        if l_count_order_cmd_ready = '1' and l_avg_disc_cmd_ready = '1' and l_avg_price_cmd_ready = '1' and l_avg_qty_cmd_ready = '1' and l_sum_charge_cmd_ready = '1' and l_sum_disc_price_cmd_ready = '1' and l_sum_base_price_cmd_ready = '1' and l_linestatus_o_cmd_ready = '1' and l_sum_qty_cmd_ready = '1' and l_returnflag_o_cmd_ready = '1' then
           state_next <= STATE_UNLOCK;
         end if;
-
       when STATE_UNLOCK =>
         -- Unlock: the generated interface delivered all items in the stream.
         -- The unlock stream is supplied to make sure all bus transfers of the
@@ -642,18 +756,28 @@ begin
         l_tax_unl_ready           <= '1';
         l_linestatus_unl_ready    <= '1';
         l_returnflag_unl_ready    <= '1';
+        -- Unlock the output stream too
+        l_returnflag_o.unl.ready   := '1';
+        l_linestatus_o.unl.ready   := '1';
+        l_sum_qty.unl.ready        := '1';
+        l_sum_base.unl.ready       := '1';
+        l_sum_disc_price.unl.ready := '1';
+        l_sum_charge.unl.ready     := '1';
+        l_avg_qty.unl.ready        := '1';
+        l_avg_price.unl.ready      := '1';
+        l_count_order.unl.ready    := '1';
+
         -- Handshake when it is valid and go to the done state.
-        -- if s_store_sk_unl_valid = '1' then
-        if l_discount_unl_valid = '1' and l_quantity_unl_valid = '1' and l_shipdate_unl_valid = '1' and l_extendedprice_unl_valid = '1' and l_linestatus_unl_valid = '1' and l_tax_unl_valid = '1' and l_returnflag_unl_valid = '1' then
+        if l_discount_unl_valid = '1' and l_quantity_unl_valid = '1' and l_shipdate_unl_valid = '1' and l_extendedprice_unl_valid = '1' and l_linestatus_unl_valid = '1' and l_tax_unl_valid = '1' and l_returnflag_unl_valid = '1' and l_count_order_unl_valid = '1' and l_avg_disc_unl_valid = '1' and l_avg_price_unl_valid = '1' and l_avg_qty_unl_valid = '1' and l_sum_charge_unl_valid = '1' and l_sum_disc_price_unl_valid = '1' and l_sum_base_price_unl_valid = '1' and l_linestatus_o_unl_valid = '1' and l_sum_qty_unl_valid = '1' and l_returnflag_o_unl_valid = '1' then
           state_next <= STATE_DONE;
         end if;
 
       when STATE_DONE =>
         -- Done: the kernel is done with its job.
-        done <= '1';
-        busy <= '0';
-        idle <= '1';
-
+        done       <= '1';
+        busy       <= '0';
+        idle       <= '1';
+        state_next <= STATE_IDLE;
         -- Wait for the reset signal (typically controlled by the host-side 
         -- software), so we can go to idle again. This reset is not to be
         -- confused with the system-wide reset that travels into the kernel
