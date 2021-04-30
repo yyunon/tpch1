@@ -383,10 +383,11 @@ package Tpch_pkg is
     generic (
       FIXED_LEFT_INDEX  : integer;
       FIXED_RIGHT_INDEX : integer;
+      DATA_WIDTH        : integer := 64;
+      INDEX_WIDTH       : integer := 32;
       NUM_KEYS          : integer;
       NUM_SUMS          : natural := 1;
       NUM_AVGS          : natural := 1;
-      INDEX_WIDTH       : integer := 32;
       TAG_WIDTH         : integer := 1
     );
     port (
@@ -404,12 +405,14 @@ package Tpch_pkg is
       in_data       : in std_logic_vector(NUM_SUMS * 64 - 1 downto 0);
 
       probe_valid   : out std_logic;
+      hash_len      : out std_logic_vector(15 downto 0);
       probe_ready   : in std_logic;
 
       out_valid     : out std_logic;
       out_ready     : in std_logic;
-      key_out_data  : out std_logic_vector(NUM_KEYS * 8 - 1 downto 0);
-      out_data      : out std_logic_vector((NUM_SUMS + NUM_AVGS + 1) * 64 - 1 downto 0)
+      out_count     : out std_logic_vector(INDEX_WIDTH - 1 downto 0);
+      out_data      : out std_logic_vector(16 + (NUM_SUMS + NUM_AVGS) * DATA_WIDTH - 1 downto 0)
+
       --avg_out_data   : out std_logic_vector(NUM_LANES * 64 - 1 downto 0);
       --count_out_data : out std_logic_vector(NUM_LANES * 64 - 1 downto 0)
 

@@ -37,6 +37,7 @@ entity ReduceStage is
     in_data       : in std_logic_vector(NUM_SUMS * DATA_WIDTH - 1 downto 0);
 
     probe_valid   : out std_logic;
+    hash_len      : out std_logic_vector(15 downto 0);
     probe_ready   : in std_logic;
 
     out_valid     : out std_logic;
@@ -130,6 +131,8 @@ begin
     hash_data      => hash_out_data,
     hash_key       => hash_out_key,
     hash_count     => hash_out_count,
+    hash_len       => hash_len,
+
     acc_in_valid   => acc_in_valid,
     acc_in_ready   => acc_in_ready,
     acc_in_data    => acc_in_data,
@@ -137,6 +140,7 @@ begin
 
     out_valid      => cntrl_out_slice_in_valid,
     out_ready      => cntrl_out_slice_in_ready,
+    out_count      => out_count,
     out_data       => cntrl_out_slice_in_data,
     key_out_data   => cntrl_out_slice_in_key_data,
     count_out_data => cntrl_out_slice_in_count_data

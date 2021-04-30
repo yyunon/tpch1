@@ -161,6 +161,10 @@ entity PU is
 end PU;
 
 architecture Behavioral of PU is
+  constant ELEMENT_WIDTH       : natural                                    := 8;
+  constant ELEMENT_COUNT_MAX   : natural                                    := 64;
+  constant ELEMENT_COUNT_WIDTH : natural                                    := 6;
+  constant COUNT_MAX_VAL       : unsigned(ELEMENT_COUNT_WIDTH - 1 downto 0) := to_unsigned(ELEMENT_COUNT_MAX, ELEMENT_COUNT_WIDTH);
   -- State Machine
   type state_type is (STATE_IDLE,
     STATE_BUILD,
@@ -432,6 +436,8 @@ architecture Behavioral of PU is
   -- signal filter_out_strb        : std_logic;
   signal probe_valid                         : std_logic;
   signal probe_ready                         : std_logic;
+  signal num_entries                         : std_logic_vector(15 downto 0);
+  signal enable_interface                    : std_logic;
   --
   constant ZERO                              : std_logic_vector(3 downto 0) := (others => '0');
 begin
@@ -875,6 +881,7 @@ begin
     out_ready     => out_data_ready_s,
     out_data      => out_data_s, -- This holds them all
     probe_ready   => probe_ready,
+    hash_len      => num_entries,
     probe_valid   => probe_valid
   );
   sync_output_streams : StreamSync
@@ -948,6 +955,7 @@ begin
     count_order_data,
     sum_base_price_data,
     probe_valid,
+    num_entries,
 
     cmd_in_valid
     ) is
@@ -1028,8 +1036,9 @@ begin
     l_count_order_o.dvalid    := '1';
     l_count_order_o.valid     := '0';
 
-    probe_ready  <= '0';
-    cmd_in_ready <= '0';
+    probe_ready      <= '0';
+    cmd_in_ready     <= '0';
+    enable_interface <= '0';
 
     case vs.state is
       when STATE_IDLE =>
@@ -1043,26 +1052,56 @@ begin
           vs.state := STATE_INTERFACE;
         end if;
       when STATE_INTERFACE =>
+        enable_interface <= '1';
         l_returnflag_o.buf.ready  := '0';
-        l_linestatus_o.buf.ready  := '0';
         l_returnflag_o.utf.ready  := l_returnflag_o_chars_ready;
         l_returnflag_o.utf.data   := returnflag_o_chars_data;
-        l_returnflag_o.utf.count  := unsigned(l_returnflag_chars_count);
+        l_returnflag_o.utf.count  := unsigned(num_entries);
         l_returnflag_o.utf.last   := '0';
         l_returnflag_o.utf.dvalid := '1';
         l_returnflag_o.utf.valid  := returnflag_o_chars_valid;
 
+        l_linestatus_o.buf.ready  := '0';
         l_linestatus_o.utf.ready  := l_linestatus_o_chars_ready;
         l_linestatus_o.utf.data   := linestatus_o_chars_data;
-        l_linestatus_o.utf.count  := unsigned(l_linestatus_chars_count);
+        l_linestatus_o.utf.count  := unsigned(num_entries);
         l_linestatus_o.utf.last   := '0';
         l_linestatus_o.utf.dvalid := '1';
         l_linestatus_o.utf.valid  := linestatus_o_chars_valid;
 
+        -- Stream chars
+        if l_linestatus_o.utf.valid = '1' and l_linestatus_o_chars_ready = '1' then
+          vs.len := rs.len - l_linestatus_o.utf.count;
+          if vs.len = 0 then
+            l_linestatus_o.utf.last := '1';
+            vs.state                := STATE_DONE;
+          end if;
+        end if;
+
+        if l_returnflag_o.utf.valid = '1' and l_returnflag_o_chars_ready = '1' then
+          vs.len := rs.len - l_returnflag_o.utf.count;
+          if vs.len = 0 then
+            l_returnflag_o.utf.last := '1';
+            vs.state                := STATE_DONE;
+          end if;
+        end if;
       when STATE_DONE =>
+        vs.state := STATE_IDLE;
     end case;
 
-    ds <= vs;
+    ds                          <= vs;
+
+    l_returnflag_o_chars_valid  <= l_returnflag_o.utf.valid;
+    l_returnflag_o_chars_dvalid <= l_returnflag_o.utf.dvalid;
+    l_returnflag_o_chars_last   <= l_returnflag_o.utf.last;
+    l_returnflag_o_chars        <= l_returnflag_o.utf.data;
+    l_returnflag_o_chars_count  <= '0' & std_logic_vector(l_returnflag_o.utf.count);
+
+    l_linestatus_o_chars_valid  <= l_linestatus_o.utf.valid;
+    l_linestatus_o_chars_dvalid <= l_linestatus_o.utf.dvalid;
+    l_linestatus_o_chars_last   <= l_linestatus_o.utf.last;
+    l_linestatus_o_chars        <= l_linestatus_o.utf.data;
+    l_linestatus_o_chars_count  <= '0' & std_logic_vector(l_linestatus_o.utf.count);
 
   end process;
 

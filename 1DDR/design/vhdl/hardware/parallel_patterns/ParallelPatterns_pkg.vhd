@@ -179,6 +179,8 @@ package ParallelPatterns_pkg is
       hash_out_data     : out std_logic_vector(NUM_LANES * DATA_WIDTH - 1 downto 0);
       hash_key_out_data : out std_logic_vector(NUM_KEYS * 8 - 1 downto 0);
       hash_count_data   : out std_logic_vector(NUM_LANES * DATA_WIDTH - 1 downto 0);
+      hash_len_data     : out std_logic_vector(15 downto 0);
+
       -- Output stream.
       out_valid         : out std_logic;
       out_ready         : in std_logic;
@@ -234,6 +236,7 @@ package ParallelPatterns_pkg is
       hash_data      : out std_logic_vector(NUM_LANES * DATA_WIDTH - 1 downto 0);
       hash_key       : out std_logic_vector(NUM_LANES * 8 - 1 downto 0);
       hash_count     : out std_logic_vector(DATA_WIDTH - 1 downto 0);
+      hash_len       : out std_logic_vector(15 downto 0);
 
       -- Accumulator input stream.
       acc_in_valid   : in std_logic;

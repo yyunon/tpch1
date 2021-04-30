@@ -78,7 +78,7 @@ begin
   read_enable            <= '1';
   bit_table_read_enable  <= '1';
   -- This is for array writer.
-  num_entries            <= std_logic_vector(hash_pointer);
+  num_entries            <= std_logic_vector(hash_pointer + 1);
   bit_table_read_address <= stream_key_out_address;
   stream_key_out_data    <= bit_table_read_data;
 

@@ -7,3 +7,4 @@
 [0m2021.04.27 09:26:35 INFO  time: initialize in 0.96s[0m
 [0m2021.04.27 09:26:37 WARN  Build server is not auto-connectable.[0m
 [0m2021.04.27 09:26:37 WARN  no build tool detected in workspace '/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1'. The most common cause for this problem is that the editor was opened in the wrong working directory, for example if you use sbt then the workspace directory should contain build.sbt. [0m
+[0m2021.04.28 23:39:28 INFO  shutting down Metals[0m

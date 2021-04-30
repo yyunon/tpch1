@@ -64,6 +64,7 @@ entity StreamAccumulator is
     hash_out_data     : out std_logic_vector(NUM_LANES * DATA_WIDTH - 1 downto 0);
     hash_key_out_data : out std_logic_vector(NUM_KEYS * 8 - 1 downto 0);
     hash_count_data   : out std_logic_vector(NUM_LANES * DATA_WIDTH - 1 downto 0);
+    hash_len_data     : out std_logic_vector(15 downto 0);
 
     -- Output stream.
     out_valid         : out std_logic;
@@ -103,6 +104,7 @@ begin
   -- Input is always ready.
   in_ready          <= '1';
 
+  hash_len_data     <= num_entries;
   -- Output data vector is always the accumulator register.
   --out_data <= data;
   out_data          <= hash_out_data_s((NUM_LANES + 1) * DATA_WIDTH - 1 downto 64); -- Read port always enabled.
@@ -174,7 +176,7 @@ begin
       hash_operation <= '0'; -- We only do reads in this process.
       key_in_data_s  <= (others => '0');
       if hash_out_ready = '1' then
-        if count_reg < 15 then
+        if count_reg < unsigned(num_entries) then
           out_valid_s    <= '1';
           bit_address_in <= std_logic_vector(count_reg);
           count_reg := count_reg + 1;

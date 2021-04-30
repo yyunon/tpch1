@@ -10,6 +10,7 @@ entity ReduceStream is
 
     -- Width of the stream data vector.
     DATA_WIDTH        : natural;
+    INDEX_WIDTH       : natural;
 
     NUM_KEYS          : natural := 1;
     NUM_LANES         : natural := 1;
@@ -55,6 +56,8 @@ entity ReduceStream is
     hash_data      : out std_logic_vector(NUM_LANES * DATA_WIDTH - 1 downto 0);
     hash_key       : out std_logic_vector(NUM_LANES * 8 - 1 downto 0);
     hash_count     : out std_logic_vector(DATA_WIDTH - 1 downto 0);
+    hash_len       : out std_logic_vector(15 downto 0);
+
     -- Output stream.
     out_valid      : out std_logic;
     out_ready      : in std_logic;
@@ -90,6 +93,7 @@ architecture Behavioral of ReduceStream is
   signal acc_key_data_s   : std_logic_vector(NUM_LANES * 8 - 1 downto 0);
   signal acc_count_data_s : std_logic_vector(NUM_LANES * DATA_WIDTH - 1 downto 0);
 
+  signal num_entries      : std_logic_vector(15 downto 0);
 begin
   -- Count the hanshaked TRANSACTIONS.    
   element_counter : StreamElementCounter
@@ -156,6 +160,7 @@ begin
     hash_out_data     => hash_data,
     hash_key_out_data => hash_key,
     hash_count_data   => hash_count,
+    hash_len          => hash_len,
     out_valid         => acc_out_valid,
     out_ready         => acc_out_ready,
     out_data          => acc_out_data_s,
