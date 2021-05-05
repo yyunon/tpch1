@@ -7,8 +7,8 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use ieee.std_logic_misc.all;
 
---LIBRARY ieee_proposed;
---USE ieee_proposed.fixed_pkg.ALL;
+library ieee_proposed;
+use ieee_proposed.fixed_pkg.all;
 
 library work;
 use work.Tpch_pkg.all;
@@ -283,6 +283,8 @@ entity PriceSummary is
     result                        : out std_logic_vector(63 downto 0);
     l_firstidx                    : in std_logic_vector(31 downto 0);
     l_lastidx                     : in std_logic_vector(31 downto 0);
+    l_o_firstidx                  : in std_logic_vector(31 downto 0);
+    l_o_lastidx                   : in std_logic_vector(31 downto 0);
     rhigh                         : out std_logic_vector(31 downto 0);
     rlow                          : out std_logic_vector(31 downto 0);
     status_1                      : out std_logic_vector(31 downto 0);
@@ -303,7 +305,7 @@ architecture Implementation of PriceSummary is
   constant DATA_WIDTH            : integer := 64;
   constant LEN_WIDTH             : integer := 8;
   constant EPC                   : integer := 8;
-  constant FIXED_LEFT_INDEX      : integer := 30;
+  constant FIXED_LEFT_INDEX      : integer := 31;
   constant FIXED_RIGHT_INDEX     : integer := FIXED_LEFT_INDEX - (DATA_WIDTH - 1);
 
   constant SYNC_IN_BUFFER_DEPTH  : integer := 0;
@@ -358,6 +360,8 @@ begin
     FIXED_LEFT_INDEX  => FIXED_LEFT_INDEX,
     FIXED_RIGHT_INDEX => FIXED_RIGHT_INDEX,
     DATA_WIDTH        => 64,
+    TAG_WIDTH         => TAG_WIDTH,
+    LEN_WIDTH         => LEN_WIDTH,
     INDEX_WIDTH       => INDEX_WIDTH,
     CONVERTERS        => "FLOAT_TO_FIXED", -- TODO: Implement this
     ILA               => ""
@@ -478,7 +482,9 @@ begin
     l_count_order_ready         => l_count_order_ready,
     l_count_order_dvalid        => l_count_order_dvalid,
     l_count_order_last          => l_count_order_last,
-    l_count_order               => l_count_order
+    l_count_order               => l_count_order,
+    cmd_in_valid                => pu_cmd_in_valid,
+    cmd_in_ready                => pu_cmd_in_ready
 
   );
 
@@ -530,6 +536,8 @@ begin
     l_linestatus_o_cmd_ready,
     l_sum_qty_cmd_ready,
     l_returnflag_o_cmd_ready,
+
+    pu_cmd_in_ready,
 
     state,
     start,
@@ -687,10 +695,10 @@ begin
         l_extendedprice_cmd_lastIdx  <= l_lastIdx;
         l_extendedprice_cmd_tag      <= (others => '0');
 
-        l_shipdate_cmd_valid         <= '1';
-        l_shipdate_cmd_firstIdx      <= l_firstIdx;
-        l_shipdate_cmd_lastIdx       <= l_lastIdx;
-        l_shipdate_cmd_tag           <= (others => '0');
+        l_returnflag_cmd_valid         <= '1';
+        l_returnflag_cmd_firstIdx      <= l_firstIdx;
+        l_returnflag_cmd_lastIdx       <= l_lastIdx;
+        l_returnflag_cmd_tag           <= (others => '0');
 
         l_discount_cmd_valid         <= '1';
         l_discount_cmd_firstIdx      <= l_firstIdx;
@@ -712,7 +720,7 @@ begin
         l_linestatus_cmd_lastIdx     <= l_lastIdx;
         l_linestatus_cmd_tag         <= (others => '0');
 
-        if l_quantity_cmd_ready = '1' and l_extendedprice_cmd_ready = '1' and l_shipdate_cmd_ready = '1' and l_discount_cmd_ready = '1' and l_linestatus_cmd_ready = '1' and l_tax_cmd_ready = '1' and l_returnflag = '1' then
+        if l_quantity_cmd_ready = '1' and l_extendedprice_cmd_ready = '1' and l_shipdate_cmd_ready = '1' and l_discount_cmd_ready = '1' and l_linestatus_cmd_ready = '1' and l_tax_cmd_ready = '1' and l_returnflag_cmd_ready = '1' then
           state_next <= STATE_BUILD;
         end if;
 
@@ -723,7 +731,7 @@ begin
         idle            <= '0';
 
         pu_cmd_in_valid <= '1';
-        if pu_cmd_in_ready = '0' then
+        if pu_cmd_in_ready = '1' then
           state_next <= STATE_INTERFACE;
         end if;
 
@@ -793,8 +801,7 @@ begin
     -- On the rising edge of the kernel clock:
     if rising_edge(kcd_clk) then
       -- Register the next state.
-      state    <= state_next;
-      status_1 <= (31 downto EPC => '0') & sum_out_valid_stages;
+      state <= state_next;
       result_out_data := (others => '0');
       temp_acc        := (others => '0');
 

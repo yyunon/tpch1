@@ -79,7 +79,7 @@ architecture Behavioral of StringWriterInterface is
     ready  : std_logic;
     valid  : std_logic;
     data   : std_logic_vector(7 downto 0);
-    count  : unsigned(LEN_WIDTH - 1 downto 0);
+    count  : unsigned(0 downto 0);
     last   : std_logic;
     dvalid : std_logic;
   end record;
@@ -122,33 +122,18 @@ architecture Behavioral of StringWriterInterface is
 begin
   -- For now only connect the l_returnflag and l_linestatus streams to their
   -- corresponding output.
-  output_valid        <= input_valid;
-  input_ready         <= output_ready;
-  output_dvalid       <= input_dvalid;
-  output_last         <= input_last;
-  output_length       <= input_length;
-  output_count        <= input_count;
+  output_valid  <= input_valid;
+  input_ready   <= output_ready;
+  output_dvalid <= input_dvalid;
+  output_last   <= input_last;
+  output_length <= input_length;
+  output_count  <= input_count;
 
-  output_chars_valid  <= input_chars_valid;
-  input_chars_ready   <= output_chars_ready;
-  output_chars_dvalid <= input_chars_dvalid;
-  output_chars_last   <= input_chars_last;
-  output_chars        <= input_chars;
-  output_chars_count  <= input_chars_count;
-  output_valid        <= input_valid;
-
-  input_ready         <= output_ready;
-  output_dvalid       <= input_dvalid;
-  output_last         <= input_last;
-  output_length       <= input_length;
-  output_count        <= input_count;
-
-  output_chars_valid  <= input_chars_valid;
-  input_chars_ready   <= output_chars_ready;
-  output_chars_dvalid <= input_chars_dvalid;
-  output_chars_last   <= input_chars_last;
-  output_chars        <= input_chars;
-  output_chars_count  <= input_chars_count;
+  input_ready   <= output_ready;
+  output_dvalid <= input_dvalid;
+  output_last   <= input_last;
+  output_length <= input_length;
+  output_count  <= input_count;
 
   writer_process :
   process (rs,
@@ -187,11 +172,12 @@ begin
 
     end case;
     ds                  <= vs;
+    input_chars_ready   <= output.utf.ready;
     output_chars_valid  <= output.utf.valid;
     output_chars_dvalid <= output.utf.dvalid;
     output_chars_last   <= output.utf.last;
     output_chars        <= output.utf.data;
-    output_chars_count  <= '0' & std_logic_vector(output.utf.count);
+    output_chars_count  <= std_logic_vector(output.utf.count);
   end process;
 
   reg_proc : process (clk)

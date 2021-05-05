@@ -20,7 +20,7 @@ CPPFLAGS = -DCONFIG_LOGLEVEL=4 -g -Wall -Werror $(INCLUDES)
 
 #the -L library include directories are only needed if the platform libraries are not installed
 #LDLIBS = -L$(FLETCHER_AWS_DIR)/runtime/runtime_sim/build -L$(FLETCHER_AWS_DIR)/runtime/runtime/build -L/home/yyunon/thesis_journals/resources/fletcher-aws/aws-fpga/sdk/userspace/lib -L$(FLETCHER_DIR)/runtime/cpp/build -lfpga_mgmt -lfletcher_aws -lfletcher_aws_sim
-LDLIBS = -L${SDK_DIR}/userspace/lib/so -lfpga_mgmt -lfletcher -L$(FLETCHER_AWS_DIR)/runtime/runtime_sim/build -L$(FLETCHER_AWS_DIR)/runtime/runtime/build
+LDLIBS = -L${SDK_DIR}/userspace/lib/so -lfpga_mgmt -lfletcher -L$(FLETCHER_AWS_DIR)/runtime/runtime_sim/build -L$(FLETCHER_AWS_DIR)/runtime/runtime/build -larrow -lparquet 
 
 SRC = tpch.cpp
 OBJ = $(SRC:.cpp=.o)

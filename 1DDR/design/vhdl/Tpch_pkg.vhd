@@ -26,6 +26,8 @@ package Tpch_pkg is
   function flatten_tuple(inp : TUPLE
   ) return std_logic_vector;
 
+  function and_reducex(a : std_logic_vector) return std_logic;
+
   component StringWriterInterface is
     generic (
       DATA_WIDTH  : natural;
@@ -34,6 +36,9 @@ package Tpch_pkg is
       INDEX_WIDTH : integer
     );
     port (
+      clk                 : in std_logic;
+      reset               : in std_logic;
+      enable              : in std_logic;
 
       input_valid         : in std_logic;
       input_ready         : out std_logic;
@@ -108,6 +113,8 @@ package Tpch_pkg is
       FIXED_LEFT_INDEX  : integer;
       FIXED_RIGHT_INDEX : integer;
       DATA_WIDTH        : natural;
+      TAG_WIDTH         : natural;
+      LEN_WIDTH         : natural;
       INDEX_WIDTH       : integer;
       CONVERTERS        : string := "";
       ILA               : string := ""
@@ -244,7 +251,10 @@ package Tpch_pkg is
       l_count_order_ready         : in std_logic;
       l_count_order_dvalid        : out std_logic;
       l_count_order_last          : out std_logic;
-      l_count_order               : out std_logic_vector(63 downto 0)
+      l_count_order               : out std_logic_vector(63 downto 0);
+
+      cmd_in_valid                : in std_logic;
+      cmd_in_ready                : out std_logic
     );
   end component;
   component Float_to_Fixed is
@@ -327,11 +337,12 @@ package Tpch_pkg is
       reset         : in std_logic;
 
       --OP1 Input stream.
-      inputs_valid  : in TUPLE(NUM_INPUTS - 1 downto 0);
-      inputs_last   : in TUPLE(NUM_INPUTS - 1 downto 0);
-      inputs_dvalid : in TUPLE(NUM_INPUTS - 1 downto 0);
+      inputs_valid  : in std_logic_vector(NUM_INPUTS - 1 downto 0);
+      inputs_last   : in std_logic_vector(NUM_INPUTS - 1 downto 0);
+      inputs_dvalid : in std_logic_vector(NUM_INPUTS - 1 downto 0);
+      inputs_ready  : out std_logic_vector(NUM_INPUTS - 1 downto 0);
       inputs_data   : in TUPLE_DATA_64(NUM_INPUTS - 1 downto 0);
-      inputs_ready  : out TUPLE(NUM_INPUTS - 1 downto 0);
+
       -- Output stream.
       out_valid     : out std_logic;
       out_last      : out std_logic;
@@ -399,7 +410,7 @@ package Tpch_pkg is
       key_in_data   : in std_logic_vector(NUM_KEYS * 8 - 1 downto 0);
 
       in_valid      : in std_logic;
-      in_dvalid     : in std_logic := '1';
+      in_dvalid     : in std_logic;
       in_ready      : out std_logic;
       in_last       : in std_logic;
       in_data       : in std_logic_vector(NUM_SUMS * 64 - 1 downto 0);
@@ -410,8 +421,8 @@ package Tpch_pkg is
 
       out_valid     : out std_logic;
       out_ready     : in std_logic;
-      out_count     : out std_logic_vector(INDEX_WIDTH - 1 downto 0);
-      out_data      : out std_logic_vector(16 + (NUM_SUMS + NUM_AVGS) * DATA_WIDTH - 1 downto 0)
+      out_last      : out std_logic;
+      out_data      : out std_logic_vector(16 + (NUM_SUMS + NUM_AVGS + 1) * DATA_WIDTH - 1 downto 0)
 
       --avg_out_data   : out std_logic_vector(NUM_LANES * 64 - 1 downto 0);
       --count_out_data : out std_logic_vector(NUM_LANES * 64 - 1 downto 0)
@@ -505,4 +516,14 @@ package body Tpch_pkg is
     end loop;
     return output;
   end function;
+  function and_reducex(a : std_logic_vector) return std_logic is
+    variable ret           : std_logic;
+  begin
+    for i in a'range loop
+      ret := ret and a(i);
+    end loop;
+
+    return ret;
+  end function and_reducex;
+
 end Tpch_pkg;

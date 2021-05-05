@@ -57,22 +57,22 @@ architecture Behavioral of HashTable is
   signal dirty_bit               : std_logic;
   signal write_enable            : std_logic;
   signal write_address           : std_logic_vector(NUM_KEYS * ADDRESS_WIDTH - 1 downto 0);
-  signal write_data              : std_logic_vector(DATA_WIDTH downto 0);
+  signal write_data              : std_logic_vector(DATA_WIDTH - 1 downto 0);
 
   signal read_enable             : std_logic;
   signal read_address            : std_logic_vector(NUM_KEYS * ADDRESS_WIDTH - 1 downto 0);
-  signal read_data               : std_logic_vector(DATA_WIDTH downto 0);
+  signal read_data               : std_logic_vector(DATA_WIDTH - 1 downto 0);
 
   signal bit_table_write_enable  : std_logic;
   signal bit_table_write_address : std_logic_vector(NUM_KEYS * ADDRESS_WIDTH - 1 downto 0);
-  signal bit_table_write_data    : std_logic_vector(ADDRESS_WIDTH downto 0);
+  signal bit_table_write_data    : std_logic_vector(NUM_KEYS * ADDRESS_WIDTH downto 0);
 
   signal bit_table_read_enable   : std_logic;
   signal bit_table_read_address  : std_logic_vector(NUM_KEYS * ADDRESS_WIDTH - 1 downto 0);
-  signal bit_table_read_data     : std_logic_vector(ADDRESS_WIDTH downto 0);
+  signal bit_table_read_data     : std_logic_vector(NUM_KEYS * ADDRESS_WIDTH downto 0);
 
-  signal hash_pointer            : unsigned(ADDRESS_WIDTH - 1 downto 0);
-  signal hash_pointer_next       : unsigned(ADDRESS_WIDTH - 1 downto 0);
+  signal hash_pointer            : unsigned(NUM_KEYS * ADDRESS_WIDTH - 1 downto 0);
+  signal hash_pointer_next       : unsigned(NUM_KEYS * ADDRESS_WIDTH - 1 downto 0);
 
 begin
   read_enable            <= '1';
@@ -80,7 +80,7 @@ begin
   -- This is for array writer.
   num_entries            <= std_logic_vector(hash_pointer + 1);
   bit_table_read_address <= stream_key_out_address;
-  stream_key_out_data    <= bit_table_read_data;
+  stream_key_out_data    <= bit_table_read_data(NUM_KEYS * ADDRESS_WIDTH - 1 downto 0);
 
   hash_function_gen :
   if HASH_FUNCTION = "DIRECT" generate
@@ -106,7 +106,7 @@ begin
 
   hash_table : UtilRam1R1W
   generic map(
-    WIDTH      => DATA_WIDTH + 1, -- Concat the counter too
+    WIDTH      => DATA_WIDTH,
     DEPTH_LOG2 => NUM_KEYS * ADDRESS_WIDTH
   )
   port map(
@@ -133,26 +133,26 @@ begin
     case state is
       when STATE_IDLE =>
         if operation = '1' then
-          if read_data(DATA_WIDTH) = '1' then
+          if bit_table_read_data(16) = '1' then
             state_next <= STATE_UPDATE_HASH_TABLE;
           else
             state_next <= STATE_UPDATE_BIT_TABLE;
           end if;
         else
-          state_next <= STATE_DONE;
+          state_next <= STATE_IDLE;
         end if;
       when STATE_UPDATE_HASH_TABLE =>
         -- update hash table
         write_enable  <= '1';
-        dirty_bit     <= '1';
-        write_data    <= dirty_bit & in_data;
+        write_data    <= in_data;
         write_address <= read_address;
         state_next    <= STATE_DONE;
       when STATE_UPDATE_BIT_TABLE =>
         -- update bit table
         bit_table_write_enable  <= '1';
         bit_table_write_address <= std_logic_vector(hash_counter);
-        bit_table_write_data    <= read_address;
+        dirty_bit               <= '1';
+        bit_table_write_data    <= dirty_bit & read_address;
         state_next              <= STATE_UPDATE_HASH_TABLE;
         hash_counter := hash_counter + 1;
       when STATE_DONE =>
@@ -172,7 +172,7 @@ begin
       hash_pointer <= hash_pointer_next;
       if reset = '1' then
         state        <= STATE_IDLE;
-        hash_pointer <= to_unsigned(0, 64);
+        hash_pointer <= to_unsigned(0, NUM_KEYS * ADDRESS_WIDTH);
       end if;
     end if;
   end process;

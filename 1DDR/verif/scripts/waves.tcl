@@ -16,12 +16,13 @@
 set curr_wave [current_wave_config]
 if { [string length $curr_wave] == 0 } {
   if { [llength [get_objects]] > 0} {
-    add_wave -recursive /tb/card/fpga/CL/
+    add_wave -recursive /tb/
     set_property needs_save false [current_wave_config]
   } else {
      send_msg_id Add_Wave-1 WARNING "No top level signals found. Simulator will start without a wave window. If you want to open a wave window go to 'File->New Waveform Configuration' or type 'create_wave_config' in the TCL console."
   }
 }
 
+set_property display_limit 5000000 [current_wave_config]
 run 200 us 
 quit

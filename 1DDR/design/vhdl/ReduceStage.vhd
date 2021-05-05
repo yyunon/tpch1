@@ -27,11 +27,11 @@ entity ReduceStage is
     clk           : in std_logic;
     reset         : in std_logic;
 
-    key_in_dvalid : in std_logic := '1';
+    key_in_dvalid : in std_logic;
     key_in_data   : in std_logic_vector(NUM_KEYS * 8 - 1 downto 0);
 
     in_valid      : in std_logic;
-    in_dvalid     : in std_logic_vector(NUM_SUMS - 1 downto 0);
+    in_dvalid     : in std_logic;
     in_ready      : out std_logic;
     in_last       : in std_logic;
     in_data       : in std_logic_vector(NUM_SUMS * DATA_WIDTH - 1 downto 0);
@@ -41,8 +41,9 @@ entity ReduceStage is
     probe_ready   : in std_logic;
 
     out_valid     : out std_logic;
-    out_ready     : in std_logic;
-    out_data      : out std_logic_vector(16 + (NUM_SUMS + NUM_AVGS) * DATA_WIDTH - 1 downto 0)
+    out_ready     : in std_logic := '0';
+    out_last      : out std_logic;
+    out_data      : out std_logic_vector(16 + (NUM_SUMS + NUM_AVGS + 1) * DATA_WIDTH - 1 downto 0)
     --avg_out_data   : out std_logic_vector(NUM_AVGS * DATA_WIDTH - 1 downto 0);
     --count_out_data : out std_logic_vector(DATA_WIDTH - 1 downto 0)
 
@@ -79,23 +80,27 @@ architecture Behavioral of ReduceStage is
   signal dly_out_data                  : std_logic_vector(NUM_SUMS * DATA_WIDTH downto 0);
 
   -- hash controller output slice
-  signal hash_out_valid                : std_logic;
-  signal hash_out_ready                : std_logic;
+  signal hash_out_valid                : std_logic := '0';
+  signal hash_out_ready                : std_logic := '0';
+  signal hash_out_last                 : std_logic;
   signal hash_out_data                 : std_logic_vector(NUM_SUMS * DATA_WIDTH - 1 downto 0);
-  signal hash_out_count                : std_logic_vector(NUM_SUMS * DATA_WIDTH - 1 downto 0);
+  signal hash_out_count                : std_logic_vector(DATA_WIDTH - 1 downto 0);
   signal hash_out_key                  : std_logic_vector(15 downto 0);
   -- controller output slice
   signal cntrl_out_slice_in_valid      : std_logic;
   signal cntrl_out_slice_in_ready      : std_logic;
+  signal cntrl_out_slice_in_last       : std_logic;
   signal cntrl_out_slice_in_data       : std_logic_vector(NUM_SUMS * DATA_WIDTH - 1 downto 0);
-  signal cntrl_out_slice_in_count_data : std_logic_vector(NUM_SUMS * DATA_WIDTH - 1 downto 0);
+  signal cntrl_out_slice_in_count_data : std_logic_vector(DATA_WIDTH - 1 downto 0);
   signal cntrl_out_slice_in_key_data   : std_logic_vector(15 downto 0);
 
   -- avg. count and agg. output
   signal out_valid_s                   : std_logic;
-  signal out_ready_s                   : std_logic;
+  signal out_ready_s                   : std_logic := '0';
+  signal out_last_s                    : std_logic;
   signal key_out_data_s                : std_logic_vector(15 downto 0);
   signal count_out_data_s              : std_logic_vector(DATA_WIDTH - 1 downto 0);
+  constant ZERO                        : std_logic_vector(DATA_WIDTH - 1 downto 0) := (others => '0');
   signal out_data_s                    : std_logic_vector(NUM_SUMS * DATA_WIDTH - 1 downto 0);
   signal avg_out_data_s                : std_logic_vector(NUM_AVGS * DATA_WIDTH - 1 downto 0);
 
@@ -103,7 +108,7 @@ begin
 
   reduce_cntrl : ReduceStream
   generic map(
-    DATA_WIDTH        => NUM_SUMS * DATA_WIDTH,
+    DATA_WIDTH        => DATA_WIDTH,
     IN_DIMENSIONALITY => 1,
     NUM_KEYS          => NUM_KEYS,
     NUM_LANES         => NUM_SUMS,
@@ -125,9 +130,10 @@ begin
     acc_out_ready  => acc_out_ready,
     acc_out_data   => acc_out_data,
 
-    -- Hash stream.
+    -- Hash stream. After build stage is done.
     hash_ready     => hash_out_ready,
     hash_valid     => hash_out_valid,
+    hash_last      => hash_out_last,
     hash_data      => hash_out_data,
     hash_key       => hash_out_key,
     hash_count     => hash_out_count,
@@ -140,7 +146,6 @@ begin
 
     out_valid      => cntrl_out_slice_in_valid,
     out_ready      => cntrl_out_slice_in_ready,
-    out_count      => out_count,
     out_data       => cntrl_out_slice_in_data,
     key_out_data   => cntrl_out_slice_in_key_data,
     count_out_data => cntrl_out_slice_in_count_data
@@ -164,11 +169,11 @@ begin
 
   );
 
-  dly_in_data <= and_reduce(in_dvalid) & in_data;
+  dly_in_data <= in_dvalid & in_data;
 
   dly : StreamSliceArray
   generic map(
-    DATA_WIDTH => NUM_SUMS * 65,
+    DATA_WIDTH => NUM_SUMS * 64 + 1,
     DEPTH      => 10
   )
   port map(
@@ -199,8 +204,8 @@ begin
 
     op1_valid  => op_s_in_valid,
     op1_ready  => op_s_in_ready,
-    op1_dvalid => dly_out_data(64),
-    op1_data   => dly_out_data(63 downto 0),
+    op1_dvalid => dly_out_data(NUM_SUMS * DATA_WIDTH),
+    op1_data   => dly_out_data(NUM_SUMS * DATA_WIDTH - 1 downto 0),
 
     op2_valid  => acc_out_valid,
     op2_ready  => acc_out_ready,
@@ -219,25 +224,29 @@ begin
 
   cntrl_out_slice : StreamSlice
   generic map(
-    DATA_WIDTH => (NUM_SUMS + 1) * 64 + 16
+    DATA_WIDTH => (NUM_SUMS + 1) * 64 + 16 + 1
   )
   port map(
     clk                                                         => clk,
     reset                                                       => reset,
     in_valid                                                    => hash_out_valid,
     in_ready                                                    => hash_out_ready,
-    in_data(NUM_SUMS * 64 + 16 + 63 downto NUM_SUMS * 64 + 63)  => hash_out_key,
+    in_data(NUM_SUMS * 64 + 16 + 64)                            => hash_out_last,
+    in_data(NUM_SUMS * 64 + 15 + 64 downto NUM_SUMS * 64 + 64)  => hash_out_key,
     in_data(NUM_SUMS * 64 + 63 downto 64)                       => hash_out_data,
     in_data(63 downto 0)                                        => hash_out_count,
+
     out_valid                                                   => out_valid_s,
     out_ready                                                   => out_ready_s,
-    out_data(NUM_SUMS * 64 + 16 + 63 downto NUM_SUMS * 64 + 63) => key_out_data_s,
+    out_data(NUM_SUMS * 64 + 16 + 64)                           => out_last_s,
+    out_data(NUM_SUMS * 64 + 15 + 64 downto NUM_SUMS * 64 + 64) => key_out_data_s,
     out_data(NUM_SUMS * 64 + 63 downto 64)                      => out_data_s,
     out_data(63 downto 0)                                       => count_out_data_s
   );
 
   out_ready_s <= out_ready;
   out_valid   <= out_valid_s;
+  out_last    <= out_last_s;
   out_data    <= key_out_data_s & out_data_s & avg_out_data_s & count_out_data_s;
   --count_out_data <= count_out_data_s;
 
@@ -253,7 +262,7 @@ begin
     variable divide_out_discount       : sfixed(FIXED_LEFT_INDEX - FIXED_RIGHT_INDEX downto FIXED_RIGHT_INDEX - FIXED_LEFT_INDEX - 1);
     variable avg_vec                   : std_logic_vector(NUM_AVGS * DATA_WIDTH - 1 downto 0);
   begin
-    if out_valid_s = '1' then
+    if out_valid_s = '1' and (count_out_data_s /= ZERO) then
       temp_buffer_quantity      := to_sfixed(out_data_s(191 downto 128), temp_buffer_1'high, temp_buffer_1'low);
       temp_buffer_extendedprice := to_sfixed(out_data_s(127 downto 64), temp_buffer_1'high, temp_buffer_1'low);
       temp_buffer_discount      := to_sfixed(out_data_s(63 downto 0), temp_buffer_1'high, temp_buffer_1'low);

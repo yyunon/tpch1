@@ -2,17 +2,160 @@
 # Vivado v2020.1 (64-bit)
 # SW Build 2902540 on Wed May 27 19:54:35 MDT 2020
 # IP Build 2902112 on Wed May 27 22:43:36 MDT 2020
-# Start of session at: Mon Apr 12 02:50:30 2021
-# Process ID: 342256
-# Current directory: /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch6/1DDR/verif/scripts
+# Start of session at: Mon May  3 20:33:31 2021
+# Process ID: 5710
+# Current directory: /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts
 # Command line: vivado
-# Log file: /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch6/1DDR/verif/scripts/vivado.log
-# Journal file: /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch6/1DDR/verif/scripts/vivado.jou
+# Log file: /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/vivado.log
+# Journal file: /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/vivado.jou
 #-----------------------------------------------------------
 start_gui
 source ./open_waves.tcl
-open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch6/1DDR/verif/scripts/tb.wcfg
-save_wave_config {/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch6/1DDR/verif/scripts/tb.wcfg}
-save_wave_config {/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch6/1DDR/verif/scripts/tb.wcfg}
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+save_wave_config {/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg}
+save_wave_config {/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg}
+save_wave_config {/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg}
 close_sim
 close_project
+source ./open_waves.tcl
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+close_sim
+close_project
+source ./open_waves.tcl
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+close_sim
+close_project
+source ./open_waves.tcl
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+save_wave_config {/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg}
+close_sim
+close_project
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+source ./open_waves.tcl
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+current_wave_config {tb.wcfg}
+add_wave {{/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/avg_discount_reduce_stage/reduce_cntrl/accumulator/HashTable_inst/bit_table/mem}} 
+close_sim
+close_project
+source ./open_waves.tcl
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+current_wave_config {}
+add_wave {{/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/avg_discount_reduce_stage/reduce_cntrl/accumulator/HashTable_inst/bit_table/mem}} 
+close_sim
+close_project
+set_property display_limit 1500000 [current_wave_config]
+source ./open_waves.tcl
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+set_property display_limit 1500000 [current_wave_config]
+current_wave_config {tb.wcfg}
+add_wave {{/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/avg_discount_reduce_stage/reduce_cntrl/accumulator/HashTable_inst/hash_table/mem}} 
+save_wave_config {/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg}
+close_sim
+close_project
+source ./open_waves.tcl
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+current_wave_config {}
+add_wave {{/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/avg_discount_reduce_stage/reduce_cntrl/accumulator/HashTable_inst/bit_table/mem}} 
+set_property display_limit 1500000 [current_wave_config]
+set_property display_limit 5000000 [current_wave_config]
+save_wave_config {/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg}
+close_sim
+close_project
+source ./open_waves.tcl
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+save_wave_config {/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg}
+close_sim
+close_project
+source ./open_waves.tcl
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+close_sim
+close_project
+source ./open_waves.tcl
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+save_wave_config {/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg}
+close_sim
+close_project
+source ./open_waves.tcl
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+close_sim
+close_project
+source ./open_waves.tcl
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+close_sim
+close_project
+source ./open_waves.tcl
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+close_sim
+close_project
+source ./open_waves.tcl
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+close_sim
+close_project
+source ./open_waves.tcl
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+close_sim
+close_project
+source ./open_waves.tcl
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+close_sim
+close_project
+source ./open_waves.tcl
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+close_sim
+close_project
+source ./open_waves.tcl
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+current_wave_config {tb.wcfg}
+add_wave {{/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/avg_discount_reduce_stage/reduce_cntrl/accumulator/HashTable_inst/bit_table/mem}} 
+get_property display_limit [current_wave_config]
+close_sim
+close_project
+source ./open_waves.tcl
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+close_sim
+close_project
+source ./open_waves.tcl
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+current_wave_config {tb.wcfg}
+add_wave {{/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/avg_discount_reduce_stage/reduce_cntrl/accumulator/HashTable_inst/bit_table/mem}} 
+save_wave_config {/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg}
+close_sim
+close_project
+source ./open_waves.tcl
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+close_sim
+close_project
+source ./open_waves.tcl
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+close_sim
+close_project
+source ./open_waves.tcl
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+close_sim
+close_project
+source ./open_waves.tcl
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+save_wave_config {/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg}
+close_sim
+close_project
+source ./open_waves.tcl
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+close_sim
+close_project
+source ./open_waves.tcl
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+close_sim
+close_project
+source ./open_waves.tcl
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+current_wave_config {tb.wcfg}
+add_wave {{/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/avg_discount_reduce_stage/reduce_cntrl/accumulator/HashTable_inst/hash_table/mem}} 
+save_wave_config {/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg}
+close_sim
+close_project
+source ./open_waves.tcl
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+close_sim
+close_project
+source ./open_waves.tcl
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg

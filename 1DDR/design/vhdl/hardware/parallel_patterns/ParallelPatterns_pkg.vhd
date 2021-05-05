@@ -160,7 +160,7 @@ package ParallelPatterns_pkg is
 
       -- Init value
       -- Loaded at reset and on 'last'.
-      init_value        : in std_logic_vector(NUM_LANES * DATA_WIDTH - 1 downto 0);
+      init_value        : in std_logic_vector(DATA_WIDTH - 1 downto 0);
 
       -- Key stream for accumulator logic
       key_in_dvalid     : in std_logic := '1';
@@ -176,9 +176,10 @@ package ParallelPatterns_pkg is
       -- Hash out stream
       hash_out_valid    : out std_logic;
       hash_out_ready    : in std_logic;
+      hash_out_last     : out std_logic;
       hash_out_data     : out std_logic_vector(NUM_LANES * DATA_WIDTH - 1 downto 0);
       hash_key_out_data : out std_logic_vector(NUM_KEYS * 8 - 1 downto 0);
-      hash_count_data   : out std_logic_vector(NUM_LANES * DATA_WIDTH - 1 downto 0);
+      hash_count_data   : out std_logic_vector(DATA_WIDTH - 1 downto 0);
       hash_len_data     : out std_logic_vector(15 downto 0);
 
       -- Output stream.
@@ -214,7 +215,7 @@ package ParallelPatterns_pkg is
       reset          : in std_logic;
 
       -- Init value for the accumulator.
-      acc_init_value : in std_logic_vector(NUM_LANES * DATA_WIDTH - 1 downto 0);
+      acc_init_value : in std_logic_vector(DATA_WIDTH - 1 downto 0);
 
       -- Input stream.
       in_valid       : in std_logic;
@@ -233,8 +234,9 @@ package ParallelPatterns_pkg is
       -- Hash stream.
       hash_ready     : in std_logic;
       hash_valid     : out std_logic;
+      hash_last      : out std_logic;
       hash_data      : out std_logic_vector(NUM_LANES * DATA_WIDTH - 1 downto 0);
-      hash_key       : out std_logic_vector(NUM_LANES * 8 - 1 downto 0);
+      hash_key       : out std_logic_vector(15 downto 0);
       hash_count     : out std_logic_vector(DATA_WIDTH - 1 downto 0);
       hash_len       : out std_logic_vector(15 downto 0);
 
@@ -247,7 +249,7 @@ package ParallelPatterns_pkg is
       out_valid      : out std_logic;
       out_ready      : in std_logic;
       out_data       : out std_logic_vector(NUM_LANES * DATA_WIDTH - 1 downto 0);
-      key_out_data   : out std_logic_vector(NUM_LANES * 8 - 1 downto 0);
+      key_out_data   : out std_logic_vector(15 downto 0);
       --out_last                    : out std_logic_vector(IN_DIMENSIONALITY-2 downto 0)
       -- Counter Stream for avg and count
       count_out_data : out std_logic_vector(DATA_WIDTH - 1 downto 0)

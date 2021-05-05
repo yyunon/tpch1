@@ -60,10 +60,11 @@ entity StreamAccumulator is
 
     -- Hash out stream
     hash_out_valid    : out std_logic;
+    hash_out_last     : out std_logic;
     hash_out_ready    : in std_logic;
-    hash_out_data     : out std_logic_vector(NUM_LANES * DATA_WIDTH - 1 downto 0);
+    hash_out_data     : out std_logic_vector(NUM_LANES * DATA_WIDTH - 1 downto 0) := (others => '0');
     hash_key_out_data : out std_logic_vector(NUM_KEYS * 8 - 1 downto 0);
-    hash_count_data   : out std_logic_vector(NUM_LANES * DATA_WIDTH - 1 downto 0);
+    hash_count_data   : out std_logic_vector(DATA_WIDTH - 1 downto 0);
     hash_len_data     : out std_logic_vector(15 downto 0);
 
     -- Output stream.
@@ -71,7 +72,7 @@ entity StreamAccumulator is
     out_ready         : in std_logic;
     out_data          : out std_logic_vector(NUM_LANES * DATA_WIDTH - 1 downto 0);
     key_out_data      : out std_logic_vector(NUM_KEYS * 8 - 1 downto 0);
-    count_data        : out std_logic_vector(NUM_LANES * DATA_WIDTH - 1 downto 0)
+    count_data        : out std_logic_vector(DATA_WIDTH - 1 downto 0)
 
   );
 end StreamAccumulator;
@@ -84,7 +85,7 @@ architecture Behavioral of StreamAccumulator is
   -- Holding register for the accumulator data
   signal data            : std_logic_vector(NUM_LANES * DATA_WIDTH - 1 downto 0);
 
-  signal count           : std_logic_vector(NUM_LANES * DATA_WIDTH - 1 downto 0);
+  signal count           : std_logic_vector(DATA_WIDTH - 1 downto 0);
 
   signal out_valid_s     : std_logic;
   -- hash table vars
@@ -139,13 +140,17 @@ begin
 
   reg_proc :
   process (clk) is
-    variable count_reg : unsigned(63 downto 0);
+    variable count_reg     : unsigned(63 downto 0);
+    variable count_reg_out : unsigned(15 downto 0);
   begin
     if rising_edge(clk) then
 
       out_valid      <= initialized;
       hash_operation <= '0';
       key_in_data_s  <= (others => '0');
+      --Output logic, will stream the hash and bit table 
+      out_valid_s    <= '0';
+      hash_out_last  <= '0';
 
       if in_valid = '1' and in_dvalid = '1' then
         hash_operation <= '1'; --Update hash table
@@ -156,39 +161,30 @@ begin
         initialized <= '1';
         if in_last = '1' then
           initialized <= '0';
-          data        <= init_value;
+          data        <= (others => '0');
         end if;
-      end if;
-      if reset = '1' then
-        initialized <= '1';
-        data        <= init_value;
-      end if;
-    end if;
-  end process;
-
-  reg_process_out :
-  process (clk) is
-    variable count_reg : unsigned(15 downto 0);
-  begin
-    if rising_edge(clk) then
-      --O-utput logic, will stream the hash and bit table 
-      out_valid_s    <= '0';
-      hash_operation <= '0'; -- We only do reads in this process.
-      key_in_data_s  <= (others => '0');
-      if hash_out_ready = '1' then
-        if count_reg < unsigned(num_entries) then
+      elsif hash_out_ready = '1' then
+        if count_reg_out < unsigned(num_entries) then
           out_valid_s    <= '1';
-          bit_address_in <= std_logic_vector(count_reg);
-          count_reg := count_reg + 1;
+          bit_address_in <= std_logic_vector(count_reg_out);
+          count_reg_out := count_reg_out + 1;
           -- 2 clk cyc.
           key_out_data_s <= bit_address_out;
           key_in_data_s  <= key_out_data_s;
+        elsif count_reg_out = unsigned(num_entries) then
+          hash_out_last <= '1';
         end if;
       end if;
+
       hash_out_valid <= out_valid_s;
+
       if reset = '1' then
-        count_reg := to_unsigned(0, 16);
+        initialized <= '1';
+        count_reg     := to_unsigned(0, 64);
+        count_reg_out := to_unsigned(0, 16);
+        data <= (others => '0');
       end if;
+
     end if;
   end process;
 

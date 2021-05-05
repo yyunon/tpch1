@@ -53,11 +53,12 @@ entity MergeOp is
     reset         : in std_logic;
 
     --OP1 Input stream.
-    inputs_valid  : in TUPLE(NUM_INPUTS - 1 downto 0);
-    inputs_last   : in TUPLE(NUM_INPUTS - 1 downto 0);
-    inputs_dvalid : in TUPLE(NUM_INPUTS - 1 downto 0);
+    inputs_valid  : in std_logic_vector(NUM_INPUTS - 1 downto 0);
+    inputs_last   : in std_logic_vector(NUM_INPUTS - 1 downto 0);
+    inputs_dvalid : in std_logic_vector(NUM_INPUTS - 1 downto 0);
+    inputs_ready  : out std_logic_vector(NUM_INPUTS - 1 downto 0);
     inputs_data   : in TUPLE_DATA_64(NUM_INPUTS - 1 downto 0);
-    inputs_ready  : out TUPLE(NUM_INPUTS - 1 downto 0);
+
     -- Output stream.
     out_valid     : out std_logic;
     out_last      : out std_logic;
@@ -69,54 +70,80 @@ end MergeOp;
 
 architecture Behavioral of MergeOp is
 
-  signal out_s_valid    : std_logic;
-  signal out_s_ready    : std_logic;
+  signal out_s_valid           : std_logic;
+  signal out_s_ready           : std_logic;
 
-  signal buf_op1_valid  : std_logic;
-  signal buf_op1_dvalid : std_logic;
-  signal buf_op1_last   : std_logic := '0';
-  signal buf_op1_ready  : std_logic;
-  signal buf_op1_data   : std_logic_vector(DATA_WIDTH - 1 downto 0);
+  signal buf_valid             : std_logic_vector(NUM_INPUTS - 1 downto 0);
+  signal buf_dvalid            : std_logic_vector(NUM_INPUTS - 1 downto 0);
+  signal buf_last              : std_logic_vector(NUM_INPUTS - 1 downto 0);
+  signal buf_ready             : std_logic_vector(NUM_INPUTS - 1 downto 0);
+  signal buf_data              : TUPLE_DATA_64(NUM_INPUTS - 1 downto 0);
 
   --OP1 Input stream.
-  signal op1_valid      : std_logic;
-  signal op1_last       : std_logic;
-  signal op1_dvalid     : std_logic := '1';
-  signal op1_data       : std_logic_vector(DATA_WIDTH - 1 downto 0);
-  signal op1_ready      : std_logic;
+  signal op1_valid             : std_logic;
+  signal op1_last              : std_logic;
+  signal op1_dvalid            : std_logic := '1';
+  signal op1_data              : std_logic_vector(DATA_WIDTH - 1 downto 0);
+  signal op1_ready             : std_logic;
 
   --OP2 Input stream.
-  signal op2_valid      : std_logic;
-  signal op2_last       : std_logic;
-  signal op2_dvalid     : std_logic := '1';
-  signal op2_ready      : std_logic;
-  signal op2_data       : std_logic_vector(DATA_WIDTH - 1 downto 0);
+  signal op2_valid             : std_logic;
+  signal op2_last              : std_logic;
+  signal op2_dvalid            : std_logic := '1';
+  signal op2_ready             : std_logic;
+  signal op2_data              : std_logic_vector(DATA_WIDTH - 1 downto 0);
 
   --OP3 Input stream.
-  signal op3_valid      : std_logic;
-  signal op3_last       : std_logic;
-  signal op3_dvalid     : std_logic := '1';
-  signal op3_ready      : std_logic;
-  signal op3_data       : std_logic_vector(DATA_WIDTH - 1 downto 0);
+  signal op3_valid             : std_logic;
+  signal op3_last              : std_logic;
+  signal op3_dvalid            : std_logic := '1';
+  signal op3_ready             : std_logic;
+  signal op3_data              : std_logic_vector(DATA_WIDTH - 1 downto 0);
 
-  signal buf_op2_valid  : std_logic;
-  signal buf_op2_dvalid : std_logic;
-  signal buf_op2_last   : std_logic := '0';
-  signal buf_op2_ready  : std_logic;
-  signal buf_op2_data   : std_logic_vector(DATA_WIDTH - 1 downto 0);
+  signal buf_op2_valid         : std_logic;
+  signal buf_op2_dvalid        : std_logic;
+  signal buf_op2_last          : std_logic := '0';
+  signal buf_op2_ready         : std_logic;
+  signal buf_op2_data          : std_logic_vector(DATA_WIDTH - 1 downto 0);
 
-  signal ops_valid      : std_logic;
-  signal ops_dvalid     : std_logic;
-  signal ops_last       : std_logic := '0';
-  signal ops_ready      : std_logic;
-  signal ops_data       : std_logic_vector(DATA_WIDTH - 1 downto 0);
+  signal ops_valid             : std_logic;
+  signal ops_dvalid            : std_logic;
+  signal ops_last              : std_logic := '0';
+  signal ops_ready             : std_logic;
+  signal ops_data              : std_logic_vector(DATA_WIDTH - 1 downto 0);
+
+  signal sync_streams_in_valid : std_logic_vector(NUM_INPUTS - 1 downto 0);
+  signal sync_streams_in_ready : std_logic_vector(NUM_INPUTS - 1 downto 0);
 
 begin
+
+  input_buffer_generator :
+  for g in 0 to NUM_INPUTS - 1 generate
+    in_buf : StreamBuffer
+    generic map(
+      DATA_WIDTH => DATA_WIDTH + 2,
+      MIN_DEPTH  => INPUT_MIN_DEPTH
+    )
+    port map(
+      clk                   => clk,
+      reset                 => reset,
+      in_valid              => inputs_valid(g),
+      in_ready              => inputs_ready(g),
+      in_data(65)           => inputs_last(g),
+      in_data(64)           => inputs_dvalid(g),
+      in_data(63 downto 0)  => inputs_data(g),
+      out_valid             => buf_valid(g),
+      out_ready             => buf_ready(g),
+      out_data(65)          => buf_last(g),
+      out_data(64)          => buf_dvalid(g),
+      out_data(63 downto 0) => buf_data(g)
+    );
+  end generate;
 
   out_buf : StreamBuffer
   generic map(
     DATA_WIDTH => DATA_WIDTH + 2,
-    MIN_DEPTH  => INPUT_MIN_DEPTH
+    MIN_DEPTH  => OUTPUT_MIN_DEPTH
   )
   port map(
     clk                   => clk,
@@ -142,22 +169,24 @@ begin
     clk          => clk,
     reset        => reset,
 
-    in_valid     => flatten_tuple(inputs_valid),
-    in_ready     => flatten_tuple(inputs_ready),
+    in_valid     => buf_valid,
+    in_ready     => buf_ready,
+
     out_valid(0) => ops_valid,
     out_ready(0) => ops_ready
   );
+
   discount_fixed_process :
   if OPERATOR = "DISCOUNT" generate
     decode_inputs :
-    process (inputs_data, inputs_dvalid, inputs_last, inputs_data)
+    process (buf_data, buf_dvalid, buf_last, buf_data)
     begin
-      op1_data   <= inputs_data(DATA_WIDTH - 1 downto 0);
-      op1_dvalid <= inputs_dvalid(0);
-      op1_last   <= inputs_last(0);
-      op2_data   <= inputs_data(2 * DATA_WIDTH - 1 downto DATA_WIDTH);
-      op2_dvalid <= inputs_dvalid(1);
-      op2_last   <= inputs_last(1);
+      op1_data   <= buf_data(0);
+      op1_dvalid <= buf_dvalid(0);
+      op1_last   <= buf_last(0);
+      op2_data   <= buf_data(1);
+      op2_dvalid <= buf_dvalid(1);
+      op2_last   <= buf_last(1);
     end process;
     mult_process :
     process (op1_data, op2_data, ops_valid, out_s_ready) is
@@ -182,20 +211,21 @@ begin
     ops_dvalid <= op1_dvalid and op2_dvalid;
     ops_last   <= op1_last and op2_last;
   end generate;
+
   charge_fixed_process :
   if OPERATOR = "CHARGE" generate
     decode_inputs :
-    process (inputs_data, inputs_dvalid, inputs_last, inputs_data)
+    process (buf_data, buf_dvalid, buf_last, buf_data)
     begin
-      op1_data   <= inputs_data(DATA_WIDTH - 1 downto 0);
-      op1_dvalid <= inputs_dvalid(0);
-      op1_last   <= inputs_last(0);
-      op2_data   <= inputs_data(2 * DATA_WIDTH - 1 downto DATA_WIDTH);
-      op2_dvalid <= inputs_dvalid(1);
-      op2_last   <= inputs_last(1);
-      op3_data   <= inputs_data(3 * data_width - 1 downto 2 * data_width);
-      op3_dvalid <= inputs_dvalid(2);
-      op3_last   <= inputs_last(2);
+      op1_data   <= buf_data(0);
+      op1_dvalid <= buf_dvalid(0);
+      op1_last   <= buf_last(0);
+      op2_data   <= buf_data(1);
+      op2_dvalid <= buf_dvalid(1);
+      op2_last   <= buf_last(1);
+      op3_data   <= buf_data(2);
+      op3_dvalid <= buf_dvalid(2);
+      op3_last   <= buf_last(2);
     end process;
     mult_process :
     process (op1_data, op2_data, op3_data, ops_valid, out_s_ready) is
@@ -217,7 +247,7 @@ begin
         temp_buffer_2 := to_sfixed(op2_data, temp_buffer_2'high, temp_buffer_2'low);
         temp_buffer_3 := to_sfixed(op3_data, temp_buffer_3'high, temp_buffer_3'low);
         temp_res      := temp_buffer_1 * temp_buffer_2;
-        temp_buffer_4 := to_slv(resize(arg => temp_res, left_index => fixed_left_index, right_index => fixed_right_index, round_style => fixed_round_style, overflow_style => fixed_overflow_style));
+        temp_buffer_4 := resize(arg => temp_res, left_index => fixed_left_index, right_index => fixed_right_index, round_style => fixed_round_style, overflow_style => fixed_overflow_style);
         temp_res_2    := temp_buffer_4 * temp_buffer_3;
         ops_data <= to_slv(resize(arg => temp_res_2, left_index => fixed_left_index, right_index => fixed_right_index, round_style => fixed_round_style, overflow_style => fixed_overflow_style));
       end if;
@@ -225,6 +255,7 @@ begin
     ops_dvalid <= op1_dvalid and op2_dvalid and op3_dvalid;
     ops_last   <= op1_last and op2_last and op3_last;
   end generate;
+
   revenue_fixed_process :
   if OPERATOR = "REVENUE" generate
     mult_process :

@@ -2,31 +2,685 @@
 # Vivado v2020.1 (64-bit)
 # SW Build 2902540 on Wed May 27 19:54:35 MDT 2020
 # IP Build 2902112 on Wed May 27 22:43:36 MDT 2020
-# Start of session at: Mon Apr 12 02:50:30 2021
-# Process ID: 342256
-# Current directory: /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch6/1DDR/verif/scripts
+# Start of session at: Mon May  3 20:33:31 2021
+# Process ID: 5710
+# Current directory: /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts
 # Command line: vivado
-# Log file: /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch6/1DDR/verif/scripts/vivado.log
-# Journal file: /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch6/1DDR/verif/scripts/vivado.jou
+# Log file: /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/vivado.log
+# Journal file: /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/vivado.jou
 #-----------------------------------------------------------
 start_gui
 source ./open_waves.tcl
 # current_fileset
 INFO: [IP_Flow 19-234] Refreshing IP repositories
 INFO: [IP_Flow 19-1704] No user IP repositories specified
-INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/opt/Xilinx/Vivado/2020.1/data/ip'.
-current_fileset: Time (s): cpu = 00:00:12 ; elapsed = 00:00:18 . Memory (MB): peak = 7071.250 ; gain = 21.035 ; free physical = 899 ; free virtual = 8246
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/mnt/9a3ce8e2-5558-402f-b9b0-4253be72229d/xilinx_2020/Vivado/2020.1/data/ip'.
+current_fileset: Time (s): cpu = 00:00:07 ; elapsed = 00:00:08 . Memory (MB): peak = 7095.938 ; gain = 18.023 ; free physical = 3605 ; free virtual = 16589
 # open_wave_database ../sim/vivado/tpch_c/tb.wdb
-open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch6/1DDR/verif/scripts/tb.wcfg
-WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst/Forecast_inst/\parallel_pu_gen(0)\/processing_unit_0/reduce_out_ready was not found in the design.
-WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst/Forecast_inst/\parallel_pu_gen(0)\/processing_unit_0/reduce_out_data was not found in the design.
-WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst/Forecast_inst/\parallel_pu_gen(0)\/processing_unit_0/reduce_out_valid was not found in the design.
-WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst/Forecast_inst/\parallel_pu_gen(0)\/processing_unit_0/reduce_out_last was not found in the design.
-WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst/Forecast_inst/\parallel_pu_gen(0)\/processing_unit_0/reduce_out_dvalid was not found in the design.
-save_wave_config {/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch6/1DDR/verif/scripts/tb.wcfg}
-save_wave_config {/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch6/1DDR/verif/scripts/tb.wcfg}
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/bcd_clk was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/bcd_reset was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/kcd_clk was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/kcd_reset was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/mmio_awvalid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/mmio_awready was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/mmio_awaddr was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/mmio_wvalid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/mmio_wready was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/mmio_wdata was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/mmio_wstrb was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/mmio_bvalid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/mmio_bready was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/mmio_bresp was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/mmio_arvalid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/mmio_arready was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/mmio_araddr was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/mmio_rvalid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/mmio_rready was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/mmio_rdata was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/mmio_rresp was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/rd_mst_rreq_valid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/rd_mst_rreq_ready was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/rd_mst_rreq_addr was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/rd_mst_rreq_len was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/rd_mst_rdat_valid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/rd_mst_rdat_ready was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/rd_mst_rdat_data was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/rd_mst_rdat_last was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_mmio_awvalid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_mmio_awready was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_mmio_awaddr was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_mmio_wvalid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_mmio_wready was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_mmio_wdata was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_mmio_wstrb was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_mmio_bvalid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_mmio_bready was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_mmio_bresp was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_mmio_arvalid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_mmio_arready was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_mmio_araddr was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_mmio_rvalid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_mmio_rready was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_mmio_rdata was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_mmio_rresp was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_quantity_valid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_quantity_ready was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_quantity_dvalid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_quantity_last was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_quantity was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_quantity_count was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_extendedprice_valid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_extendedprice_ready was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_extendedprice_dvalid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_extendedprice_last was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_extendedprice was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_extendedprice_count was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_discount_valid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_discount_ready was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_discount_dvalid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_discount_last was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_discount was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_discount_count was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_shipdate_valid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_shipdate_ready was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_shipdate_dvalid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_shipdate_last was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_shipdate was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_shipdate_count was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_quantity_unl_valid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_quantity_unl_ready was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_quantity_unl_tag was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_extendedprice_unl_valid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_extendedprice_unl_ready was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_extendedprice_unl_tag was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_discount_unl_valid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_discount_unl_ready was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_discount_unl_tag was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_shipdate_unl_valid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_shipdate_unl_ready was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_shipdate_unl_tag was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_quantity_cmd_valid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_quantity_cmd_ready was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_quantity_cmd_firstIdx was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_quantity_cmd_lastIdx was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_quantity_cmd_ctrl was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_quantity_cmd_tag was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_extendedprice_cmd_valid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_extendedprice_cmd_ready was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_extendedprice_cmd_firstIdx was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_extendedprice_cmd_lastIdx was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_extendedprice_cmd_ctrl was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_extendedprice_cmd_tag was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_discount_cmd_valid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_discount_cmd_ready was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_discount_cmd_firstIdx was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_discount_cmd_lastIdx was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_discount_cmd_ctrl was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_discount_cmd_tag was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_shipdate_cmd_valid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_shipdate_cmd_ready was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_shipdate_cmd_firstIdx was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_shipdate_cmd_lastIdx was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_shipdate_cmd_ctrl was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst_l_shipdate_cmd_tag was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_quantity_valid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_quantity_ready was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_quantity_dvalid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_quantity_last was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_quantity was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_quantity_count was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_quantity_bus_rreq_valid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_quantity_bus_rreq_ready was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_quantity_bus_rreq_addr was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_quantity_bus_rreq_len was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_quantity_bus_rdat_valid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_quantity_bus_rdat_ready was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_quantity_bus_rdat_data was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_quantity_bus_rdat_last was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_quantity_cmd_valid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_quantity_cmd_ready was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_quantity_cmd_firstIdx was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_quantity_cmd_lastIdx was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_quantity_cmd_ctrl was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_quantity_cmd_tag was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_quantity_unl_valid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_quantity_unl_ready was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_quantity_unl_tag was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_extendedprice_valid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_extendedprice_ready was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_extendedprice_dvalid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_extendedprice_last was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_extendedprice was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_extendedprice_count was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_extendedprice_bus_rreq_valid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_extendedprice_bus_rreq_ready was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_extendedprice_bus_rreq_addr was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_extendedprice_bus_rreq_len was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_extendedprice_bus_rdat_valid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_extendedprice_bus_rdat_ready was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_extendedprice_bus_rdat_data was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_extendedprice_bus_rdat_last was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_extendedprice_cmd_valid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_extendedprice_cmd_ready was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_extendedprice_cmd_firstIdx was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_extendedprice_cmd_lastIdx was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_extendedprice_cmd_ctrl was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_extendedprice_cmd_tag was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_extendedprice_unl_valid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_extendedprice_unl_ready was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_extendedprice_unl_tag was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_discount_valid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_discount_ready was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_discount_dvalid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_discount_last was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_discount was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_discount_count was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_discount_bus_rreq_valid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_discount_bus_rreq_ready was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_discount_bus_rreq_addr was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_discount_bus_rreq_len was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_discount_bus_rdat_valid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_discount_bus_rdat_ready was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_discount_bus_rdat_data was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_discount_bus_rdat_last was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_discount_cmd_valid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_discount_cmd_ready was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_discount_cmd_firstIdx was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_discount_cmd_lastIdx was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_discount_cmd_ctrl was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_discount_cmd_tag was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_discount_unl_valid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_discount_unl_ready was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_discount_unl_tag was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_shipdate_valid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_shipdate_ready was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_shipdate_dvalid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_shipdate_last was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_shipdate was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_shipdate_count was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_shipdate_bus_rreq_valid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_shipdate_bus_rreq_ready was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_shipdate_bus_rreq_addr was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_shipdate_bus_rreq_len was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_shipdate_bus_rdat_valid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_shipdate_bus_rdat_ready was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_shipdate_bus_rdat_data was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_shipdate_bus_rdat_last was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_shipdate_cmd_valid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_shipdate_cmd_ready was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_shipdate_cmd_firstIdx was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_shipdate_cmd_lastIdx was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_shipdate_cmd_ctrl was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_shipdate_cmd_tag was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_shipdate_unl_valid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_shipdate_unl_ready was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_l_inst_l_shipdate_unl_tag was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/RDAW64DW512LW8BS1BM16_inst_mst_rreq_valid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/RDAW64DW512LW8BS1BM16_inst_mst_rreq_ready was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/RDAW64DW512LW8BS1BM16_inst_mst_rreq_addr was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/RDAW64DW512LW8BS1BM16_inst_mst_rreq_len was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/RDAW64DW512LW8BS1BM16_inst_mst_rdat_valid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/RDAW64DW512LW8BS1BM16_inst_mst_rdat_ready was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/RDAW64DW512LW8BS1BM16_inst_mst_rdat_data was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/RDAW64DW512LW8BS1BM16_inst_mst_rdat_last was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/RDAW64DW512LW8BS1BM16_inst_bsv_rreq_valid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/RDAW64DW512LW8BS1BM16_inst_bsv_rreq_ready was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/RDAW64DW512LW8BS1BM16_inst_bsv_rreq_addr was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/RDAW64DW512LW8BS1BM16_inst_bsv_rreq_len was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/RDAW64DW512LW8BS1BM16_inst_bsv_rdat_valid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/RDAW64DW512LW8BS1BM16_inst_bsv_rdat_ready was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/RDAW64DW512LW8BS1BM16_inst_bsv_rdat_data was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/RDAW64DW512LW8BS1BM16_inst_bsv_rdat_last was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/INDEX_WIDTH was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/TAG_WIDTH was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/BUS_ADDR_WIDTH was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/BUS_DATA_WIDTH was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/BUS_LEN_WIDTH was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/BUS_BURST_STEP_LEN was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/BUS_BURST_MAX_LEN was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/Forecast_Mantle_inst/Forecast_Nucleus_inst/Forecast_inst/state was not found in the design.
+WARNING: [Wavedata 42-489] Can't add object "/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/avg_discount_reduce_stage/reduce_cntrl/accumulator/HashTable_inst/bit_table/mem" to the wave window because it has 1114112 bits, which exceeds the display limit of 65536 bits.  To change the display limit, use the command "set_property display_limit <new limit> [current_wave_config]".
+WARNING: [Wavedata 42-489] Can't add object "/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/avg_discount_reduce_stage/reduce_cntrl/accumulator/HashTable_inst/bit_table/mem" to the wave window because it has 1114112 bits, which exceeds the display limit of 65536 bits.  To change the display limit, use the command "set_property display_limit <new limit> [current_wave_config]".
+save_wave_config {/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg}
+WARNING: [Wavedata 42-489] Can't add object "/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/avg_discount_reduce_stage/reduce_cntrl/accumulator/HashTable_inst/bit_table/mem" to the wave window because it has 1114112 bits, which exceeds the display limit of 65536 bits.  To change the display limit, use the command "set_property display_limit <new limit> [current_wave_config]".
+WARNING: [Wavedata 42-489] Can't add object "/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/avg_discount_reduce_stage/reduce_cntrl/accumulator/HashTable_inst/hash_table/mem" to the wave window because it has 25165824 bits, which exceeds the display limit of 65536 bits.  To change the display limit, use the command "set_property display_limit <new limit> [current_wave_config]".
+save_wave_config {/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg}
+save_wave_config {/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg}
 close_sim
 INFO: [Simtcl 6-16] Simulation closed
 close_project
-exit
-INFO: [Common 17-206] Exiting Vivado at Mon Apr 12 03:50:07 2021...
+source ./open_waves.tcl
+# current_fileset
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/mnt/9a3ce8e2-5558-402f-b9b0-4253be72229d/xilinx_2020/Vivado/2020.1/data/ip'.
+current_fileset: Time (s): cpu = 00:00:04 ; elapsed = 00:00:08 . Memory (MB): peak = 7343.617 ; gain = 0.000 ; free physical = 4307 ; free virtual = 16117
+# open_wave_database ../sim/vivado/tpch_c/tb.wdb
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+open_wave_database: Time (s): cpu = 00:00:02 ; elapsed = 00:00:05 . Memory (MB): peak = 7389.270 ; gain = 45.652 ; free physical = 4217 ; free virtual = 16043
+close_sim
+INFO: [Simtcl 6-16] Simulation closed
+close_project
+source ./open_waves.tcl
+# current_fileset
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/mnt/9a3ce8e2-5558-402f-b9b0-4253be72229d/xilinx_2020/Vivado/2020.1/data/ip'.
+# open_wave_database ../sim/vivado/tpch_c/tb.wdb
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+open_wave_config: Time (s): cpu = 00:00:00.73 ; elapsed = 00:00:06 . Memory (MB): peak = 7389.270 ; gain = 0.000 ; free physical = 4537 ; free virtual = 15848
+open_wave_database: Time (s): cpu = 00:00:02 ; elapsed = 00:00:06 . Memory (MB): peak = 7389.270 ; gain = 0.000 ; free physical = 4537 ; free virtual = 15848
+close_sim
+INFO: [Simtcl 6-16] Simulation closed
+close_project
+source ./open_waves.tcl
+# current_fileset
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/mnt/9a3ce8e2-5558-402f-b9b0-4253be72229d/xilinx_2020/Vivado/2020.1/data/ip'.
+# open_wave_database ../sim/vivado/tpch_c/tb.wdb
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+save_wave_config {/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg}
+close_sim
+INFO: [Simtcl 6-16] Simulation closed
+close_project
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+ERROR: [Wavedata 42-21] A waveform data source could not be established for the requested wave configuration.
+source ./open_waves.tcl
+# current_fileset
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/mnt/9a3ce8e2-5558-402f-b9b0-4253be72229d/xilinx_2020/Vivado/2020.1/data/ip'.
+# open_wave_database ../sim/vivado/tpch_c/tb.wdb
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/MERGER_IN_DEPTH was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/MERGER_OUT_DEPTH was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/BETWEEN_FILTER_IN_DEPTH was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/BETWEEN_FILTER_OUT_DEPTH was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/LESSTHAN_FILTER_IN_DEPTH was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/LESSTHAN_FILTER_OUT_DEPTH was not found in the design.
+WARNING: [Wavedata 42-489] Can't add object "/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/avg_discount_reduce_stage/reduce_cntrl/accumulator/HashTable_inst/bit_table/mem" to the wave window because it has 1114112 bits, which exceeds the display limit of 65536 bits.  To change the display limit, use the command "set_property display_limit <new limit> [current_wave_config]".
+WARNING: [Wavedata 42-489] Can't add object "/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/avg_discount_reduce_stage/reduce_cntrl/accumulator/HashTable_inst/bit_table/mem" to the wave window because it has 1114112 bits, which exceeds the display limit of 65536 bits.  To change the display limit, use the command "set_property display_limit <new limit> [current_wave_config]".
+current_wave_config {tb.wcfg}
+tb.wcfg
+add_wave {{/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/avg_discount_reduce_stage/reduce_cntrl/accumulator/HashTable_inst/bit_table/mem}} 
+WARNING: [Wavedata 42-489] Can't add object "/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/avg_discount_reduce_stage/reduce_cntrl/accumulator/HashTable_inst/bit_table/mem" to the wave window because it has 1114112 bits, which exceeds the display limit of 65536 bits.  To change the display limit, use the command "set_property display_limit <new limit> [current_wave_config]".
+INFO: [Wavedata 42-43] There are no traceable objects to add.
+close_sim
+INFO: [Simtcl 6-16] Simulation closed
+close_project
+source ./open_waves.tcl
+# current_fileset
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/mnt/9a3ce8e2-5558-402f-b9b0-4253be72229d/xilinx_2020/Vivado/2020.1/data/ip'.
+# open_wave_database ../sim/vivado/tpch_c/tb.wdb
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/MERGER_IN_DEPTH was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/MERGER_OUT_DEPTH was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/BETWEEN_FILTER_IN_DEPTH was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/BETWEEN_FILTER_OUT_DEPTH was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/LESSTHAN_FILTER_IN_DEPTH was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/LESSTHAN_FILTER_OUT_DEPTH was not found in the design.
+WARNING: [Wavedata 42-489] Can't add object "/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/avg_discount_reduce_stage/reduce_cntrl/accumulator/HashTable_inst/bit_table/mem" to the wave window because it has 1114112 bits, which exceeds the display limit of 65536 bits.  To change the display limit, use the command "set_property display_limit <new limit> [current_wave_config]".
+current_wave_config {}
+WARNING: [Wavedata 42-16] Error Unable to get wave configuration ''.
+tb.wcfg
+add_wave {{/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/avg_discount_reduce_stage/reduce_cntrl/accumulator/HashTable_inst/bit_table/mem}} 
+WARNING: [Wavedata 42-489] Can't add object "/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/avg_discount_reduce_stage/reduce_cntrl/accumulator/HashTable_inst/bit_table/mem" to the wave window because it has 1114112 bits, which exceeds the display limit of 65536 bits.  To change the display limit, use the command "set_property display_limit <new limit> [current_wave_config]".
+INFO: [Wavedata 42-43] There are no traceable objects to add.
+close_sim
+INFO: [Simtcl 6-16] Simulation closed
+close_project
+set_property display_limit 1500000 [current_wave_config]
+ERROR: [Common 17-161] Invalid option value '' specified for 'objects'.
+source ./open_waves.tcl
+# current_fileset
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/mnt/9a3ce8e2-5558-402f-b9b0-4253be72229d/xilinx_2020/Vivado/2020.1/data/ip'.
+# open_wave_database ../sim/vivado/tpch_c/tb.wdb
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/MERGER_IN_DEPTH was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/MERGER_OUT_DEPTH was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/BETWEEN_FILTER_IN_DEPTH was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/BETWEEN_FILTER_OUT_DEPTH was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/LESSTHAN_FILTER_IN_DEPTH was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/LESSTHAN_FILTER_OUT_DEPTH was not found in the design.
+set_property display_limit 1500000 [current_wave_config]
+WARNING: [Wavedata 42-489] Can't add object "/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/avg_discount_reduce_stage/reduce_cntrl/accumulator/HashTable_inst/hash_table/mem" to the wave window because it has 25165824 bits, which exceeds the display limit of 1500000 bits.  To change the display limit, use the command "set_property display_limit <new limit> [current_wave_config]".
+WARNING: [Wavedata 42-489] Can't add object "/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/avg_discount_reduce_stage/reduce_cntrl/accumulator/HashTable_inst/hash_table/mem" to the wave window because it has 25165824 bits, which exceeds the display limit of 1500000 bits.  To change the display limit, use the command "set_property display_limit <new limit> [current_wave_config]".
+current_wave_config {tb.wcfg}
+tb.wcfg
+add_wave {{/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/avg_discount_reduce_stage/reduce_cntrl/accumulator/HashTable_inst/hash_table/mem}} 
+WARNING: [Wavedata 42-489] Can't add object "/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/avg_discount_reduce_stage/reduce_cntrl/accumulator/HashTable_inst/hash_table/mem" to the wave window because it has 25165824 bits, which exceeds the display limit of 1500000 bits.  To change the display limit, use the command "set_property display_limit <new limit> [current_wave_config]".
+INFO: [Wavedata 42-43] There are no traceable objects to add.
+save_wave_config {/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg}
+close_sim
+INFO: [Simtcl 6-16] Simulation closed
+close_project
+source ./open_waves.tcl
+# current_fileset
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/mnt/9a3ce8e2-5558-402f-b9b0-4253be72229d/xilinx_2020/Vivado/2020.1/data/ip'.
+current_fileset: Time (s): cpu = 00:00:02 ; elapsed = 00:00:05 . Memory (MB): peak = 7450.289 ; gain = 0.000 ; free physical = 7922 ; free virtual = 18606
+# open_wave_database ../sim/vivado/tpch_c/tb.wdb
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+open_wave_config: Time (s): cpu = 00:00:00.69 ; elapsed = 00:00:07 . Memory (MB): peak = 7498.293 ; gain = 48.004 ; free physical = 7847 ; free virtual = 18554
+open_wave_database: Time (s): cpu = 00:00:01 ; elapsed = 00:00:08 . Memory (MB): peak = 7498.293 ; gain = 48.004 ; free physical = 7847 ; free virtual = 18554
+WARNING: [Wavedata 42-489] Can't add object "/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/avg_discount_reduce_stage/reduce_cntrl/accumulator/HashTable_inst/bit_table/mem" to the wave window because it has 1114112 bits, which exceeds the display limit of 65536 bits.  To change the display limit, use the command "set_property display_limit <new limit> [current_wave_config]".
+current_wave_config {}
+WARNING: [Wavedata 42-16] Error Unable to get wave configuration ''.
+tb.wcfg
+add_wave {{/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/avg_discount_reduce_stage/reduce_cntrl/accumulator/HashTable_inst/bit_table/mem}} 
+WARNING: [Wavedata 42-489] Can't add object "/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/avg_discount_reduce_stage/reduce_cntrl/accumulator/HashTable_inst/bit_table/mem" to the wave window because it has 1114112 bits, which exceeds the display limit of 65536 bits.  To change the display limit, use the command "set_property display_limit <new limit> [current_wave_config]".
+INFO: [Wavedata 42-43] There are no traceable objects to add.
+set_property display_limit 1500000 [current_wave_config]
+set_property display_limit 5000000 [current_wave_config]
+save_wave_config {/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg}
+close_sim
+INFO: [Simtcl 6-16] Simulation closed
+close_project
+source ./open_waves.tcl
+# current_fileset
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/mnt/9a3ce8e2-5558-402f-b9b0-4253be72229d/xilinx_2020/Vivado/2020.1/data/ip'.
+# open_wave_database ../sim/vivado/tpch_c/tb.wdb
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+save_wave_config {/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg}
+close_sim
+INFO: [Simtcl 6-16] Simulation closed
+close_project
+source ./open_waves.tcl
+# current_fileset
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/mnt/9a3ce8e2-5558-402f-b9b0-4253be72229d/xilinx_2020/Vivado/2020.1/data/ip'.
+# open_wave_database ../sim/vivado/tpch_c/tb.wdb
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+close_sim
+INFO: [Simtcl 6-16] Simulation closed
+close_project
+source ./open_waves.tcl
+# current_fileset
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/mnt/9a3ce8e2-5558-402f-b9b0-4253be72229d/xilinx_2020/Vivado/2020.1/data/ip'.
+# open_wave_database ../sim/vivado/tpch_c/tb.wdb
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+save_wave_config {/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg}
+close_sim
+INFO: [Simtcl 6-16] Simulation closed
+close_project
+source ./open_waves.tcl
+# current_fileset
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/mnt/9a3ce8e2-5558-402f-b9b0-4253be72229d/xilinx_2020/Vivado/2020.1/data/ip'.
+current_fileset: Time (s): cpu = 00:00:03 ; elapsed = 00:00:06 . Memory (MB): peak = 8070.172 ; gain = 0.000 ; free physical = 4613 ; free virtual = 15718
+# open_wave_database ../sim/vivado/tpch_c/tb.wdb
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+open_wave_config: Time (s): cpu = 00:00:03 ; elapsed = 00:00:18 . Memory (MB): peak = 8156.320 ; gain = 86.148 ; free physical = 4136 ; free virtual = 15342
+open_wave_database: Time (s): cpu = 00:00:04 ; elapsed = 00:00:19 . Memory (MB): peak = 8156.320 ; gain = 86.148 ; free physical = 4135 ; free virtual = 15340
+close_sim
+INFO: [Simtcl 6-16] Simulation closed
+close_project
+source ./open_waves.tcl
+# current_fileset
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/mnt/9a3ce8e2-5558-402f-b9b0-4253be72229d/xilinx_2020/Vivado/2020.1/data/ip'.
+# open_wave_database ../sim/vivado/tpch_c/tb.wdb
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+close_sim
+INFO: [Simtcl 6-16] Simulation closed
+close_project
+source ./open_waves.tcl
+# current_fileset
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/mnt/9a3ce8e2-5558-402f-b9b0-4253be72229d/xilinx_2020/Vivado/2020.1/data/ip'.
+# open_wave_database ../sim/vivado/tpch_c/tb.wdb
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+open_wave_config: Time (s): cpu = 00:00:06 ; elapsed = 00:00:41 . Memory (MB): peak = 8249.715 ; gain = 51.000 ; free physical = 4047 ; free virtual = 15297
+open_wave_database: Time (s): cpu = 00:00:06 ; elapsed = 00:00:41 . Memory (MB): peak = 8249.715 ; gain = 51.000 ; free physical = 4045 ; free virtual = 15295
+close_sim
+INFO: [Simtcl 6-16] Simulation closed
+close_project
+source ./open_waves.tcl
+# current_fileset
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/mnt/9a3ce8e2-5558-402f-b9b0-4253be72229d/xilinx_2020/Vivado/2020.1/data/ip'.
+# open_wave_database ../sim/vivado/tpch_c/tb.wdb
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+open_wave_config: Time (s): cpu = 00:00:07 ; elapsed = 00:01:02 . Memory (MB): peak = 8296.918 ; gain = 47.203 ; free physical = 5143 ; free virtual = 15299
+open_wave_database: Time (s): cpu = 00:00:07 ; elapsed = 00:01:03 . Memory (MB): peak = 8296.918 ; gain = 47.203 ; free physical = 5144 ; free virtual = 15301
+close_sim
+INFO: [Simtcl 6-16] Simulation closed
+close_project
+source ./open_waves.tcl
+# current_fileset
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/mnt/9a3ce8e2-5558-402f-b9b0-4253be72229d/xilinx_2020/Vivado/2020.1/data/ip'.
+# open_wave_database ../sim/vivado/tpch_c/tb.wdb
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+open_wave_config: Time (s): cpu = 00:00:03 ; elapsed = 00:00:17 . Memory (MB): peak = 8349.918 ; gain = 53.000 ; free physical = 4830 ; free virtual = 15214
+open_wave_database: Time (s): cpu = 00:00:04 ; elapsed = 00:00:17 . Memory (MB): peak = 8349.918 ; gain = 53.000 ; free physical = 4830 ; free virtual = 15214
+close_sim
+INFO: [Simtcl 6-16] Simulation closed
+close_project
+source ./open_waves.tcl
+# current_fileset
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/mnt/9a3ce8e2-5558-402f-b9b0-4253be72229d/xilinx_2020/Vivado/2020.1/data/ip'.
+# open_wave_database ../sim/vivado/tpch_c/tb.wdb
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+close_sim
+INFO: [Simtcl 6-16] Simulation closed
+close_project
+source ./open_waves.tcl
+# current_fileset
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/mnt/9a3ce8e2-5558-402f-b9b0-4253be72229d/xilinx_2020/Vivado/2020.1/data/ip'.
+# open_wave_database ../sim/vivado/tpch_c/tb.wdb
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+open_wave_config: Time (s): cpu = 00:00:07 ; elapsed = 00:00:51 . Memory (MB): peak = 8444.324 ; gain = 35.406 ; free physical = 4783 ; free virtual = 14929
+open_wave_database: Time (s): cpu = 00:00:07 ; elapsed = 00:00:52 . Memory (MB): peak = 8444.324 ; gain = 35.406 ; free physical = 4783 ; free virtual = 14929
+close_sim
+INFO: [Simtcl 6-16] Simulation closed
+close_project
+source ./open_waves.tcl
+# current_fileset
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/mnt/9a3ce8e2-5558-402f-b9b0-4253be72229d/xilinx_2020/Vivado/2020.1/data/ip'.
+# open_wave_database ../sim/vivado/tpch_c/tb.wdb
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+open_wave_config: Time (s): cpu = 00:00:03 ; elapsed = 00:00:11 . Memory (MB): peak = 8497.324 ; gain = 53.000 ; free physical = 4739 ; free virtual = 14910
+open_wave_database: Time (s): cpu = 00:00:04 ; elapsed = 00:00:12 . Memory (MB): peak = 8497.324 ; gain = 53.000 ; free physical = 4739 ; free virtual = 14910
+WARNING: [Wavedata 42-489] Can't add object "/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/avg_discount_reduce_stage/reduce_cntrl/accumulator/HashTable_inst/bit_table/mem" to the wave window because it has 1114112 bits, which exceeds the display limit of 65536 bits.  To change the display limit, use the command "set_property display_limit <new limit> [current_wave_config]".
+current_wave_config {tb.wcfg}
+tb.wcfg
+add_wave {{/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/avg_discount_reduce_stage/reduce_cntrl/accumulator/HashTable_inst/bit_table/mem}} 
+WARNING: [Wavedata 42-489] Can't add object "/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/avg_discount_reduce_stage/reduce_cntrl/accumulator/HashTable_inst/bit_table/mem" to the wave window because it has 1114112 bits, which exceeds the display limit of 65536 bits.  To change the display limit, use the command "set_property display_limit <new limit> [current_wave_config]".
+INFO: [Wavedata 42-43] There are no traceable objects to add.
+get_property display_limit [current_wave_config]
+65536
+close_sim
+INFO: [Simtcl 6-16] Simulation closed
+close_project
+source ./open_waves.tcl
+# current_fileset
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/mnt/9a3ce8e2-5558-402f-b9b0-4253be72229d/xilinx_2020/Vivado/2020.1/data/ip'.
+current_fileset: Time (s): cpu = 00:00:02 ; elapsed = 00:00:06 . Memory (MB): peak = 8497.324 ; gain = 0.000 ; free physical = 750 ; free virtual = 10250
+# open_wave_database ../sim/vivado/tpch_c/tb.wdb
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+open_wave_config: Time (s): cpu = 00:00:02 ; elapsed = 00:00:19 . Memory (MB): peak = 8537.344 ; gain = 40.020 ; free physical = 562 ; free virtual = 10048
+open_wave_database: Time (s): cpu = 00:00:03 ; elapsed = 00:00:29 . Memory (MB): peak = 8537.344 ; gain = 40.020 ; free physical = 570 ; free virtual = 10056
+# set_property display_limit 5000000 [current_wave_config]
+close_sim
+INFO: [Simtcl 6-16] Simulation closed
+close_project
+source ./open_waves.tcl
+# current_fileset
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/mnt/9a3ce8e2-5558-402f-b9b0-4253be72229d/xilinx_2020/Vivado/2020.1/data/ip'.
+# open_wave_database ../sim/vivado/tpch_c/tb.wdb
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+open_wave_config: Time (s): cpu = 00:00:06 ; elapsed = 00:01:14 . Memory (MB): peak = 8608.340 ; gain = 70.996 ; free physical = 4337 ; free virtual = 14335
+open_wave_database: Time (s): cpu = 00:00:07 ; elapsed = 00:01:14 . Memory (MB): peak = 8608.340 ; gain = 70.996 ; free physical = 4337 ; free virtual = 14335
+# set_property display_limit 5000000 [current_wave_config]
+current_wave_config {tb.wcfg}
+tb.wcfg
+add_wave {{/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/avg_discount_reduce_stage/reduce_cntrl/accumulator/HashTable_inst/bit_table/mem}} 
+save_wave_config {/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg}
+close_sim
+INFO: [Simtcl 6-16] Simulation closed
+close_project
+source ./open_waves.tcl
+# current_fileset
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/mnt/9a3ce8e2-5558-402f-b9b0-4253be72229d/xilinx_2020/Vivado/2020.1/data/ip'.
+# open_wave_database ../sim/vivado/tpch_c/tb.wdb
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+open_wave_config: Time (s): cpu = 00:00:05 ; elapsed = 00:00:43 . Memory (MB): peak = 9076.262 ; gain = 13.008 ; free physical = 5003 ; free virtual = 14847
+open_wave_database: Time (s): cpu = 00:00:06 ; elapsed = 00:00:44 . Memory (MB): peak = 9076.262 ; gain = 13.008 ; free physical = 5004 ; free virtual = 14848
+# set_property display_limit 5000000 [current_wave_config]
+close_sim
+INFO: [Simtcl 6-16] Simulation closed
+close_project
+source ./open_waves.tcl
+# current_fileset
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/mnt/9a3ce8e2-5558-402f-b9b0-4253be72229d/xilinx_2020/Vivado/2020.1/data/ip'.
+# open_wave_database ../sim/vivado/tpch_c/tb.wdb
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+open_wave_config: Time (s): cpu = 00:00:02 ; elapsed = 00:00:09 . Memory (MB): peak = 9076.262 ; gain = 0.000 ; free physical = 4714 ; free virtual = 14420
+open_wave_database: Time (s): cpu = 00:00:03 ; elapsed = 00:00:09 . Memory (MB): peak = 9076.262 ; gain = 0.000 ; free physical = 4714 ; free virtual = 14420
+# set_property display_limit 5000000 [current_wave_config]
+close_sim
+INFO: [Simtcl 6-16] Simulation closed
+close_project
+source ./open_waves.tcl
+# current_fileset
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/mnt/9a3ce8e2-5558-402f-b9b0-4253be72229d/xilinx_2020/Vivado/2020.1/data/ip'.
+current_fileset: Time (s): cpu = 00:00:02 ; elapsed = 00:00:07 . Memory (MB): peak = 9076.262 ; gain = 0.000 ; free physical = 4672 ; free virtual = 13804
+# open_wave_database ../sim/vivado/tpch_c/tb.wdb
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+open_wave_config: Time (s): cpu = 00:00:03 ; elapsed = 00:00:46 . Memory (MB): peak = 9076.262 ; gain = 0.000 ; free physical = 3623 ; free virtual = 13104
+open_wave_database: Time (s): cpu = 00:00:04 ; elapsed = 00:00:47 . Memory (MB): peak = 9076.262 ; gain = 0.000 ; free physical = 3622 ; free virtual = 13103
+# set_property display_limit 5000000 [current_wave_config]
+close_sim
+INFO: [Simtcl 6-16] Simulation closed
+close_project
+source ./open_waves.tcl
+# current_fileset
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/mnt/9a3ce8e2-5558-402f-b9b0-4253be72229d/xilinx_2020/Vivado/2020.1/data/ip'.
+current_fileset: Time (s): cpu = 00:00:02 ; elapsed = 00:00:06 . Memory (MB): peak = 9076.262 ; gain = 0.000 ; free physical = 4586 ; free virtual = 13243
+# open_wave_database ../sim/vivado/tpch_c/tb.wdb
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/sum_disc_price_merger/buf_op1_valid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/sum_disc_price_merger/buf_op1_dvalid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/sum_disc_price_merger/buf_op1_last was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/sum_disc_price_merger/buf_op1_ready was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/sum_disc_price_merger/buf_op1_data was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/sum_charge_merger/buf_op1_valid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/sum_charge_merger/buf_op1_dvalid was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/sum_charge_merger/buf_op1_last was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/sum_charge_merger/buf_op1_ready was not found in the design.
+WARNING: Simulation object /tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/sum_charge_merger/buf_op1_data was not found in the design.
+open_wave_config: Time (s): cpu = 00:00:05 ; elapsed = 00:00:56 . Memory (MB): peak = 9076.262 ; gain = 0.000 ; free physical = 4005 ; free virtual = 12985
+open_wave_database: Time (s): cpu = 00:00:06 ; elapsed = 00:00:57 . Memory (MB): peak = 9076.262 ; gain = 0.000 ; free physical = 4004 ; free virtual = 12985
+# set_property display_limit 5000000 [current_wave_config]
+save_wave_config {/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg}
+close_sim
+INFO: [Simtcl 6-16] Simulation closed
+close_project
+source ./open_waves.tcl
+# current_fileset
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/mnt/9a3ce8e2-5558-402f-b9b0-4253be72229d/xilinx_2020/Vivado/2020.1/data/ip'.
+current_fileset: Time (s): cpu = 00:00:04 ; elapsed = 00:00:17 . Memory (MB): peak = 9076.262 ; gain = 0.000 ; free physical = 4666 ; free virtual = 12531
+# open_wave_database ../sim/vivado/tpch_c/tb.wdb
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+open_wave_config: Time (s): cpu = 00:00:04 ; elapsed = 00:00:51 . Memory (MB): peak = 9076.262 ; gain = 0.000 ; free physical = 3924 ; free virtual = 12141
+open_wave_database: Time (s): cpu = 00:00:05 ; elapsed = 00:00:55 . Memory (MB): peak = 9076.262 ; gain = 0.000 ; free physical = 3912 ; free virtual = 12130
+# set_property display_limit 5000000 [current_wave_config]
+close_sim
+INFO: [Simtcl 6-16] Simulation closed
+close_project
+source ./open_waves.tcl
+# current_fileset
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/mnt/9a3ce8e2-5558-402f-b9b0-4253be72229d/xilinx_2020/Vivado/2020.1/data/ip'.
+current_fileset: Time (s): cpu = 00:00:03 ; elapsed = 00:00:06 . Memory (MB): peak = 9076.262 ; gain = 0.000 ; free physical = 4130 ; free virtual = 13008
+# open_wave_database ../sim/vivado/tpch_c/tb.wdb
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+open_wave_config: Time (s): cpu = 00:00:05 ; elapsed = 00:00:49 . Memory (MB): peak = 9076.262 ; gain = 0.000 ; free physical = 3950 ; free virtual = 12867
+open_wave_database: Time (s): cpu = 00:00:06 ; elapsed = 00:00:50 . Memory (MB): peak = 9076.262 ; gain = 0.000 ; free physical = 3918 ; free virtual = 12835
+# set_property display_limit 5000000 [current_wave_config]
+close_sim
+INFO: [Simtcl 6-16] Simulation closed
+close_project
+source ./open_waves.tcl
+# current_fileset
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/mnt/9a3ce8e2-5558-402f-b9b0-4253be72229d/xilinx_2020/Vivado/2020.1/data/ip'.
+# open_wave_database ../sim/vivado/tpch_c/tb.wdb
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+open_wave_config: Time (s): cpu = 00:00:05 ; elapsed = 00:00:27 . Memory (MB): peak = 9076.262 ; gain = 0.000 ; free physical = 4116 ; free virtual = 13080
+open_wave_database: Time (s): cpu = 00:00:06 ; elapsed = 00:00:28 . Memory (MB): peak = 9076.262 ; gain = 0.000 ; free physical = 4117 ; free virtual = 13081
+# set_property display_limit 5000000 [current_wave_config]
+WARNING: [Wavedata 42-489] Can't add object "/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/avg_discount_reduce_stage/reduce_cntrl/accumulator/HashTable_inst/hash_table/mem" to the wave window because it has 25165824 bits, which exceeds the display limit of 5000000 bits.  To change the display limit, use the command "set_property display_limit <new limit> [current_wave_config]".
+current_wave_config {tb.wcfg}
+tb.wcfg
+add_wave {{/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/avg_discount_reduce_stage/reduce_cntrl/accumulator/HashTable_inst/hash_table/mem}} 
+WARNING: [Wavedata 42-489] Can't add object "/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/avg_discount_reduce_stage/reduce_cntrl/accumulator/HashTable_inst/hash_table/mem" to the wave window because it has 25165824 bits, which exceeds the display limit of 5000000 bits.  To change the display limit, use the command "set_property display_limit <new limit> [current_wave_config]".
+INFO: [Wavedata 42-43] There are no traceable objects to add.
+save_wave_config {/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg}
+close_sim
+INFO: [Simtcl 6-16] Simulation closed
+close_project
+source ./open_waves.tcl
+# current_fileset
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/mnt/9a3ce8e2-5558-402f-b9b0-4253be72229d/xilinx_2020/Vivado/2020.1/data/ip'.
+# open_wave_database ../sim/vivado/tpch_c/tb.wdb
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+open_wave_config: Time (s): cpu = 00:00:03 ; elapsed = 00:00:05 . Memory (MB): peak = 9227.238 ; gain = 85.043 ; free physical = 4419 ; free virtual = 12992
+open_wave_database: Time (s): cpu = 00:00:03 ; elapsed = 00:00:06 . Memory (MB): peak = 9227.238 ; gain = 85.043 ; free physical = 4419 ; free virtual = 12992
+# set_property display_limit 5000000 [current_wave_config]
+close_sim
+INFO: [Simtcl 6-16] Simulation closed
+close_project
+source ./open_waves.tcl
+# current_fileset
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/mnt/9a3ce8e2-5558-402f-b9b0-4253be72229d/xilinx_2020/Vivado/2020.1/data/ip'.
+current_fileset: Time (s): cpu = 00:00:02 ; elapsed = 00:00:06 . Memory (MB): peak = 9227.238 ; gain = 0.000 ; free physical = 5198 ; free virtual = 13741
+# open_wave_database ../sim/vivado/tpch_c/tb.wdb
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+open_wave_config: Time (s): cpu = 00:00:03 ; elapsed = 00:00:22 . Memory (MB): peak = 9227.238 ; gain = 0.000 ; free physical = 4740 ; free virtual = 13294
+open_wave_database: Time (s): cpu = 00:00:04 ; elapsed = 00:00:25 . Memory (MB): peak = 9227.238 ; gain = 0.000 ; free physical = 4732 ; free virtual = 13286
+# set_property display_limit 5000000 [current_wave_config]

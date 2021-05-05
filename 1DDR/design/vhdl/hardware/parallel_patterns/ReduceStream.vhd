@@ -10,7 +10,6 @@ entity ReduceStream is
 
     -- Width of the stream data vector.
     DATA_WIDTH        : natural;
-    INDEX_WIDTH       : natural;
 
     NUM_KEYS          : natural := 1;
     NUM_LANES         : natural := 1;
@@ -29,7 +28,7 @@ entity ReduceStream is
     reset          : in std_logic;
 
     -- Init value for the accumulator.
-    acc_init_value : in std_logic_vector(NUM_LANES * DATA_WIDTH - 1 downto 0);
+    acc_init_value : in std_logic_vector(DATA_WIDTH - 1 downto 0);
 
     -- Input stream.
     in_valid       : in std_logic;
@@ -53,17 +52,18 @@ entity ReduceStream is
     -- Hash stream.
     hash_ready     : in std_logic;
     hash_valid     : out std_logic;
+    hash_last      : out std_logic;
     hash_data      : out std_logic_vector(NUM_LANES * DATA_WIDTH - 1 downto 0);
-    hash_key       : out std_logic_vector(NUM_LANES * 8 - 1 downto 0);
+    hash_key       : out std_logic_vector(15 downto 0);
     hash_count     : out std_logic_vector(DATA_WIDTH - 1 downto 0);
     hash_len       : out std_logic_vector(15 downto 0);
 
-    -- Output stream.
+    -- Output stream for build phase.
     out_valid      : out std_logic;
     out_ready      : in std_logic;
     out_data       : out std_logic_vector(NUM_LANES * DATA_WIDTH - 1 downto 0);
     -- Key stream
-    key_out_data   : out std_logic_vector(NUM_LANES * 8 - 1 downto 0);
+    key_out_data   : out std_logic_vector(15 downto 0);
     --out_last                    : out std_logic_vector(IN_DIMENSIONALITY-2 downto 0)
     -- Counter Stream for avg and count
     count_out_data : out std_logic_vector(DATA_WIDTH - 1 downto 0)
@@ -90,8 +90,8 @@ architecture Behavioral of ReduceStream is
   signal out_s_valid      : std_logic;
 
   signal acc_out_data_s   : std_logic_vector(NUM_LANES * DATA_WIDTH - 1 downto 0);
-  signal acc_key_data_s   : std_logic_vector(NUM_LANES * 8 - 1 downto 0);
-  signal acc_count_data_s : std_logic_vector(NUM_LANES * DATA_WIDTH - 1 downto 0);
+  signal acc_key_data_s   : std_logic_vector(NUM_KEYS * 8 - 1 downto 0);
+  signal acc_count_data_s : std_logic_vector(DATA_WIDTH - 1 downto 0);
 
   signal num_entries      : std_logic_vector(15 downto 0);
 begin
@@ -157,10 +157,11 @@ begin
     in_last           => seq_out_last,
     hash_out_valid    => hash_valid,
     hash_out_ready    => hash_ready,
+    hash_out_last     => hash_last,
     hash_out_data     => hash_data,
     hash_key_out_data => hash_key,
     hash_count_data   => hash_count,
-    hash_len          => hash_len,
+    hash_len_data     => hash_len,
     out_valid         => acc_out_valid,
     out_ready         => acc_out_ready,
     out_data          => acc_out_data_s,
@@ -194,7 +195,7 @@ begin
   -- Only valid if the last value is processed in a sequence.
   out_valid   <= out_s_valid and seq_out_last;
 
-  out_s_ready <= hash_ready;
+  out_s_ready <= out_ready;
 
   out_data_proc : process (acc_in_data, acc_out_data_s, acc_count_data_s, acc_in_dvalid, acc_key_data_s) is
   begin
