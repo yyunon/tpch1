@@ -64,23 +64,23 @@ std::shared_ptr<arrow::RecordBatch> PrepareRecordBatch(int32_t num_strings, int3
 
   std::shared_ptr<arrow::Schema> schema = arrow::schema({arrow::field("l_returnflag", arrow::utf8(), false),
                                                          arrow::field("l_linestatus", arrow::utf8(), false),
-                                                         arrow::field("sum_qty", arrow::float64(), false),
-                                                         arrow::field("sum_base_price", arrow::float64(), false),
-                                                         arrow::field("sum_disc_price", arrow::float64(), false),
-                                                         arrow::field("sum_charge", arrow::float64(), false),
-                                                         arrow::field("avg_qty", arrow::float64(), false),
-                                                         arrow::field("avg_price", arrow::float64(), false),
-                                                         arrow::field("avg_disc", arrow::float64(), false),
+                                                         arrow::field("sum_qty", arrow::int64(), false),
+                                                         arrow::field("sum_base_price", arrow::int64(), false),
+                                                         arrow::field("sum_disc_price", arrow::int64(), false),
+                                                         arrow::field("sum_charge", arrow::int64(), false),
+                                                         arrow::field("avg_qty", arrow::int64(), false),
+                                                         arrow::field("avg_price", arrow::int64(), false),
+                                                         arrow::field("avg_disc", arrow::int64(), false),
                                                          arrow::field("count_order", arrow::int64(), false)});
   auto l_returnflag_arr = std::make_shared<arrow::StringArray>(num_strings, l_returnflag_offsets, l_returnflag_values);
   auto l_linestatus_arr = std::make_shared<arrow::StringArray>(num_strings, l_linestatus_offsets, l_linestatus_values);
-  auto sum_qty_arr = std::make_shared<arrow::DoubleArray>(num_strings, sum_qty);
-  auto sum_base_price_arr = std::make_shared<arrow::DoubleArray>(num_strings, sum_base_price);
-  auto sum_disc_price_arr = std::make_shared<arrow::DoubleArray>(num_strings, sum_disc_price);
-  auto sum_charge_arr = std::make_shared<arrow::DoubleArray>(num_strings, sum_charge);
-  auto avg_qty_arr = std::make_shared<arrow::DoubleArray>(num_strings, avg_qty);
-  auto avg_disc_arr = std::make_shared<arrow::DoubleArray>(num_strings, avg_disc);
-  auto avg_price_arr = std::make_shared<arrow::DoubleArray>(num_strings, avg_price);
+  auto sum_qty_arr = std::make_shared<arrow::Int64Array>(num_strings, sum_qty);
+  auto sum_base_price_arr = std::make_shared<arrow::Int64Array>(num_strings, sum_base_price);
+  auto sum_disc_price_arr = std::make_shared<arrow::Int64Array>(num_strings, sum_disc_price);
+  auto sum_charge_arr = std::make_shared<arrow::Int64Array>(num_strings, sum_charge);
+  auto avg_qty_arr = std::make_shared<arrow::Int64Array>(num_strings, avg_qty);
+  auto avg_disc_arr = std::make_shared<arrow::Int64Array>(num_strings, avg_disc);
+  auto avg_price_arr = std::make_shared<arrow::Int64Array>(num_strings, avg_price);
   auto count_order_arr = std::make_shared<arrow::Int64Array>(num_strings, count_order);
   // Final recordbatch
   std::vector<std::shared_ptr<arrow::Array>> output_arrs = {l_returnflag_arr, l_linestatus_arr, sum_qty_arr, sum_base_price_arr, sum_disc_price_arr, sum_charge_arr, avg_qty_arr, avg_price_arr, avg_disc_arr, count_order_arr};
@@ -201,37 +201,37 @@ int main(int argc, char **argv)
   //auto res_l_linestatus_val_size = res_l_linestatus_array->value_data()->size();
   std::cout << "Attempt to get output recordbatch fields...\n";
 
-  auto res_sum_qty = std::dynamic_pointer_cast<arrow::DoubleArray>(output_batch->column(2));
+  auto res_sum_qty = std::dynamic_pointer_cast<arrow::Int64Array>(output_batch->column(2));
   auto res_sum_qty_data = res_sum_qty->values()->mutable_data();
   //auto res_sum_qty_size = res_sum_qty->values()->size();
   std::cout << "Attempt to get output recordbatch fields...\n";
 
-  auto res_sum_base_price = std::dynamic_pointer_cast<arrow::DoubleArray>(output_batch->column(3));
+  auto res_sum_base_price = std::dynamic_pointer_cast<arrow::Int64Array>(output_batch->column(3));
   auto res_sum_base_price_data = res_sum_base_price->values()->mutable_data();
   //auto res_sum_base_price_size = res_sum_base_price->values()->size();
   std::cout << "Attempt to get output recordbatch fields...\n";
 
-  auto res_sum_disc_price = std::dynamic_pointer_cast<arrow::DoubleArray>(output_batch->column(4));
+  auto res_sum_disc_price = std::dynamic_pointer_cast<arrow::Int64Array>(output_batch->column(4));
   auto res_sum_disc_data = res_sum_disc_price->values()->mutable_data();
   //auto res_sum_disc_size = res_sum_disc_price->values()->size();
   std::cout << "Attempt to get output recordbatch fields...\n";
 
-  auto res_sum_charge = std::dynamic_pointer_cast<arrow::DoubleArray>(output_batch->column(5));
+  auto res_sum_charge = std::dynamic_pointer_cast<arrow::Int64Array>(output_batch->column(5));
   auto res_sum_charge_data = res_sum_charge->values()->mutable_data();
   //auto res_sum_charge_size = res_sum_charge->values()->size();
   std::cout << "Attempt to get output recordbatch fields...\n";
 
-  auto res_avg_qty = std::dynamic_pointer_cast<arrow::DoubleArray>(output_batch->column(6));
+  auto res_avg_qty = std::dynamic_pointer_cast<arrow::Int64Array>(output_batch->column(6));
   auto res_avg_qty_data = res_avg_qty->values()->mutable_data();
   //auto res_avg_qty_size = res_avg_qty->values()->size();
   std::cout << "Attempt to get output recordbatch fields...\n";
 
-  auto res_avg_price = std::dynamic_pointer_cast<arrow::DoubleArray>(output_batch->column(7));
+  auto res_avg_price = std::dynamic_pointer_cast<arrow::Int64Array>(output_batch->column(7));
   auto res_avg_price_data = res_avg_price->values()->mutable_data();
   //auto res_avg_price_size = res_avg_price->values()->size();
   std::cout << "Attempt to get output recordbatch fields...\n";
 
-  auto res_avg_disc = std::dynamic_pointer_cast<arrow::DoubleArray>(output_batch->column(8));
+  auto res_avg_disc = std::dynamic_pointer_cast<arrow::Int64Array>(output_batch->column(8));
   auto res_avg_disc_data = res_avg_disc->values()->mutable_data();
   //auto res_avg_disc_size = res_avg_disc->values()->size();
   std::cout << "Attempt to get output recordbatch fields...\n";
@@ -337,7 +337,7 @@ int main(int argc, char **argv)
     return -1;
   }
   // Take the data back.
-  const int device_buffer_offset = 9;
+  const int device_buffer_offset = 0;
   platform->CopyDeviceToHost(context->device_buffer(device_buffer_offset).device_address, res_l_returnflag_off, sizeof(int32_t) * (num_strings + 1));
   platform->CopyDeviceToHost(context->device_buffer(device_buffer_offset + 1).device_address, res_l_returnflag_val, sizeof(int32_t) * num_chars);
   platform->CopyDeviceToHost(context->device_buffer(device_buffer_offset + 2).device_address, res_l_linestatus_off, sizeof(int32_t) * (num_strings + 1));
@@ -351,10 +351,22 @@ int main(int argc, char **argv)
   platform->CopyDeviceToHost(context->device_buffer(device_buffer_offset + 10).device_address, res_avg_disc_data, sizeof(int64_t) * num_rows);
   platform->CopyDeviceToHost(context->device_buffer(device_buffer_offset + 11).device_address, res_count_order_data, sizeof(int64_t) * num_rows);
 
-  std::cout<< "Copy operation is done.\n";
-  std::cout<<"l_returnflag, l_linestatus, sum_qty, sum_base, sum_disc, sum_charge, avg_qty, avg_price, avg_disc, count_order\n"
-  for(int i = 0; i< num_rows; ++i)
+  std::cout << "Copy operation is done.\n";
+  std::cout << "l_returnflag, l_linestatus, sum_qty, sum_base, sum_disc, sum_charge, avg_qty, avg_price, avg_disc, count_order\n";
+
+  auto r = res_l_returnflag_array->value_data()->mutable_data();
+  auto l = res_l_linestatus_array->value_data()->mutable_data();
+  const int64_t *q = res_sum_qty->raw_values();
+  const int64_t *b = res_sum_base_price->raw_values();
+  const int64_t *d = res_sum_disc_price->raw_values();
+  const int64_t *c = res_sum_charge->raw_values();
+  const int64_t *aq = res_avg_qty->raw_values();
+  const int64_t *ap = res_avg_price->raw_values();
+  const int64_t *ad = res_avg_disc->raw_values();
+  const int64_t *co = res_count_order->raw_values();
+  for (int i = 0; i < num_rows; ++i)
   {
+    std::cout << i << "," << r[i] << "," << l[i] << "," << q[i] << "," << b[i] << "," << d[i] << "," << c[i] << "," << aq[i] << "," << ap[i] << "," << ad[i] << "," << co[i] << "\n";
   }
 
   return 0;

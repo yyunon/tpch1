@@ -178,7 +178,10 @@ begin
     stream_key_out_data    => bit_address_out
   );
 
-  hash_in_data <= data & count;
+  hash_in_data  <= data & count;
+  key_in_data_s <= key_in_data when in_valid = '1' and in_dvalid = '1' else
+    bit_address_out
+    when hash_out_ready_s = '1' and hash_out_enable = '1';
 
   reg_proc :
   process (clk) is
@@ -196,8 +199,8 @@ begin
       bit_address_valid <= '0';
 
       if in_valid = '1' and in_dvalid = '1' then
-        hash_operation <= '1'; --Update hash table
-        key_in_data_s  <= key_in_data;
+        hash_operation <= '1';                               --Update hash table
+        --key_in_data_s  <= key_in_data;
         count_reg := unsigned(hash_out_data_s(63 downto 0)); -- Always least significant bits hold the count.
         count       <= std_logic_vector(count_reg + 1);
         data        <= in_data;
@@ -214,7 +217,7 @@ begin
           bit_address_valid <= '1';
           bit_address_in    <= std_logic_vector(count_reg_out); -- Read the key list
           key_out_data_s    <= bit_address_out;                 -- to output hash key
-          key_in_data_s     <= bit_address_out;                 -- to input key for reading data from hash table
+          --key_in_data_s     <= bit_address_out;                 -- to input key for reading data from hash table
           count_reg_out := count_reg_out + 1;
         elsif count_reg_out = unsigned(num_entries) + 1 then
           hash_last_s <= '1';
