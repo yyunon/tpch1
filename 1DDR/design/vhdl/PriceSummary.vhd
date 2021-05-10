@@ -344,15 +344,20 @@ architecture Implementation of PriceSummary is
   type state_t is (STATE_IDLE,
     STATE_COMMAND,
     STATE_BUILD,
+    STATE_INTERFACE_CMD,
     STATE_INTERFACE,
     STATE_UNLOCK,
     STATE_DONE);
-  signal state_slv         : std_logic_vector(2 downto 0);
+  signal state_slv             : std_logic_vector(2 downto 0);
   -- Current state register and next state signal.
-  signal state, state_next : state_t;
+  signal state, state_next     : state_t;
 
-  signal pu_cmd_in_valid   : std_logic;
-  signal pu_cmd_in_ready   : std_logic;
+  signal pu_cmd_in_valid       : std_logic;
+  signal pu_cmd_in_ready       : std_logic;
+  signal pu_interface_in_valid : std_logic;
+  signal pu_interface_in_ready : std_logic;
+  signal output_first_idx      : std_logic_vector(32 - 1 downto 0);
+  signal output_last_idx       : std_logic_vector(32 - 1 downto 0);
 
 begin
   processing_unit_0 : PU
@@ -397,8 +402,8 @@ begin
     l_returnflag_length         => l_returnflag_length,
     l_returnflag_count          => l_returnflag_count,
     l_returnflag_chars_valid    => l_returnflag_chars_valid,
-    l_returnflag_chars_ready    => l_returnflag_ready,
-    l_returnflag_chars_dvalid   => l_returnflag_dvalid,
+    l_returnflag_chars_ready    => l_returnflag_chars_ready,
+    l_returnflag_chars_dvalid   => l_returnflag_chars_dvalid,
     l_returnflag_chars_last     => l_returnflag_chars_last,
     l_returnflag_chars          => l_returnflag_chars,
     l_returnflag_chars_count    => l_returnflag_chars_count,
@@ -483,8 +488,13 @@ begin
     l_count_order_dvalid        => l_count_order_dvalid,
     l_count_order_last          => l_count_order_last,
     l_count_order               => l_count_order,
+    --Status regs
+    output_first_idx            => output_first_idx,
+    output_last_idx             => output_last_idx,
     cmd_in_valid                => pu_cmd_in_valid,
-    cmd_in_ready                => pu_cmd_in_ready
+    cmd_in_ready                => pu_cmd_in_ready,
+    interface_in_valid          => pu_interface_in_valid,
+    interface_in_ready          => pu_interface_in_ready
 
   );
 
@@ -538,6 +548,7 @@ begin
     l_returnflag_o_cmd_ready,
 
     pu_cmd_in_ready,
+    pu_interface_in_ready,
 
     state,
     start,
@@ -552,6 +563,7 @@ begin
     variable l_sum_charge     : out_record;
     variable l_avg_qty        : out_record;
     variable l_avg_price      : out_record;
+    variable l_avg_disc       : out_record;
     variable l_count_order    : out_record;
   begin
 
@@ -595,64 +607,71 @@ begin
     l_returnflag_o.str.valid      := '0';
     l_returnflag_o.unl.ready      := '0';
     l_returnflag_o.cmd.valid      := '0';
-    l_returnflag_o.cmd.firstIdx   := l_firstIdx;
-    l_returnflag_o.cmd.lastIdx    := l_lastIdx;
+    l_returnflag_o.cmd.firstIdx   := (others => '0');
+    l_returnflag_o.cmd.lastIdx    := (others => '0');
     l_returnflag_o.cmd.tag        := (others => '0');
 
     l_linestatus_o.str.valid      := '0';
     l_linestatus_o.unl.ready      := '0';
     l_linestatus_o.cmd.valid      := '0';
-    l_linestatus_o.cmd.firstIdx   := l_firstIdx;
-    l_linestatus_o.cmd.lastIdx    := l_lastIdx;
+    l_linestatus_o.cmd.firstIdx   := (others => '0');
+    l_linestatus_o.cmd.lastIdx    := (others => '0');
     l_linestatus_o.cmd.tag        := (others => '0');
 
     l_sum_qty.str.valid           := '0';
     l_sum_qty.unl.ready           := '0';
     l_sum_qty.cmd.valid           := '0';
-    l_sum_qty.cmd.firstIdx        := l_firstIdx;
-    l_sum_qty.cmd.lastIdx         := l_lastIdx;
+    l_sum_qty.cmd.firstIdx        := (others => '0');
+    l_sum_qty.cmd.lastIdx         := (others => '0');
     l_sum_qty.cmd.tag             := (others => '0');
 
     l_sum_base.str.valid          := '0';
     l_sum_base.unl.ready          := '0';
     l_sum_base.cmd.valid          := '0';
-    l_sum_base.cmd.firstIdx       := l_firstIdx;
-    l_sum_base.cmd.lastIdx        := l_lastIdx;
+    l_sum_base.cmd.firstIdx       := (others => '0');
+    l_sum_base.cmd.lastIdx        := (others => '0');
     l_sum_base.cmd.tag            := (others => '0');
 
     l_sum_disc_price.str.valid    := '0';
     l_sum_disc_price.unl.ready    := '0';
     l_sum_disc_price.cmd.valid    := '0';
-    l_sum_disc_price.cmd.firstIdx := l_firstIdx;
-    l_sum_disc_price.cmd.lastIdx  := l_lastIdx;
+    l_sum_disc_price.cmd.firstIdx := (others => '0');
+    l_sum_disc_price.cmd.lastIdx  := (others => '0');
     l_sum_disc_price.cmd.tag      := (others => '0');
 
     l_sum_charge.str.valid        := '0';
     l_sum_charge.unl.ready        := '0';
     l_sum_charge.cmd.valid        := '0';
-    l_sum_charge.cmd.firstIdx     := l_firstIdx;
-    l_sum_charge.cmd.lastIdx      := l_lastIdx;
+    l_sum_charge.cmd.firstIdx     := (others => '0');
+    l_sum_charge.cmd.lastIdx      := (others => '0');
     l_sum_charge.cmd.tag          := (others => '0');
 
     l_avg_qty.str.valid           := '0';
     l_avg_qty.unl.ready           := '0';
     l_avg_qty.cmd.valid           := '0';
-    l_avg_qty.cmd.firstIdx        := l_firstIdx;
-    l_avg_qty.cmd.lastIdx         := l_lastIdx;
+    l_avg_qty.cmd.firstIdx        := (others => '0');
+    l_avg_qty.cmd.lastIdx         := (others => '0');
     l_avg_qty.cmd.tag             := (others => '0');
 
     l_avg_price.str.valid         := '0';
     l_avg_price.unl.ready         := '0';
     l_avg_price.cmd.valid         := '0';
-    l_avg_price.cmd.firstIdx      := l_firstIdx;
-    l_avg_price.cmd.lastIdx       := l_lastIdx;
+    l_avg_price.cmd.firstIdx      := (others => '0');
+    l_avg_price.cmd.lastIdx       := (others => '0');
     l_avg_price.cmd.tag           := (others => '0');
+
+    l_avg_disc.str.valid          := '0';
+    l_avg_disc.unl.ready          := '0';
+    l_avg_disc.cmd.valid          := '0';
+    l_avg_disc.cmd.firstIdx       := (others => '0');
+    l_avg_disc.cmd.lastIdx        := (others => '0');
+    l_avg_disc.cmd.tag            := (others => '0');
 
     l_count_order.str.valid       := '0';
     l_count_order.unl.ready       := '0';
     l_count_order.cmd.valid       := '0';
-    l_count_order.cmd.firstIdx    := l_firstIdx;
-    l_count_order.cmd.lastIdx     := l_lastIdx;
+    l_count_order.cmd.firstIdx    := (others => '0');
+    l_count_order.cmd.lastIdx     := (others => '0');
     l_count_order.cmd.tag         := (others => '0');
 
     state_next                <= state; -- Retain current state.
@@ -695,10 +714,10 @@ begin
         l_extendedprice_cmd_lastIdx  <= l_lastIdx;
         l_extendedprice_cmd_tag      <= (others => '0');
 
-        l_returnflag_cmd_valid         <= '1';
-        l_returnflag_cmd_firstIdx      <= l_firstIdx;
-        l_returnflag_cmd_lastIdx       <= l_lastIdx;
-        l_returnflag_cmd_tag           <= (others => '0');
+        l_returnflag_cmd_valid       <= '1';
+        l_returnflag_cmd_firstIdx    <= l_firstIdx;
+        l_returnflag_cmd_lastIdx     <= l_lastIdx;
+        l_returnflag_cmd_tag         <= (others => '0');
 
         l_discount_cmd_valid         <= '1';
         l_discount_cmd_firstIdx      <= l_firstIdx;
@@ -732,20 +751,66 @@ begin
 
         pu_cmd_in_valid <= '1';
         if pu_cmd_in_ready = '1' then
-          state_next <= STATE_INTERFACE;
+          state_next <= STATE_INTERFACE_CMD;
         end if;
 
-      when STATE_INTERFACE =>
-        l_returnflag_o.cmd.valid   := '1';
-        l_linestatus_o.cmd.valid   := '1';
-        l_sum_qty.cmd.valid        := '1';
-        l_sum_base.cmd.valid       := '1';
-        l_sum_disc_price.cmd.valid := '1';
-        l_sum_charge.cmd.valid     := '1';
-        l_avg_qty.cmd.valid        := '1';
-        l_avg_price.cmd.valid      := '1';
-        l_count_order.cmd.valid    := '1';
+      when STATE_INTERFACE_CMD =>
+        l_returnflag_o.cmd.valid      := '1';
+        l_returnflag_o.cmd.firstIdx   := output_first_idx;
+        l_returnflag_o.cmd.lastIdx    := output_last_idx;
+        l_returnflag_o.cmd.tag        := (others => '0');
+
+        l_linestatus_o.cmd.valid      := '1';
+        l_linestatus_o.cmd.firstIdx   := output_first_idx;
+        l_linestatus_o.cmd.lastIdx    := output_last_idx;
+        l_linestatus_o.cmd.tag        := (others => '0');
+
+        l_sum_qty.cmd.valid           := '1';
+        l_sum_qty.cmd.firstIdx        := output_first_idx;
+        l_sum_qty.cmd.lastIdx         := output_last_idx;
+        l_sum_qty.cmd.tag             := (others => '0');
+
+        l_sum_base.cmd.valid          := '1';
+        l_sum_base.cmd.firstIdx       := output_first_idx;
+        l_sum_base.cmd.lastIdx        := output_last_idx;
+        l_sum_base.cmd.tag            := (others => '0');
+
+        l_sum_disc_price.cmd.valid    := '1';
+        l_sum_disc_price.cmd.firstIdx := output_first_idx;
+        l_sum_disc_price.cmd.lastIdx  := output_last_idx;
+        l_sum_disc_price.cmd.tag      := (others => '0');
+
+        l_sum_charge.cmd.valid        := '1';
+        l_sum_charge.cmd.firstIdx     := output_first_idx;
+        l_sum_charge.cmd.lastIdx      := output_last_idx;
+        l_sum_charge.cmd.tag          := (others => '0');
+
+        l_avg_qty.cmd.valid           := '1';
+        l_avg_qty.cmd.firstIdx        := output_first_idx;
+        l_avg_qty.cmd.lastIdx         := output_last_idx;
+        l_avg_qty.cmd.tag             := (others => '0');
+
+        l_avg_price.cmd.valid         := '1';
+        l_avg_price.cmd.firstIdx      := output_first_idx;
+        l_avg_price.cmd.lastIdx       := output_last_idx;
+        l_avg_price.cmd.tag           := (others => '0');
+
+        l_avg_disc.cmd.valid          := '1';
+        l_avg_disc.cmd.firstIdx       := output_first_idx;
+        l_avg_disc.cmd.lastIdx        := output_last_idx;
+        l_avg_disc.cmd.tag            := (others => '0');
+
+        l_count_order.cmd.valid       := '1';
+        l_count_order.cmd.firstIdx    := output_first_idx;
+        l_count_order.cmd.lastIdx     := output_last_idx;
+        l_count_order.cmd.tag         := (others => '0');
+
         if l_count_order_cmd_ready = '1' and l_avg_disc_cmd_ready = '1' and l_avg_price_cmd_ready = '1' and l_avg_qty_cmd_ready = '1' and l_sum_charge_cmd_ready = '1' and l_sum_disc_price_cmd_ready = '1' and l_sum_base_price_cmd_ready = '1' and l_linestatus_o_cmd_ready = '1' and l_sum_qty_cmd_ready = '1' and l_returnflag_o_cmd_ready = '1' then
+          state_next <= STATE_INTERFACE;
+        end if;
+      when STATE_INTERFACE =>
+        pu_interface_in_valid <= '1';
+        if pu_interface_in_ready = '1' then
           state_next <= STATE_UNLOCK;
         end if;
       when STATE_UNLOCK =>
@@ -791,6 +856,67 @@ begin
         -- confused with the system-wide reset that travels into the kernel
         -- alongside the clock (kcd_reset).        
     end case;
+
+    l_returnflag_o_cmd_valid      <= l_returnflag_o.cmd.valid;
+    l_returnflag_o_cmd_firstIdx   <= l_returnflag_o.cmd.firstIdx;
+    l_returnflag_o_cmd_lastIdx    <= l_returnflag_o.cmd.lastIdx;
+    l_returnflag_o_cmd_tag        <= l_returnflag_o.cmd.tag;
+
+    l_linestatus_o_cmd_valid      <= l_linestatus_o.cmd.valid;
+    l_linestatus_o_cmd_firstIdx   <= l_linestatus_o.cmd.firstIdx;
+    l_linestatus_o_cmd_lastIdx    <= l_linestatus_o.cmd.lastIdx;
+    l_linestatus_o_cmd_tag        <= l_linestatus_o.cmd.tag;
+
+    l_sum_qty_cmd_valid           <= l_sum_qty.cmd.valid;
+    l_sum_qty_cmd_firstIdx        <= l_sum_qty.cmd.firstIdx;
+    l_sum_qty_cmd_lastIdx         <= l_sum_qty.cmd.lastIdx;
+    l_sum_qty_cmd_tag             <= l_sum_qty.cmd.tag;
+
+    l_sum_base_price_cmd_valid    <= l_sum_base.cmd.valid;
+    l_sum_base_price_cmd_firstIdx <= l_sum_base.cmd.firstIdx;
+    l_sum_base_price_cmd_lastIdx  <= l_sum_base.cmd.lastIdx;
+    l_sum_base_price_cmd_tag      <= l_sum_base.cmd.tag;
+
+    l_sum_disc_price_cmd_valid    <= l_sum_disc_price.cmd.valid;
+    l_sum_disc_price_cmd_firstIdx <= l_sum_disc_price.cmd.firstIdx;
+    l_sum_disc_price_cmd_lastIdx  <= l_sum_disc_price.cmd.lastIdx;
+    l_sum_disc_price_cmd_tag      <= l_sum_disc_price.cmd.tag;
+
+    l_sum_charge_cmd_valid        <= l_sum_charge.cmd.valid;
+    l_sum_charge_cmd_firstIdx     <= l_sum_charge.cmd.firstIdx;
+    l_sum_charge_cmd_lastIdx      <= l_sum_charge.cmd.lastIdx;
+    l_sum_charge_cmd_tag          <= l_sum_charge.cmd.tag;
+
+    l_avg_qty_cmd_valid           <= l_avg_qty.cmd.valid;
+    l_avg_qty_cmd_firstIdx        <= l_avg_qty.cmd.firstIdx;
+    l_avg_qty_cmd_lastIdx         <= l_avg_qty.cmd.lastIdx;
+    l_avg_qty_cmd_tag             <= l_avg_qty.cmd.tag;
+
+    l_avg_price_cmd_valid         <= l_avg_price.cmd.valid;
+    l_avg_price_cmd_firstIdx      <= l_avg_price.cmd.firstIdx;
+    l_avg_price_cmd_lastIdx       <= l_avg_price.cmd.lastIdx;
+    l_avg_price_cmd_tag           <= l_avg_price.cmd.tag;
+
+    l_avg_disc_cmd_valid          <= l_avg_disc.cmd.valid;
+    l_avg_disc_cmd_firstIdx       <= l_avg_disc.cmd.firstIdx;
+    l_avg_disc_cmd_lastIdx        <= l_avg_disc.cmd.lastIdx;
+    l_avg_disc_cmd_tag            <= l_avg_disc.cmd.tag;
+
+    l_count_order_cmd_valid       <= l_count_order.cmd.valid;
+    l_count_order_cmd_firstIdx    <= l_count_order.cmd.firstIdx;
+    l_count_order_cmd_lastIdx     <= l_count_order.cmd.lastIdx;
+    l_count_order_cmd_tag         <= l_count_order.cmd.tag;
+
+    l_returnflag_o_unl_ready      <= l_returnflag_o.unl.ready;
+    l_linestatus_o_unl_ready      <= l_linestatus_o.unl.ready;
+    l_sum_qty_unl_ready           <= l_sum_qty.unl.ready;
+    l_sum_base_price_unl_ready    <= l_sum_base.unl.ready;
+    l_sum_disc_price_unl_ready    <= l_sum_disc_price.unl.ready;
+    l_sum_charge_unl_ready        <= l_sum_charge.unl.ready;
+    l_avg_qty_unl_ready           <= l_avg_qty.unl.ready;
+    l_avg_price_unl_ready         <= l_avg_price.unl.ready;
+    l_avg_disc_unl_ready          <= l_avg_disc.unl.ready;
+    l_count_order_unl_ready       <= l_count_order.unl.ready;
   end process;
 
   -- Sequential part:

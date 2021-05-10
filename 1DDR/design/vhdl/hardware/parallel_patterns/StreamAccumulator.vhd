@@ -24,6 +24,7 @@ use ieee.numeric_std.all;
 
 library work;
 use work.Tpch_pkg.all;
+use work.Stream_pkg.all;
 
 -- This unit is a simple accumulator. The data can be read any time after
 
@@ -62,6 +63,7 @@ entity StreamAccumulator is
     hash_out_valid    : out std_logic;
     hash_out_last     : out std_logic;
     hash_out_ready    : in std_logic;
+    hash_out_enable   : in std_logic;
     hash_out_data     : out std_logic_vector(NUM_LANES * DATA_WIDTH - 1 downto 0) := (others => '0');
     hash_key_out_data : out std_logic_vector(NUM_KEYS * 8 - 1 downto 0);
     hash_count_data   : out std_logic_vector(DATA_WIDTH - 1 downto 0);
@@ -80,42 +82,81 @@ end StreamAccumulator;
 architecture Behavioral of StreamAccumulator is
 
   -- Initialization status regsiter.
-  signal initialized     : std_logic;
+  signal initialized         : std_logic;
 
   -- Holding register for the accumulator data
-  signal data            : std_logic_vector(NUM_LANES * DATA_WIDTH - 1 downto 0);
+  signal data                : std_logic_vector(NUM_LANES * DATA_WIDTH - 1 downto 0);
 
-  signal count           : std_logic_vector(DATA_WIDTH - 1 downto 0);
+  signal count               : std_logic_vector(DATA_WIDTH - 1 downto 0);
 
-  signal out_valid_s     : std_logic;
+  signal out_valid_s1        : std_logic;
+  signal out_valid_s2        : std_logic;
+  signal out_valid_s         : std_logic;
   -- hash table vars
-  signal hash_operation  : std_logic;
-  signal hash_in_data    : std_logic_vector((NUM_LANES + 1) * DATA_WIDTH - 1 downto 0);
-  signal hash_out_data_s : std_logic_vector((NUM_LANES + 1) * DATA_WIDTH - 1 downto 0);
-  --bit table vars
-  signal num_entries     : std_logic_vector(15 downto 0);
-  signal bit_address_in  : std_logic_vector(15 downto 0);
-  signal bit_address_out : std_logic_vector(15 downto 0);
+  signal hash_out_ready_s1   : std_logic;
+  signal hash_out_ready_s2   : std_logic;
 
-  signal key_out_data_s  : std_logic_vector(NUM_KEYS * 8 - 1 downto 0);
-  signal key_in_data_s   : std_logic_vector(NUM_KEYS * 8 - 1 downto 0);
+  signal hash_last_s1        : std_logic;
+  signal hash_last_s2        : std_logic;
+
+  signal hash_operation      : std_logic;
+  signal hash_in_data        : std_logic_vector((NUM_LANES + 1) * DATA_WIDTH - 1 downto 0);
+
+  --hash out stream in slice
+  signal hash_out_valid_s    : std_logic;
+  signal hash_out_ready_s    : std_logic;
+  signal hash_last_s         : std_logic;
+  signal hash_out_data_s     : std_logic_vector((NUM_LANES + 1) * DATA_WIDTH - 1 downto 0);
+  signal hash_data_s         : std_logic_vector(NUM_LANES * DATA_WIDTH - 1 downto 0);
+  signal hash_key_out_data_s : std_logic_vector(NUM_KEYS * 8 - 1 downto 0);
+  signal hash_count_data_s   : std_logic_vector(DATA_WIDTH - 1 downto 0);
+  --bit table vars
+  signal num_entries         : std_logic_vector(15 downto 0);
+  signal bit_address_in      : std_logic_vector(15 downto 0);
+  signal bit_address_valid   : std_logic;
+  signal bit_address_out     : std_logic_vector(15 downto 0);
+
+  signal key_out_data_s      : std_logic_vector(NUM_KEYS * 8 - 1 downto 0);
+  signal key_out_data_s1     : std_logic_vector(NUM_KEYS * 8 - 1 downto 0);
+  signal key_out_data_s2     : std_logic_vector(NUM_KEYS * 8 - 1 downto 0);
+  signal key_out_data_s3     : std_logic_vector(NUM_KEYS * 8 - 1 downto 0);
+  signal key_in_data_s       : std_logic_vector(NUM_KEYS * 8 - 1 downto 0);
+
+  --Debug
+  signal out_counter         : unsigned(15 downto 0);
 
 begin
 
+  hash_out_buffer : StreamBuffer
+  generic map(
+    MIN_DEPTH  => 2,
+    DATA_WIDTH => (NUM_LANES + 1) * DATA_WIDTH + NUM_KEYS * 8 + 1
+  )
+  port map(
+    clk                                                                                           => clk,
+    reset                                                                                         => reset,
+    in_valid                                                                                      => hash_out_valid_s,
+    in_ready                                                                                      => hash_out_ready_s,
+    in_data((NUM_LANES + 1) * DATA_WIDTH + NUM_KEYS * 8)                                          => hash_last_s,
+    in_data((NUM_LANES + 1) * DATA_WIDTH + NUM_KEYS * 8 - 1 downto (NUM_LANES + 1) * DATA_WIDTH)  => hash_key_out_data_s,
+    in_data((NUM_LANES + 1) * DATA_WIDTH - 1 downto NUM_LANES * DATA_WIDTH)                       => hash_count_data_s,
+    in_data(NUM_LANES * DATA_WIDTH - 1 downto 0)                                                  => hash_data_s,
+    out_valid                                                                                     => hash_out_valid,
+    out_ready                                                                                     => hash_out_ready,
+    out_data((NUM_LANES + 1) * DATA_WIDTH + NUM_KEYS * 8)                                         => hash_out_last,
+    out_data((NUM_LANES + 1) * DATA_WIDTH + NUM_KEYS * 8 - 1 downto (NUM_LANES + 1) * DATA_WIDTH) => hash_key_out_data,
+    out_data((NUM_LANES + 1) * DATA_WIDTH - 1 downto NUM_LANES * DATA_WIDTH)                      => hash_count_data,
+    out_data(NUM_LANES * DATA_WIDTH - 1 downto 0)                                                 => hash_out_data
+  );
   -- Input is always ready.
-  in_ready          <= '1';
+  in_ready      <= '1';
 
-  hash_len_data     <= num_entries;
+  hash_len_data <= num_entries;
   -- Output data vector is always the accumulator register.
   --out_data <= data;
-  out_data          <= hash_out_data_s((NUM_LANES + 1) * DATA_WIDTH - 1 downto 64); -- Read port always enabled.
-  count_data        <= hash_out_data_s(63 downto 0);                                -- First 64 bits for count data..
-  key_out_data      <= key_out_data_s;
-  -- This is for backwards reading. what a shitty comment
-  -- Output data vector is always the accumulator register.
-  hash_out_data     <= hash_out_data_s((NUM_LANES + 1) * DATA_WIDTH - 1 downto 64); -- Read port always enabled.
-  hash_count_data   <= hash_out_data_s(63 downto 0);                                -- First 64 bits for count data..
-  hash_key_out_data <= key_out_data_s;
+  out_data      <= hash_out_data_s((NUM_LANES + 1) * DATA_WIDTH - 1 downto 64); -- Read port always enabled.
+  count_data    <= hash_out_data_s(63 downto 0);                                -- First 64 bits for count data..
+  key_out_data  <= key_out_data_s;
 
   HashTable_inst : HashTable
   generic map(
@@ -132,6 +173,7 @@ begin
     in_data                => hash_in_data,
     out_data               => hash_out_data_s,
     num_entries            => num_entries,
+    stream_key_out_valid   => bit_address_valid,
     stream_key_out_address => bit_address_in,
     stream_key_out_data    => bit_address_out
   );
@@ -145,12 +187,13 @@ begin
   begin
     if rising_edge(clk) then
 
-      out_valid      <= initialized;
-      hash_operation <= '0';
-      key_in_data_s  <= (others => '0');
+      out_valid         <= initialized;
+      hash_operation    <= '0';
+      --key_in_data_s  <= (others => '0');
       --Output logic, will stream the hash and bit table 
-      out_valid_s    <= '0';
-      hash_out_last  <= '0';
+      out_valid_s       <= '0';
+      hash_last_s       <= '0';
+      bit_address_valid <= '0';
 
       if in_valid = '1' and in_dvalid = '1' then
         hash_operation <= '1'; --Update hash table
@@ -163,29 +206,50 @@ begin
           initialized <= '0';
           data        <= (others => '0');
         end if;
-      elsif hash_out_ready = '1' then
-        if count_reg_out < unsigned(num_entries) then
-          out_valid_s    <= '1';
-          bit_address_in <= std_logic_vector(count_reg_out);
+      elsif hash_out_ready_s = '1' and hash_out_enable = '1' then
+        if count_reg_out < unsigned(num_entries) + 1 then
+          -- It takes 1 clk cycles to read the hash key and 1 clk cycles to read data.
+          out_valid_s       <= '1';
+
+          bit_address_valid <= '1';
+          bit_address_in    <= std_logic_vector(count_reg_out); -- Read the key list
+          key_out_data_s    <= bit_address_out;                 -- to output hash key
+          key_in_data_s     <= bit_address_out;                 -- to input key for reading data from hash table
           count_reg_out := count_reg_out + 1;
-          -- 2 clk cyc.
-          key_out_data_s <= bit_address_out;
-          key_in_data_s  <= key_out_data_s;
-        elsif count_reg_out = unsigned(num_entries) then
-          hash_out_last <= '1';
+        elsif count_reg_out = unsigned(num_entries) + 1 then
+          hash_last_s <= '1';
         end if;
       end if;
 
-      hash_out_valid <= out_valid_s;
+      -- Debug purposes
+      out_counter <= count_reg_out;
 
       if reset = '1' then
         initialized <= '1';
         count_reg     := to_unsigned(0, 64);
         count_reg_out := to_unsigned(0, 16);
-        data <= (others => '0');
+        data              <= (others => '0');
+        hash_out_ready_s1 <= '0';
+        hash_out_ready_s2 <= '0';
       end if;
 
+      --key_out_data_s2     <= key_out_data_s;
+      hash_key_out_data_s <= key_out_data_s;
+
+      out_valid_s1        <= out_valid_s;
+      out_valid_s2        <= out_valid_s1;
+      hash_out_valid_s    <= out_valid_s2;
+
+      --hash_last_s1        <= hash_last_s2;
+      --hash_last_s         <= hash_last_s1;
     end if;
+
   end process;
+  -- This is for backwards reading.
+  -- Output data vector is always the accumulator register.
+  hash_data_s <= hash_out_data_s((NUM_LANES + 1) * DATA_WIDTH - 1 downto 64) when hash_out_enable = '1' else
+    (others => '0'); -- Read port always enabled.
+  hash_count_data_s <= std_logic_vector(unsigned(hash_out_data_s(63 downto 0)) + 1) when hash_out_enable = '1' else
+    (others => '0'); -- First 64 bits for count data..
 
 end Behavioral;

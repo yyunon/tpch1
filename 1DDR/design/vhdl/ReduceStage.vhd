@@ -41,6 +41,7 @@ entity ReduceStage is
     probe_ready   : in std_logic;
 
     out_valid     : out std_logic;
+    out_enable    : in std_logic;
     out_ready     : in std_logic := '0';
     out_last      : out std_logic;
     out_data      : out std_logic_vector(16 + (NUM_SUMS + NUM_AVGS + 1) * DATA_WIDTH - 1 downto 0)
@@ -82,6 +83,7 @@ architecture Behavioral of ReduceStage is
   -- hash controller output slice
   signal hash_out_valid                : std_logic := '0';
   signal hash_out_ready                : std_logic := '0';
+  signal hash_out_enable               : std_logic := '0';
   signal hash_out_last                 : std_logic;
   signal hash_out_data                 : std_logic_vector(NUM_SUMS * DATA_WIDTH - 1 downto 0);
   signal hash_out_count                : std_logic_vector(DATA_WIDTH - 1 downto 0);
@@ -106,6 +108,7 @@ architecture Behavioral of ReduceStage is
 
 begin
 
+  hash_out_enable <= out_enable;
   reduce_cntrl : ReduceStream
   generic map(
     DATA_WIDTH        => DATA_WIDTH,
@@ -132,6 +135,7 @@ begin
 
     -- Hash stream. After build stage is done.
     hash_ready     => hash_out_ready,
+    hash_enable    => hash_out_enable,
     hash_valid     => hash_out_valid,
     hash_last      => hash_out_last,
     hash_data      => hash_out_data,
@@ -196,7 +200,7 @@ begin
     FIXED_RIGHT_INDEX => FIXED_RIGHT_INDEX,
     NUM_LANES         => NUM_SUMS,
     DATA_WIDTH        => 64,
-    DATA_TYPE         => "FLOAT64"
+    DATA_TYPE         => "FIXED64"
   )
   port map(
     clk        => clk,
@@ -261,12 +265,14 @@ begin
     variable divide_out_extendedprice  : sfixed(FIXED_LEFT_INDEX - FIXED_RIGHT_INDEX downto FIXED_RIGHT_INDEX - FIXED_LEFT_INDEX - 1);
     variable divide_out_discount       : sfixed(FIXED_LEFT_INDEX - FIXED_RIGHT_INDEX downto FIXED_RIGHT_INDEX - FIXED_LEFT_INDEX - 1);
     variable avg_vec                   : std_logic_vector(NUM_AVGS * DATA_WIDTH - 1 downto 0);
+    variable count_var                 : integer;
   begin
     if out_valid_s = '1' and (count_out_data_s /= ZERO) then
+      count_var                 := to_integer(unsigned(count_out_data_s));
       temp_buffer_quantity      := to_sfixed(out_data_s(191 downto 128), temp_buffer_1'high, temp_buffer_1'low);
       temp_buffer_extendedprice := to_sfixed(out_data_s(127 downto 64), temp_buffer_1'high, temp_buffer_1'low);
       temp_buffer_discount      := to_sfixed(out_data_s(63 downto 0), temp_buffer_1'high, temp_buffer_1'low);
-      temp_buffer_2             := to_sfixed(count_out_data_s, temp_buffer_2'high, temp_buffer_2'low);
+      temp_buffer_2             := to_sfixed(count_var, temp_buffer_2'high, temp_buffer_2'low);
       divide_out_quantity       := temp_buffer_quantity / temp_buffer_2;
       divide_out_extendedprice  := temp_buffer_quantity / temp_buffer_2;
       divide_out_discount       := temp_buffer_quantity / temp_buffer_2;

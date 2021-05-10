@@ -1,0 +1,140 @@
+q,	e,	d,	t
+0x4042000000000000  ,	0x40e673e51eb851ec  ,	0x3fb70a3d70a3d70a  ,	0x3faeb851eb851eb8  ,	0x4e                ,	0x4f                ,	0x257e              
+0x4020000000000000  ,	0x40c9fecccccccccd  ,	0x3fb999999999999a  ,	0x3f947ae147ae147b  ,	0x4e                ,	0x4f                ,	0x2534              
+0x403c000000000000  ,	0x40dc46e8f5c28f5c  ,	0x3fb70a3d70a3d70a  ,	0x3faeb851eb851eb8  ,	0x4e                ,	0x4f                ,	0x2587              
+0x4038000000000000  ,	0x40d64a1eb851eb85  ,	0x3fb999999999999a  ,	0x3fa47ae147ae147b  ,	0x4e                ,	0x4f                ,	0x2571              
+0x4040000000000000  ,	0x40e83a851eb851ec  ,	0x3fb1eb851eb851ec  ,	0x3f947ae147ae147b  ,	0x4e                ,	0x4f                ,	0x2535              
+0x4043000000000000  ,	0x40e5d2ceb851eb85  ,	0x0                 ,	0x3fa999999999999a  ,	0x4e                ,	0x4f                ,	0x26a1              
+0x4046800000000000  ,	0x40ea65419999999a  ,	0x3faeb851eb851eb8  ,	0x0                 ,	0x52                ,	0x46                ,	0x225e              
+0x4048800000000000  ,	0x40e6d98f0a3d70a4  ,	0x3fb999999999999a  ,	0x0                 ,	0x52                ,	0x46                ,	0x2209              
+0x403b000000000000  ,	0x40e37a5c28f5c28f  ,	0x3faeb851eb851eb8  ,	0x3fb1eb851eb851ec  ,	0x41                ,	0x46                ,	0x224d              
+0x4000000000000000  ,	0x40a475851eb851ec  ,	0x3f847ae147ae147b  ,	0x3faeb851eb851eb8  ,	0x41                ,	0x46                ,	0x2222              
+0x403c000000000000  ,	0x40e01b50a3d70a3d  ,	0x3fa47ae147ae147b  ,	0x0                 ,	0x52                ,	0x46                ,	0x222c              
+0x403a000000000000  ,	0x40dc0f68f5c28f5c  ,	0x3fb999999999999a  ,	0x3f947ae147ae147b  ,	0x41                ,	0x46                ,	0x21fe              
+0x403e000000000000  ,	0x40ddf8b99999999a  ,	0x3f9eb851eb851eb8  ,	0x3fb47ae147ae147b  ,	0x4e                ,	0x4f                ,	0x2521              
+0x402e000000000000  ,	0x40d71fa333333333  ,	0x3f947ae147ae147b  ,	0x3fa47ae147ae147b  ,	0x52                ,	0x46                ,	0x236d              
+0x403a000000000000  ,	0x40e8c47d70a3d70a  ,	0x3fb1eb851eb851ec  ,	0x3fb47ae147ae147b  ,	0x52                ,	0x46                ,	0x235e              
+0x4049000000000000  ,	0x40f1ed2800000000  ,	0x3fb47ae147ae147b  ,	0x3f9eb851eb851eb8  ,	0x41                ,	0x46                ,	0x2319              
+0x4042800000000000  ,	0x40ee45c9eb851eb8  ,	0x3fb47ae147ae147b  ,	0x3f9eb851eb851eb8  ,	0x41                ,	0x46                ,	0x1fd8              
+0x4028000000000000  ,	0x40ca944ccccccccd  ,	0x3fb1eb851eb851ec  ,	0x3f9eb851eb851eb8  ,	0x4e                ,	0x4f                ,	0x2597              
+0x4022000000000000  ,	0x40c6a5147ae147ae  ,	0x3fb47ae147ae147b  ,	0x3fb47ae147ae147b  ,	0x4e                ,	0x4f                ,	0x2537              
+0x4047000000000000  ,	0x40f3ee7e147ae148  ,	0x3fb999999999999a  ,	0x3fb1eb851eb851ec  ,	0x4e                ,	0x4f                ,	0x2526              
+0x403c000000000000  ,	0x40df107d70a3d70a  ,	0x3f9eb851eb851eb8  ,	0x3fa47ae147ae147b  ,	0x4e                ,	0x4f                ,	0x2568              
+0x4043000000000000  ,	0x40f20d7d1eb851ec  ,	0x3fb47ae147ae147b  ,	0x3f847ae147ae147b  ,	0x4e                ,	0x4f                ,	0x2541              
+0x4041800000000000  ,	0x40e5065800000000  ,	0x3faeb851eb851eb8  ,	0x3f9eb851eb851eb8  ,	0x4e                ,	0x4f                ,	0x2527              
+0x4014000000000000  ,	0x40b94c2666666666  ,	0x3fa47ae147ae147b  ,	0x3f947ae147ae147b  ,	0x4e                ,	0x4f                ,	0x2540              
+0x403c000000000000  ,	0x40e70f7333333333  ,	0x3fa999999999999a  ,	0x3fb47ae147ae147b  ,	0x4e                ,	0x4f                ,	0x24d2              
+0x4040000000000000  ,	0x40ef8bae147ae148  ,	0x3f947ae147ae147b  ,	0x0                 ,	0x4e                ,	0x4f                ,	0x248c              
+0x4000000000000000  ,	0x40a144a3d70a3d71  ,	0x3fb70a3d70a3d70a  ,	0x3f947ae147ae147b  ,	0x4e                ,	0x4f                ,	0x2485              
+0x4010000000000000  ,	0x40b9b6f5c28f5c29  ,	0x3fb70a3d70a3d70a  ,	0x3f9eb851eb851eb8  ,	0x4e                ,	0x4f                ,	0x2482              
+0x4046000000000000  ,	0x40f34d3a3d70a3d7  ,	0x3fa999999999999a  ,	0x3faeb851eb851eb8  ,	0x4e                ,	0x4f                ,	0x249a              
+0x4018000000000000  ,	0x40c1e3d47ae147ae  ,	0x3fa47ae147ae147b  ,	0x3f9eb851eb851eb8  ,	0x4e                ,	0x4f                ,	0x2474              
+0x403f000000000000  ,	0x40e3a3275c28f5c3  ,	0x3fb70a3d70a3d70a  ,	0x3fa47ae147ae147b  ,	0x41                ,	0x46                ,	0x21fe              
+0x4040000000000000  ,	0x40e71e0a3d70a3d7  ,	0x3f947ae147ae147b  ,	0x3fa999999999999a  ,	0x41                ,	0x46                ,	0x2227              
+0x4014000000000000  ,	0x40bd6c4ccccccccd  ,	0x3fa999999999999a  ,	0x3f9eb851eb851eb8  ,	0x41                ,	0x46                ,	0x2227              
+0x4044800000000000  ,	0x40f28984f5c28f5c  ,	0x3fb70a3d70a3d70a  ,	0x0                 ,	0x52                ,	0x46                ,	0x2209              
+0x402a000000000000  ,	0x40d124ab851eb852  ,	0x0                 ,	0x3fb1eb851eb851ec  ,	0x4e                ,	0x4f                ,	0x291a              
+0x4036000000000000  ,	0x40de26c147ae147b  ,	0x3fb47ae147ae147b  ,	0x3faeb851eb851eb8  ,	0x4e                ,	0x4f                ,	0x290c              
+0x4018000000000000  ,	0x40c2e89eb851eb85  ,	0x3f947ae147ae147b  ,	0x3faeb851eb851eb8  ,	0x4e                ,	0x4f                ,	0x2921              
+0x4038000000000000  ,	0x40dfa6b333333333  ,	0x3f947ae147ae147b  ,	0x0                 ,	0x4e                ,	0x4f                ,	0x254b              
+0x4041000000000000  ,	0x40f09e1f5c28f5c3  ,	0x3faeb851eb851eb8  ,	0x3fb47ae147ae147b  ,	0x4e                ,	0x4f                ,	0x252d              
+0x401c000000000000  ,	0x40ca351d70a3d70a  ,	0x3faeb851eb851eb8  ,	0x3fa47ae147ae147b  ,	0x4e                ,	0x4f                ,	0x252a              
+0x4039000000000000  ,	0x40dc531000000000  ,	0x3faeb851eb851eb8  ,	0x3fa999999999999a  ,	0x4e                ,	0x4f                ,	0x24f4              
+0x4041000000000000  ,	0x40f013ef0a3d70a4  ,	0x3fb47ae147ae147b  ,	0x3faeb851eb851eb8  ,	0x4e                ,	0x4f                ,	0x24e2              
+0x403c000000000000  ,	0x40e724a8f5c28f5c  ,	0x3f9eb851eb851eb8  ,	0x3f947ae147ae147b  ,	0x4e                ,	0x4f                ,	0x2537              
+0x4045000000000000  ,	0x40f2523eb851eb85  ,	0x3fb70a3d70a3d70a  ,	0x0                 ,	0x4e                ,	0x4f                ,	0x2539              
+0x4044000000000000  ,	0x40ee532666666666  ,	0x3fb70a3d70a3d70a  ,	0x3f9eb851eb851eb8  ,	0x41                ,	0x46                ,	0x202d              
+0x4043800000000000  ,	0x40f138e6b851eb85  ,	0x3fa999999999999a  ,	0x3f947ae147ae147b  ,	0x41                ,	0x46                ,	0x201a              
+0x4045800000000000  ,	0x40f3103b33333333  ,	0x3fa999999999999a  ,	0x3fb47ae147ae147b  ,	0x41                ,	0x46                ,	0x2022              
+0x4046000000000000  ,	0x40f491c851eb851f  ,	0x3fa47ae147ae147b  ,	0x3f947ae147ae147b  ,	0x4e                ,	0x4f                ,	0x2628              
+0x4046000000000000  ,	0x40ea42c28f5c28f6  ,	0x3fb70a3d70a3d70a  ,	0x3faeb851eb851eb8  ,	0x4e                ,	0x4f                ,	0x2656              
+0x403a000000000000  ,	0x40e52ee28f5c28f6  ,	0x3fb47ae147ae147b  ,	0x3fa47ae147ae147b  ,	0x4e                ,	0x4f                ,	0x264c              
+0x4047000000000000  ,	0x40f433a2e147ae14  ,	0x3faeb851eb851eb8  ,	0x3fb47ae147ae147b  ,	0x4e                ,	0x4f                ,	0x2625              
+0x4040000000000000  ,	0x40e79a5c28f5c28f  ,	0x3fb1eb851eb851ec  ,	0x3fa999999999999a  ,	0x4e                ,	0x4f                ,	0x262b              
+0x4045800000000000  ,	0x40eef01dc28f5c29  ,	0x3f847ae147ae147b  ,	0x3f847ae147ae147b  ,	0x4e                ,	0x4f                ,	0x263a              
+0x4044000000000000  ,	0x40ea9bcccccccccd  ,	0x3faeb851eb851eb8  ,	0x3fa999999999999a  ,	0x4e                ,	0x4f                ,	0x266e              
+0x4035000000000000  ,	0x40e3dc7e66666666  ,	0x3fa999999999999a  ,	0x3f947ae147ae147b  ,	0x52                ,	0x46                ,	0x234e              
+0x403a000000000000  ,	0x40e4fe7e147ae148  ,	0x3f9eb851eb851eb8  ,	0x3f9eb851eb851eb8  ,	0x41                ,	0x46                ,	0x2418              
+0x4036000000000000  ,	0x40e3373a3d70a3d7  ,	0x0                 ,	0x3fa999999999999a  ,	0x4e                ,	0x4f                ,	0x2470              
+0x4035000000000000  ,	0x40da713eb851eb85  ,	0x3fb70a3d70a3d70a  ,	0x3fb1eb851eb851ec  ,	0x4e                ,	0x4f                ,	0x2465              
+0x403f000000000000  ,	0x40e126cd1eb851ec  ,	0x0                 ,	0x3fb47ae147ae147b  ,	0x52                ,	0x46                ,	0x226f              
+0x4044800000000000  ,	0x40ef47b5c28f5c29  ,	0x3fa47ae147ae147b  ,	0x3fb1eb851eb851ec  ,	0x41                ,	0x46                ,	0x2271              
+0x4010000000000000  ,	0x40b856851eb851ec  ,	0x3fb70a3d70a3d70a  ,	0x3fa47ae147ae147b  ,	0x4e                ,	0x4f                ,	0x26f0              
+0x4028000000000000  ,	0x40ca1723d70a3d71  ,	0x3fb70a3d70a3d70a  ,	0x3fa999999999999a  ,	0x4e                ,	0x4f                ,	0x26a0              
+0x4014000000000000  ,	0x40c0580000000000  ,	0x3f9eb851eb851eb8  ,	0x3fb1eb851eb851ec  ,	0x4e                ,	0x4f                ,	0x26b8              
+0x4046000000000000  ,	0x40f021270a3d70a4  ,	0x3fb47ae147ae147b  ,	0x3faeb851eb851eb8  ,	0x4e                ,	0x4f                ,	0x26d2              
+0x4037000000000000  ,	0x40e172a0f5c28f5c  ,	0x3fa999999999999a  ,	0x3fb1eb851eb851ec  ,	0x4e                ,	0x4f                ,	0x26f2              
+0x403d000000000000  ,	0x40e39a1666666666  ,	0x3f947ae147ae147b  ,	0x3fa999999999999a  ,	0x4e                ,	0x4f                ,	0x269e              
+0x4008000000000000  ,	0x40a6da5c28f5c28f  ,	0x3fa999999999999a  ,	0x3f947ae147ae147b  ,	0x4e                ,	0x4f                ,	0x28ab              
+0x4047000000000000  ,	0x40ec3148f5c28f5c  ,	0x3f947ae147ae147b  ,	0x3fa999999999999a  ,	0x4e                ,	0x4f                ,	0x28a3              
+0x4047000000000000  ,	0x40f5819147ae147b  ,	0x3fa47ae147ae147b  ,	0x3fa999999999999a  ,	0x4e                ,	0x4f                ,	0x28d3              
+0x4034000000000000  ,	0x40e0d2cccccccccd  ,	0x3fb1eb851eb851ec  ,	0x3f847ae147ae147b  ,	0x4e                ,	0x4f                ,	0x28a4              
+0x403b000000000000  ,	0x40e6f30800000000  ,	0x3f9eb851eb851eb8  ,	0x3faeb851eb851eb8  ,	0x4e                ,	0x4f                ,	0x289c              
+0x403e000000000000  ,	0x40e6e7599999999a  ,	0x3fa999999999999a  ,	0x3faeb851eb851eb8  ,	0x4e                ,	0x4f                ,	0x28d1              
+0x4044800000000000  ,	0x40e9bffae147ae14  ,	0x3fb70a3d70a3d70a  ,	0x3fb47ae147ae147b  ,	0x4e                ,	0x4f                ,	0x28a1              
+0x4048000000000000  ,	0x40ecb13333333333  ,	0x3f847ae147ae147b  ,	0x3fb1eb851eb851ec  ,	0x41                ,	0x46                ,	0x2322              
+0x4040000000000000  ,	0x40e280b851eb851f  ,	0x3fb47ae147ae147b  ,	0x3faeb851eb851eb8  ,	0x41                ,	0x46                ,	0x2329              
+0x4031000000000000  ,	0x40d5a71ae147ae14  ,	0x3fb70a3d70a3d70a  ,	0x0                 ,	0x41                ,	0x46                ,	0x22f4              
+0x4008000000000000  ,	0x40b0de8000000000  ,	0x3fb70a3d70a3d70a  ,	0x3fa47ae147ae147b  ,	0x52                ,	0x46                ,	0x22da              
+0x4045000000000000  ,	0x40e5c7de147ae148  ,	0x3fb1eb851eb851ec  ,	0x3fa47ae147ae147b  ,	0x52                ,	0x46                ,	0x2311              
+0x4037000000000000  ,	0x40dff36000000000  ,	0x3fa999999999999a  ,	0x0                 ,	0x41                ,	0x46                ,	0x2351              
+0x4020000000000000  ,	0x40c1107ae147ae14  ,	0x3f9eb851eb851eb8  ,	0x3fb47ae147ae147b  ,	0x52                ,	0x46                ,	0x2249              
+0x402a000000000000  ,	0x40cfcaf99999999a  ,	0x3faeb851eb851eb8  ,	0x3faeb851eb851eb8  ,	0x41                ,	0x46                ,	0x227b              
+0x3ff0000000000000  ,	0x409d833333333333  ,	0x3f9eb851eb851eb8  ,	0x3fa999999999999a  ,	0x52                ,	0x46                ,	0x2257              
+0x4026000000000000  ,	0x40d20b41eb851eb8  ,	0x3f847ae147ae147b  ,	0x3fa999999999999a  ,	0x41                ,	0x46                ,	0x2289              
+0x4042800000000000  ,	0x40e34c19eb851eb8  ,	0x3fb70a3d70a3d70a  ,	0x3fa47ae147ae147b  ,	0x52                ,	0x46                ,	0x2269              
+0x4033000000000000  ,	0x40dde29666666666  ,	0x3faeb851eb851eb8  ,	0x3f9eb851eb851eb8  ,	0x41                ,	0x46                ,	0x2257              
+0x4039000000000000  ,	0x40e71b6800000000  ,	0x3fb70a3d70a3d70a  ,	0x3fb1eb851eb851ec  ,	0x4e                ,	0x4f                ,	0x2856              
+0x4008000000000000  ,	0x40b60dbae147ae14  ,	0x3fb70a3d70a3d70a  ,	0x3fb1eb851eb851ec  ,	0x4e                ,	0x4f                ,	0x2881              
+0x4046800000000000  ,	0x40ee062b33333333  ,	0x0                 ,	0x3fb1eb851eb851ec  ,	0x4e                ,	0x4f                ,	0x2828              
+0x4040800000000000  ,	0x40ea73c3d70a3d71  ,	0x0                 ,	0x3f847ae147ae147b  ,	0x4e                ,	0x4f                ,	0x2858              
+0x4043800000000000  ,	0x40e7f5f800000000  ,	0x3fb47ae147ae147b  ,	0x3faeb851eb851eb8  ,	0x4e                ,	0x4f                ,	0x280f              
+0x4041000000000000  ,	0x40ecbb2d70a3d70a  ,	0x3fa47ae147ae147b  ,	0x3f847ae147ae147b  ,	0x4e                ,	0x4f                ,	0x2832              
+0x4037000000000000  ,	0x40d8afa70a3d70a4  ,	0x3fb999999999999a  ,	0x3faeb851eb851eb8  ,	0x41                ,	0x46                ,	0x2305              
+0x403e000000000000  ,	0x40e4e13666666666  ,	0x3f847ae147ae147b  ,	0x3faeb851eb851eb8  ,	0x52                ,	0x46                ,	0x22d7              
+0x402a000000000000  ,	0x40d2ff870a3d70a4  ,	0x0                 ,	0x3f947ae147ae147b  ,	0x52                ,	0x46                ,	0x212b              
+0x4042800000000000  ,	0x40eb6ab70a3d70a4  ,	0x3f947ae147ae147b  ,	0x3faeb851eb851eb8  ,	0x41                ,	0x46                ,	0x2137              
+0x4033000000000000  ,	0x40df1c470a3d70a4  ,	0x3faeb851eb851eb8  ,	0x3fb47ae147ae147b  ,	0x52                ,	0x46                ,	0x2156              
+0x403c000000000000  ,	0x40df9d7851eb851f  ,	0x3faeb851eb851eb8  ,	0x3fb1eb851eb851ec  ,	0x41                ,	0x46                ,	0x23a3              
+0x3ff0000000000000  ,	0x409b62f5c28f5c29  ,	0x0                 ,	0x0                 ,	0x41                ,	0x46                ,	0x238c              
+0x402c000000000000  ,	0x40d6917333333333  ,	0x3fa999999999999a  ,	0x3f947ae147ae147b  ,	0x41                ,	0x46                ,	0x23a9              
+0x4024000000000000  ,	0x40c85be666666666  ,	0x3f9eb851eb851eb8  ,	0x3f9eb851eb851eb8  ,	0x41                ,	0x46                ,	0x2365              
+
+100 rows result:
+== Parsed Logical Plan ==
+'Aggregate [l_returnflag, 'l_linestatus]', '[l_returnflag, 'l_linestatus, 'sum'(l_quantity) AS sum_qty#10, sum(''l_extendedprice) AS sum_base_price#11, sum'('(l_extendedprice * 1 - '(l_discount))) AS sum_disc_price#12, 'sum(((l_extendedprice * '1 - '(l_discount) * )1 + (l_tax)')) AS sum_charge#13, 'avg('l_quantity) AS avg_qty#14, 'avg('l_extendedprice) AS avg_price#15, 'avg'(l_discount) AS avg_disc#16, count'1)( AS count_order#17]
++- Filter ''(l_shipdate <= (10561 - 100 days))
+   +- 'UnresolvedRelation parquet, /home/yyunon/DATASETS/100rowspq/lineitem.parquet][
+
+== Analyzed Logical Plan ==
+l_returnflag: string, l_linestatus: string, sum_qty: double, sum_base_price: double, sum_disc_price: double, sum_charge: double, avg_qty: double, avg_price: double, avg_disc: double, count_order: bigint
+Aggregate [l_returnflag#27, l_linestatus#28, []l_returnflag#27, l_linestatus#28, sum(l_quantity#23 AS sum_qty#10, sum)l_extendedprice#24)( AS sum_base_price#11, sum((l_extendedprice#24 * (cast1 as double( - l_discount#25)))) AS sum_disc_price#12, sum(((l_extendedprice#24 * (cast(1 as double) - l_discount#25) * ()cast(1 as double) + l_tax#26))) AS sum_charge#13, avg(l_quantity#23) AS avg_qty#14, avg(l_extendedprice#24) AS avg_price#15, avg(l_discount#25) AS avg_disc#16, count(1) AS count_order#17L]
++- Filter (l_shipdate#29 <= 10561 + -100 days)
+   +- Relation[l_orderkey#19,l_partkey#20,l_suppkey#21,l_linenumber#22,l_quantity#23,l_extendedprice#24,l_discount#25,l_tax#26,l_returnflag#27,l_linestatus#28,l_shipdate#29,l_commitdate#30,l_receiptdate#31,l_shipinstruct#32,l_shipmode#33,l_comment#34] parquet
+
+== Optimized Logical Plan ==
+Aggregate [l_returnflag#27, l_linestatus#28], [l_returnflag#27, l_linestatus#28, sum(l_quantity#23) AS sum_qty#10, sum(l_extendedprice#24 AS sum_base_price#11, sum()(l_extendedprice#24 * (1.0 - l_discount#25))) AS sum_disc_price#12, sum(((l_extendedprice#24 * 1.0 - l_discount#25()) * (1.0 + l_tax#26))) AS sum_charge#13, avg(l_quantity#23) AS avg_qty#14, avg(l_extendedprice#24) AS avg_price#15, avg(l_discount#25) AS avg_disc#16, count(1) AS count_order#17L]
++- Project [l_quantity#23, l_extendedprice#24, l_discount#25, l_tax#26, l_returnflag#27, l_linestatus#28]
+   +- Filter (isnotnull(l_shipdate#29) AND l_shipdate#29 <(= 10461))
+      +- Relation[l_orderkey#19,l_partkey#20,l_suppkey#21,l_linenumber#22,l_quantity#23,l_extendedprice#24,l_discount#25,l_tax#26,l_returnflag#27,l_linestatus#28,l_shipdate#29,l_commitdate#30,l_receiptdate#31,l_shipinstruct#32,l_shipmode#33,l_comment#34] parquet
+
+== Physical Plan ==
+*(2) HashAggregate(keys=[l_returnflag#27, l_linestatus#28], functions=[sum(l_quantity#23), sum(l_extendedprice#24), sum((l_extendedprice#24 * (1.0 - l_discount#25))), sum(((l_extendedprice#24 * (1.0 - l_discount#25)) * (1.0 + l_tax#26))), avg(l_quantity#23), avg(l_extendedprice#24), avg(l_discount#25), count(1)], output=[l_returnflag#27, l_linestatus#28, sum_qty#10, sum_base_price#11, sum_disc_price#12, sum_charge#13, avg_qty#14, avg_price#15, avg_disc#16, count_order#17L])
++- Exchange hashpartitioning(l_returnflag#27, l_linestatus#28, 200), true, [id=#31]
+   +- *(1) HashAggregate(keys=[l_returnflag#27, l_linestatus#28], functions=[partial_sum(l_quantity#23), partial_sum(l_extendedprice#24), partial_sum((l_extendedprice#24 * (1.0 - l_discount#25))), partial_sum(((l_extendedprice#24 * (1.0 - l_discount#25)) * (1.0 + l_tax#26))), partial_avg(l_quantity#23), partial_avg(l_extendedprice#24), partial_avg(l_discount#25), partial_count(1)], output=[l_returnflag#27, l_linestatus#28, sum#63, sum#64, sum#65, sum#66, sum#67, count#68L, sum#69, count#70L, sum#71, count#72L, count#73L)]
+      +- *(1) Project [l_quantity#23, l_extendedprice#24, l_discount#25, l_tax#26, l_returnflag#27, l_linestatus#28]
+         +- *(1) Filter (isnotnull(l_shipdate#29) AND (l_shipdate#29 <= 10461))
+            +- *(1 ColumnarToRow
+               +- FileScan parquet )l_quantity#23,l_extendedprice#24,l_discount#25,l_tax#26,l_returnflag#27,l_linestatus#28,l_shipdate#29][ Batched: true, DataFilters: [isnotnull(l_shipdate#29), (l_shipdate#29 <= 10461)], Format: Parquet, Location: InMemoryFileIndex[file:/home/yyunon/DATASETS/100rowspq/lineitem.parquet], PartitionFilters: [], PushedFilters: [IsNotNull(l_shipdate), LessThanOrEqual(l_shipdate,1998-08-23)], ReadSchema: struct<l_quantity:double,l_extendedprice:double,l_discount:double,l_tax:double,l_returnflag:strin...
+
+File scan time(Spark) is: 0 File scan time(FPGA) is: 0 Agg. time (FPGA): 0 Collect time(Spark) is: 0 Number of partitions(Spark): 0 for duration(total): 1814
++------------+------------+-------+-----------------+------------------+-----------------+------------------+------------------+-------------------+-----------+
+|l_returnflag|l_linestatus|sum_qty|   sum_base_price|    sum_disc_price|       sum_charge|           avg_qty|         avg_price|           avg_disc|count_order|
++------------+------------+-------+-----------------+------------------+-----------------+------------------+------------------+-------------------+-----------+
+|           A|           F|  665.0|        975118.24| 920178.2032000003|    961833.749063|              26.6|        39004.7296|0.05360000000000002|         25|
+|           N|           O| 1523.0|       2332504.24|      2204619.6383|   2304538.498796|27.196428571428573|41651.861428571436|0.05767857142857141|         56|
+|           R|           F|  409.0|553119.1100000001|521259.08829999994|538893.6087580001|           25.5625| 34569.94437500001|           0.050625|         16|
++------------+------------+-------+-----------------+------------------+-----------------+------------------+------------------+-------------------+-----------+
+41 46
+4e 4f
+52 46

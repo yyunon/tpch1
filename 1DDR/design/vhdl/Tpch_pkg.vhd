@@ -103,6 +103,7 @@ package Tpch_pkg is
       num_entries            : out std_logic_vector(NUM_KEYS * ADDRESS_WIDTH - 1 downto 0);
 
       -- Stream key output
+      stream_key_out_valid   : in std_logic;
       stream_key_out_address : in std_logic_vector(NUM_KEYS * ADDRESS_WIDTH - 1 downto 0);
       stream_key_out_data    : out std_logic_vector(NUM_KEYS * ADDRESS_WIDTH - 1 downto 0)
 
@@ -253,8 +254,13 @@ package Tpch_pkg is
       l_count_order_last          : out std_logic;
       l_count_order               : out std_logic_vector(63 downto 0);
 
+      --Status regs
+      output_first_idx            : out std_logic_vector(31 downto 0);
+      output_last_idx             : out std_logic_vector(31 downto 0);
       cmd_in_valid                : in std_logic;
-      cmd_in_ready                : out std_logic
+      cmd_in_ready                : out std_logic;
+      interface_in_valid          : in std_logic;
+      interface_in_ready          : out std_logic
     );
   end component;
   component Float_to_Fixed is
@@ -420,6 +426,7 @@ package Tpch_pkg is
       probe_ready   : in std_logic;
 
       out_valid     : out std_logic;
+      out_enable    : in std_logic;
       out_ready     : in std_logic;
       out_last      : out std_logic;
       out_data      : out std_logic_vector(16 + (NUM_SUMS + NUM_AVGS + 1) * DATA_WIDTH - 1 downto 0)

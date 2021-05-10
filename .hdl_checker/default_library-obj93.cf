@@ -1,55 +1,64 @@
 v 4
-file / "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/vhlib/util/UtilRam1R1W.vhd" "3283181663bbc64c15f5c9f392fdc8a612445516" "20210505214843.922":
-  entity utilram1r1w at 15( 608) + 0 on 504;
-  architecture behavioral of utilram1r1w at 63( 2563) + 0 on 505;
-file / "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/interconnect/Interconnect_pkg.vhd" "f811c0e70cb279d77518f80b8e654568eff4f500" "20210504152219.680":
-  package interconnect_pkg at 15( 608) + 0 on 462;
-file / "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/parallel_patterns/ReduceStream.vhd" "3b464f77cf72b8abec7fa6b248fa810977117bd2" "20210504142600.793":
-  entity reducestream at 1( 0) + 0 on 458;
-  architecture behavioral of reducestream at 73( 2353) + 0 on 459;
-file / "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/parallel_patterns/ParallelPatterns_pkg.vhd" "455b6d4a26a665d38d6d2239c20900384567d2a5" "20210505163153.187":
-  package parallelpatterns_pkg at 21( 484) + 0 on 480;
-file / "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/mmio.gen.vhd" "814d5b0f6f56c52e4f71fbe156445a977d4eb0fb" "20210502003553.459":
-  entity mmio at 3( 75) + 0 on 378;
-  architecture behavioral of mmio at 202( 8568) + 0 on 379;
-file / "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/PriceSummary_Nucleus.gen.vhd" "8996fa674d952b724b16c81a261e1393e8ce3271" "20210504152348.111":
-  entity pricesummary_nucleus at 17( 692) + 0 on 474;
-  architecture implementation of pricesummary_nucleus at 336( 20048) + 0 on 475;
-file / "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/arrays/Array_pkg.vhd" "90293254691bbb053acaf2f85663b27fd8c5dfd7" "20210504152347.980":
-  package array_pkg at 15( 608) + 0 on 473;
-file / "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/arrays/ArrayConfigParse_pkg.vhd" "38ce659d235f9a4d69f21ef1e6ce10440eeb639e" "20210504152347.452":
-  package arrayconfigparse_pkg at 15( 608) + 0 on 468 body;
-  package body arrayconfigparse_pkg at 44( 1703) + 0 on 469;
-file / "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/vhlib/util/UtilInt_pkg.vhd" "b14578f3908bd0d432a8265aa95d6c0f1018418e" "20210504152219.560":
-  package utilint_pkg at 15( 608) + 0 on 460 body;
-  package body utilint_pkg at 50( 1688) + 0 on 461;
-file / "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/mmio_pkg.gen.vhd" "bde335b5bcdc74c384cd030b3352fb66aaf62cb0" "20210504152347.640":
-  package mmio_pkg at 3( 75) + 0 on 470;
-file / "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/Float_to_Fixed.vhd" "8c0d6f5f1aa95def0b0ea973eb6ed50141283e59" "20210430170953.182":
-  entity float_to_fixed at 2( 72) + 0 on 112;
-  architecture behavioral of float_to_fixed at 44( 1108) + 0 on 113;
-file / "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/Tpch_pkg.vhd" "fec921c6fd987e377fddd0d95fcc7d5921cf7bec" "20210430170404.986":
-  package tpch_pkg at 5( 218) + 0 on 80 body;
-  package body tpch_pkg at 509( 18849) + 0 on 81;
-file / "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/PU.vhd" "1f190016e147691797c8741322254d587b915215" "20210430162626.774":
-  entity pu at 2( 70) + 0 on 64;
-  architecture behavioral of pu at 163( 6857) + 0 on 65;
-file / "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/vhlib/stream/Stream_pkg.vhd" "b75491a5cecb32aed81d31bf26219f0dec58cc61" "20210430143223.355":
-  package stream_pkg at 15( 608) + 0 on 13 body;
-  package body stream_pkg at 440( 20215) + 0 on 14;
-file / "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/vhdmmio_pkg.gen.vhd" "9e199954a065324b485aeb00e1cc9b9f1909a478" "20210504152347.301":
-  package vhdmmio_pkg at 3( 75) + 0 on 467;
-file / "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/vhlib/util/UtilMisc_pkg.vhd" "3115396ba73ed14342de239a7d51acaa8eb89471" "20210504152347.176":
-  package utilmisc_pkg at 15( 608) + 0 on 465 body;
-  package body utilmisc_pkg at 51( 2185) + 0 on 466;
-file / "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/arrays/ArrayConfig_pkg.vhd" "bfc53246754dfac5339ea2cf85a7bf6d142d1873" "20210504152347.739":
-  package arrayconfig_pkg at 15( 608) + 0 on 471 body;
-  package body arrayconfig_pkg at 182( 6501) + 0 on 472;
-file / "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/vhlib/util/UtilRam_pkg.vhd" "eeb4422fb06a58033be9654292611aae50ef9270" "20210505191118.790":
-  package utilram_pkg at 15( 608) + 0 on 481;
-file / "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/WriterInterface.vhd" "96184f9889f09eee555a2cff26f8d1242a6a193f" "20210502111635.159":
-  entity stringwriterinterface at 2( 99) + 0 on 434;
-  architecture behavioral of stringwriterinterface at 50( 1646) + 0 on 435;
+file / "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/parallel_patterns/StreamSliceArray.vhd" "8b3022cbb85c2007a6a4452d0d8ed2210804903a" "20210506020400.731":
+  entity streamslicearray at 1( 0) + 0 on 506;
+  architecture behavioral of streamslicearray at 45( 1073) + 0 on 507;
 file / "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/PriceSummary_Mantle.gen.vhd" "88d28072fd425920bf0ac6c38b79e452da8f6522" "20210504152219.817":
   entity pricesummary_mantle at 17( 692) + 0 on 463;
   architecture implementation of pricesummary_mantle at 76( 2832) + 0 on 464;
+file / "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/vhlib/util/UtilRam_pkg.vhd" "eeb4422fb06a58033be9654292611aae50ef9270" "20210508194900.417":
+  package utilram_pkg at 15( 608) + 0 on 595;
+file / "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/arrays/ArrayConfig_pkg.vhd" "bfc53246754dfac5339ea2cf85a7bf6d142d1873" "20210504152347.739":
+  package arrayconfig_pkg at 15( 608) + 0 on 471 body;
+  package body arrayconfig_pkg at 182( 6501) + 0 on 472;
+file / "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/vhlib/util/UtilMisc_pkg.vhd" "3115396ba73ed14342de239a7d51acaa8eb89471" "20210504152347.176":
+  package utilmisc_pkg at 15( 608) + 0 on 465 body;
+  package body utilmisc_pkg at 51( 2185) + 0 on 466;
+file / "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/vhdmmio_pkg.gen.vhd" "9e199954a065324b485aeb00e1cc9b9f1909a478" "20210508225008.592":
+  package vhdmmio_pkg at 3( 75) + 0 on 636;
+file / "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/vhlib/stream/Stream_pkg.vhd" "b75491a5cecb32aed81d31bf26219f0dec58cc61" "20210430143223.355":
+  package stream_pkg at 15( 608) + 0 on 13 body;
+  package body stream_pkg at 440( 20215) + 0 on 14;
+file / "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/PU.vhd" "1f190016e147691797c8741322254d587b915215" "20210430162626.774":
+  entity pu at 2( 70) + 0 on 64;
+  architecture behavioral of pu at 163( 6857) + 0 on 65;
+file / "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/Tpch_pkg.vhd" "fec921c6fd987e377fddd0d95fcc7d5921cf7bec" "20210430170404.986":
+  package tpch_pkg at 5( 218) + 0 on 80 body;
+  package body tpch_pkg at 509( 18849) + 0 on 81;
+file / "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/Float_to_Fixed.vhd" "8c0d6f5f1aa95def0b0ea973eb6ed50141283e59" "20210430170953.182":
+  entity float_to_fixed at 2( 72) + 0 on 112;
+  architecture behavioral of float_to_fixed at 44( 1108) + 0 on 113;
+file / "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/mmio_pkg.gen.vhd" "bde335b5bcdc74c384cd030b3352fb66aaf62cb0" "20210508225008.660":
+  package mmio_pkg at 3( 75) + 0 on 637;
+file / "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/vhlib/util/UtilInt_pkg.vhd" "b14578f3908bd0d432a8265aa95d6c0f1018418e" "20210509140219.190":
+  package utilint_pkg at 15( 608) + 0 on 640 body;
+  package body utilint_pkg at 50( 1688) + 0 on 641;
+file / "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/arrays/ArrayConfigParse_pkg.vhd" "38ce659d235f9a4d69f21ef1e6ce10440eeb639e" "20210504152347.452":
+  package arrayconfigparse_pkg at 15( 608) + 0 on 468 body;
+  package body arrayconfigparse_pkg at 44( 1703) + 0 on 469;
+file / "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/arrays/Array_pkg.vhd" "90293254691bbb053acaf2f85663b27fd8c5dfd7" "20210504152347.980":
+  package array_pkg at 15( 608) + 0 on 473;
+file / "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/PriceSummary_Nucleus.gen.vhd" "8996fa674d952b724b16c81a261e1393e8ce3271" "20210504152348.111":
+  entity pricesummary_nucleus at 17( 692) + 0 on 474;
+  architecture implementation of pricesummary_nucleus at 336( 20048) + 0 on 475;
+file / "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/mmio.gen.vhd" "814d5b0f6f56c52e4f71fbe156445a977d4eb0fb" "20210508225008.703":
+  entity mmio at 3( 75) + 0 on 638;
+  architecture behavioral of mmio at 202( 8568) + 0 on 639;
+file / "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/parallel_patterns/ParallelPatterns_pkg.vhd" "455b6d4a26a665d38d6d2239c20900384567d2a5" "20210505163153.187":
+  package parallelpatterns_pkg at 21( 484) + 0 on 480;
+file / "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/parallel_patterns/ReduceStream.vhd" "3b464f77cf72b8abec7fa6b248fa810977117bd2" "20210506141418.837":
+  entity reducestream at 1( 0) + 0 on 509;
+  architecture behavioral of reducestream at 73( 2353) + 0 on 510;
+file / "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/interconnect/Interconnect_pkg.vhd" "f811c0e70cb279d77518f80b8e654568eff4f500" "20210504152219.680":
+  package interconnect_pkg at 15( 608) + 0 on 462;
+file / "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/vhlib/util/UtilRam1R1W.vhd" "3283181663bbc64c15f5c9f392fdc8a612445516" "20210505214843.922":
+  entity utilram1r1w at 15( 608) + 0 on 504;
+  architecture behavioral of utilram1r1w at 63( 2563) + 0 on 505;
+file / "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/parallel_patterns/SequenceStream.vhd" "bb1e7794ea5ac81f189bd3311d81a2315e6c639c" "20210509140219.364":
+  entity sequencestream at 21( 484) + 0 on 642;
+  architecture behavioral of sequencestream at 75( 2469) + 0 on 643;
+file / "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/vhlib/stream/StreamSync.vhd" "c7042d71a7db12bf2ca398116060bebf9c5bfe5e" "20210508011634.385":
+  entity streamsync at 15( 608) + 0 on 593;
+  architecture behavioral of streamsync at 77( 3104) + 0 on 594;
+file / "/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/WriterInterface.vhd" "c8d5e0385683743dbb0162065cb867eaacf97080" "20210510000012.692":
+  entity stringwriterinterface at 2( 99) + 0 on 688;
+  architecture behavioral of stringwriterinterface at 50( 1646) + 0 on 689;

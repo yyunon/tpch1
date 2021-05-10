@@ -51,6 +51,7 @@ entity ReduceStream is
 
     -- Hash stream.
     hash_ready     : in std_logic;
+    hash_enable    : in std_logic;
     hash_valid     : out std_logic;
     hash_last      : out std_logic;
     hash_data      : out std_logic_vector(NUM_LANES * DATA_WIDTH - 1 downto 0);
@@ -156,6 +157,7 @@ begin
     in_data           => acc_in_data,
     in_last           => seq_out_last,
     hash_out_valid    => hash_valid,
+    hash_out_enable   => hash_enable,
     hash_out_ready    => hash_ready,
     hash_out_last     => hash_last,
     hash_out_data     => hash_data,

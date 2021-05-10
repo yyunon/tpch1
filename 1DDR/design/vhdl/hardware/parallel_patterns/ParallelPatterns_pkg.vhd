@@ -175,6 +175,7 @@ package ParallelPatterns_pkg is
 
       -- Hash out stream
       hash_out_valid    : out std_logic;
+      hash_out_enable   : in std_logic;
       hash_out_ready    : in std_logic;
       hash_out_last     : out std_logic;
       hash_out_data     : out std_logic_vector(NUM_LANES * DATA_WIDTH - 1 downto 0);
@@ -233,6 +234,7 @@ package ParallelPatterns_pkg is
       acc_in_dvalid  : in std_logic := '1';
       -- Hash stream.
       hash_ready     : in std_logic;
+      hash_enable    : in std_logic;
       hash_valid     : out std_logic;
       hash_last      : out std_logic;
       hash_data      : out std_logic_vector(NUM_LANES * DATA_WIDTH - 1 downto 0);

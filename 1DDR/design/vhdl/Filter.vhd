@@ -170,7 +170,7 @@ BEGIN
     --end process;
     PROCESS (ops_data, ops_valid, out_ready_s) IS
       CONSTANT DATE_LOW : INTEGER := 8766;
-      CONSTANT DATE_HIGH : INTEGER := 9131;
+      CONSTANT DATE_HIGH : INTEGER := 10461;
     BEGIN
       out_valid_s <= '0';
       ops_ready_s <= '0';
@@ -178,7 +178,7 @@ BEGIN
       IF ops_valid = '1' AND out_ready_s = '1' THEN
         ops_ready_s <= '1';
         out_valid_s <= '1';
-        IF (to_integer(unsigned(ops_data)) >= DATE_LOW) AND (to_integer(unsigned(ops_data)) < DATE_HIGH) THEN
+        IF (to_integer(unsigned(ops_data)) <= DATE_HIGH) THEN
           result <= '1';
         END IF;
       END IF;

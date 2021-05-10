@@ -43,6 +43,7 @@ entity HashTable is
     num_entries            : out std_logic_vector(NUM_KEYS * ADDRESS_WIDTH - 1 downto 0);
 
     -- Stream key output
+    stream_key_out_valid   : in std_logic;
     stream_key_out_address : in std_logic_vector(NUM_KEYS * ADDRESS_WIDTH - 1 downto 0);
     stream_key_out_data    : out std_logic_vector(NUM_KEYS * ADDRESS_WIDTH - 1 downto 0)
 
@@ -54,22 +55,22 @@ architecture Behavioral of HashTable is
 
   signal state, state_next       : state_t;
 
-  signal dirty_bit               : std_logic;
+  signal operation_s             : std_logic;
   signal write_enable            : std_logic;
   signal write_address           : std_logic_vector(NUM_KEYS * ADDRESS_WIDTH - 1 downto 0);
-  signal write_data              : std_logic_vector(DATA_WIDTH - 1 downto 0);
+  signal write_data              : std_logic_vector(DATA_WIDTH downto 0);
 
   signal read_enable             : std_logic;
   signal read_address            : std_logic_vector(NUM_KEYS * ADDRESS_WIDTH - 1 downto 0);
-  signal read_data               : std_logic_vector(DATA_WIDTH - 1 downto 0);
+  signal read_data               : std_logic_vector(DATA_WIDTH downto 0);
 
   signal bit_table_write_enable  : std_logic;
   signal bit_table_write_address : std_logic_vector(NUM_KEYS * ADDRESS_WIDTH - 1 downto 0);
-  signal bit_table_write_data    : std_logic_vector(NUM_KEYS * ADDRESS_WIDTH downto 0);
+  signal bit_table_write_data    : std_logic_vector(NUM_KEYS * ADDRESS_WIDTH - 1 downto 0);
 
   signal bit_table_read_enable   : std_logic;
   signal bit_table_read_address  : std_logic_vector(NUM_KEYS * ADDRESS_WIDTH - 1 downto 0);
-  signal bit_table_read_data     : std_logic_vector(NUM_KEYS * ADDRESS_WIDTH downto 0);
+  signal bit_table_read_data     : std_logic_vector(NUM_KEYS * ADDRESS_WIDTH - 1 downto 0);
 
   signal hash_pointer            : unsigned(NUM_KEYS * ADDRESS_WIDTH - 1 downto 0);
   signal hash_pointer_next       : unsigned(NUM_KEYS * ADDRESS_WIDTH - 1 downto 0);
@@ -79,8 +80,9 @@ begin
   bit_table_read_enable  <= '1';
   -- This is for array writer.
   num_entries            <= std_logic_vector(hash_pointer + 1);
-  bit_table_read_address <= stream_key_out_address;
-  stream_key_out_data    <= bit_table_read_data(NUM_KEYS * ADDRESS_WIDTH - 1 downto 0);
+  bit_table_read_address <= stream_key_out_address when stream_key_out_valid = '1' else
+    std_logic_vector(hash_pointer);
+  stream_key_out_data <= bit_table_read_data(NUM_KEYS * ADDRESS_WIDTH - 1 downto 0);
 
   hash_function_gen :
   if HASH_FUNCTION = "DIRECT" generate
@@ -90,7 +92,7 @@ begin
 
   bit_table : UtilRam1R1W -- This will hold the keys.
   generic map(
-    WIDTH      => 16 + 1, -- Concat a dirty bit
+    WIDTH      => NUM_KEYS * ADDRESS_WIDTH,
     DEPTH_LOG2 => NUM_KEYS * ADDRESS_WIDTH
   )
   port map(
@@ -106,7 +108,7 @@ begin
 
   hash_table : UtilRam1R1W
   generic map(
-    WIDTH      => DATA_WIDTH,
+    WIDTH      => DATA_WIDTH + 1,
     DEPTH_LOG2 => NUM_KEYS * ADDRESS_WIDTH
   )
   port map(
@@ -122,52 +124,52 @@ begin
 
   -- Process to hash the input
   hash_proc :
-  process (state, in_data, read_data, read_address, dirty_bit, operation, hash_pointer) is
+  process (state, in_data, read_data, read_address, operation, hash_pointer) is
     variable hash_counter : unsigned(NUM_KEYS * ADDRESS_WIDTH - 1 downto 0);
   begin
-    hash_counter := hash_pointer;
     state_next             <= state;
     bit_table_write_enable <= '0';
     write_enable           <= '0';
-    dirty_bit              <= '0';
+    hash_counter := hash_pointer;
     case state is
       when STATE_IDLE =>
         if operation = '1' then
-          if bit_table_read_data(16) = '1' then
-            state_next <= STATE_UPDATE_HASH_TABLE;
-          else
-            state_next <= STATE_UPDATE_BIT_TABLE;
-          end if;
+          state_next <= STATE_UPDATE_HASH_TABLE;
         else
           state_next <= STATE_IDLE;
         end if;
       when STATE_UPDATE_HASH_TABLE =>
         -- update hash table
+        if read_data(DATA_WIDTH) = '1' then
+          state_next <= STATE_IDLE;
+        else
+          state_next <= STATE_UPDATE_BIT_TABLE;
+        end if;
         write_enable  <= '1';
-        write_data    <= in_data;
+        write_data    <= '1' & in_data;
         write_address <= read_address;
-        state_next    <= STATE_DONE;
       when STATE_UPDATE_BIT_TABLE =>
         -- update bit table
         bit_table_write_enable  <= '1';
-        bit_table_write_address <= std_logic_vector(hash_counter);
-        dirty_bit               <= '1';
-        bit_table_write_data    <= dirty_bit & read_address;
-        state_next              <= STATE_UPDATE_HASH_TABLE;
-        hash_counter := hash_counter + 1;
+        bit_table_write_address <= std_logic_vector(hash_pointer);
+        bit_table_write_data    <= read_address;
+        state_next              <= STATE_IDLE;
+        hash_counter := hash_counter + to_unsigned(1, NUM_KEYS * ADDRESS_WIDTH); -- Increment the hash pointer to the next address
+        --hash_counter := hash_counter + 1;
       when STATE_DONE =>
         state_next <= STATE_IDLE;
     end case;
     hash_pointer_next <= hash_counter;
   end process;
 
-  out_data <= read_data;
+  out_data <= read_data(DATA_WIDTH - 1 downto 0);
 
   -- Seq process
   seq_proc :
   process (clk) is
   begin
     if rising_edge(clk) then
+      --operation_s  <= operation;
       state        <= state_next;
       hash_pointer <= hash_pointer_next;
       if reset = '1' then

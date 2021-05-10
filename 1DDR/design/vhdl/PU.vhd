@@ -154,8 +154,13 @@ entity PU is
     l_count_order_last          : out std_logic;
     l_count_order               : out std_logic_vector(63 downto 0);
 
+    --Status regs
+    output_first_idx            : out std_logic_vector(31 downto 0);
+    output_last_idx             : out std_logic_vector(31 downto 0);
     cmd_in_valid                : in std_logic;
-    cmd_in_ready                : out std_logic
+    cmd_in_ready                : out std_logic;
+    interface_in_valid          : in std_logic;
+    interface_in_ready          : out std_logic
 
   );
 end PU;
@@ -168,6 +173,7 @@ architecture Behavioral of PU is
   -- State Machine
   type state_type is (STATE_IDLE,
     STATE_BUILD,
+    STATE_CMD,
     STATE_INTERFACE,
     STATE_DONE);
   type len_record is record
@@ -324,6 +330,19 @@ architecture Behavioral of PU is
   signal discount_aggregate_in_ready         : std_logic                     := '0';
   signal extendedprice_aggregate_in_valid    : std_logic                     := '0';
   signal extendedprice_aggregate_in_ready    : std_logic                     := '0';
+  -- Merge key streams
+  signal in_key_stream_chars_valid           : std_logic                     := '0';
+  signal in_key_stream_chars_dvalid          : std_logic                     := '0';
+  signal in_key_stream_chars                 : std_logic_vector(15 downto 0);
+  signal in_key_stream_chars_ready           : std_logic := '0';
+
+  signal key_stream_chars_valid              : std_logic := '0';
+  signal key_stream_chars_dvalid             : std_logic := '0';
+  signal key_stream_chars                    : std_logic_vector(15 downto 0);
+  signal key_stream_chars_ready              : std_logic := '0';
+
+  signal l_returnflag_chars_ready_x          : std_logic := '0';
+  signal l_linestatus_chars_ready_x          : std_logic := '0';
   --
   -- Merger inputs
   signal sum_charge_inputs_valid             : std_logic_vector(2 downto 0);
@@ -435,9 +454,16 @@ architecture Behavioral of PU is
   signal len_returnflag_o_data               : std_logic_vector(7 downto 0);
   signal len_returnflag_o_length             : std_logic_vector(31 downto 0);
 
+  signal buf_in_out_data_valid_s             : std_logic;
+  signal buf_in_out_data_enable_s            : std_logic;
+  signal buf_in_out_data_ready_s             : std_logic;
+  signal buf_in_out_data_last_s              : std_logic := '0';
+  signal buf_in_out_data_s                   : std_logic_vector(16 + 9 * 64 - 1 downto 0);
+
   signal out_data_valid_s                    : std_logic;
+  signal out_data_enable_s                   : std_logic;
   signal out_data_ready_s                    : std_logic;
-  signal out_data_last_s                     : std_logic;
+  signal out_data_last_s                     : std_logic := '0';
   signal out_data_s                          : std_logic_vector(16 + 9 * 64 - 1 downto 0);
   signal reduce_in_data                      : std_logic_vector(5 * 64 - 1 downto 0);
   -- Output of filter stage
@@ -458,6 +484,8 @@ architecture Behavioral of PU is
   --
   constant ZERO                              : std_logic_vector(3 downto 0) := (others => '0');
 begin
+  output_first_idx <= (others       => '0');
+  output_last_idx  <= (31 downto 16 => '0') & num_entries;
   --Integrated Logic Analyzers (ILA): This module works 
   --for only one of the instances. 
   logic_analyzer_gen :
@@ -511,6 +539,11 @@ begin
     --      probe43(0)            => reduce_in_valid
     --);
   end generate;
+  l_returnflag_ready       <= l_returnflag_chars_ready_x;
+  l_linestatus_ready       <= l_linestatus_chars_ready_x;
+
+  l_returnflag_chars_ready <= l_returnflag_chars_ready_x;
+  l_linestatus_chars_ready <= l_linestatus_chars_ready_x;
 
   -- CONVERTERS
   discount_converter : Float_to_Fixed
@@ -618,10 +651,10 @@ begin
     out_data   => conv_l_extendedprice
   );
 
-  dly_shipdate : StreamSliceArray
+  dly_shipdate : StreamBuffer
   generic map(
     DATA_WIDTH => DATA_WIDTH/2 + 2,
-    DEPTH      => 9
+    MIN_DEPTH  => 1
   )
   port map(
     clk                   => clk,
@@ -641,17 +674,17 @@ begin
 
   );
 
-  dly_returnflag : StreamSliceArray
+  dly_returnflag : StreamBuffer
   generic map(
     DATA_WIDTH => 8 + 2,
-    DEPTH      => 9
+    MIN_DEPTH  => 2
   )
   port map(
     clk                  => clk,
     reset                => reset,
 
     in_valid             => l_returnflag_chars_valid,
-    in_ready             => l_returnflag_chars_ready,
+    in_ready             => l_returnflag_chars_ready_x,
     in_data(9)           => l_returnflag_chars_last,
     in_data(8)           => l_returnflag_chars_dvalid,
     in_data(7 downto 0)  => l_returnflag_chars,
@@ -664,17 +697,17 @@ begin
 
   );
 
-  dly_linestatus : StreamSliceArray
+  dly_linestatus : StreamBuffer
   generic map(
     DATA_WIDTH => 8 + 2,
-    DEPTH      => 9
+    MIN_DEPTH  => 4
   )
   port map(
     clk                  => clk,
     reset                => reset,
 
     in_valid             => l_linestatus_chars_valid,
-    in_ready             => l_linestatus_chars_ready,
+    in_ready             => l_linestatus_chars_ready_x,
     in_data(9)           => l_linestatus_chars_last,
     in_data(8)           => l_linestatus_chars_dvalid,
     in_data(7 downto 0)  => l_linestatus_chars,
@@ -685,6 +718,42 @@ begin
     out_data(8)          => dly_l_linestatus_chars_dvalid,
     out_data(7 downto 0) => dly_l_linestatus_chars
 
+  );
+  key_stream_sync : StreamSync
+  generic map(
+    NUM_INPUTS  => 2,
+    NUM_OUTPUTS => 1
+  )
+  port map(
+    clk          => clk,
+    reset        => reset,
+    in_valid(0)  => dly_l_linestatus_chars_valid,
+    in_valid(1)  => dly_l_returnflag_chars_valid,
+    in_ready(0)  => dly_l_linestatus_chars_ready,
+    in_ready(1)  => dly_l_returnflag_chars_ready,
+
+    out_valid(0) => in_key_stream_chars_valid,
+    out_ready(0) => in_key_stream_chars_ready
+  );
+  in_key_stream_chars <= dly_l_returnflag_chars & dly_l_linestatus_chars when dly_l_linestatus_chars_valid = '1' and dly_l_returnflag_chars_ready = '1' else
+    (others => '0');
+  merge_two_key_streams : StreamBuffer
+  generic map(
+    MIN_DEPTH  => 2,
+    DATA_WIDTH => 17
+  )
+  port map(
+    clk                   => clk,
+    reset                 => reset,
+    in_valid              => in_key_stream_chars_valid,
+    in_ready              => in_key_stream_chars_ready,
+    in_data(16)           => dly_l_returnflag_chars_dvalid and dly_l_linestatus_chars_dvalid,
+    in_data(15 downto 0)  => in_key_stream_chars,
+
+    out_valid             => key_stream_chars_valid,
+    out_ready             => key_stream_chars_ready,
+    out_data(16)          => key_stream_chars_dvalid,
+    out_data(15 downto 0) => key_stream_chars
   );
 
   -----------------------------------------------------------------------------
@@ -863,7 +932,7 @@ begin
   -----------------------------------------------------------------------------
   filter_out_sync : StreamSync
   generic map(
-    NUM_INPUTS  => 8,
+    NUM_INPUTS  => 7,
     NUM_OUTPUTS => 1
   )
   port map(
@@ -876,8 +945,7 @@ begin
     in_valid(3)  => extendedprice_aggregate_in_valid,
     in_valid(4)  => discount_aggregate_in_valid,
     in_valid(5)  => conv_l_quantity_valid,
-    in_valid(6)  => dly_l_linestatus_chars_valid,
-    in_valid(7)  => dly_l_returnflag_chars_valid,
+    in_valid(6)  => key_stream_chars_valid,
 
     in_ready(0)  => filter_in_ready,
     in_ready(1)  => charge_reduce_in_ready,
@@ -885,8 +953,7 @@ begin
     in_ready(3)  => extendedprice_aggregate_in_ready,
     in_ready(4)  => discount_aggregate_in_ready,
     in_ready(5)  => conv_l_quantity_ready,
-    in_ready(6)  => dly_l_linestatus_chars_ready,
-    in_ready(7)  => dly_l_returnflag_chars_ready,
+    in_ready(6)  => key_stream_chars_ready,
 
     out_valid(0) => filter_out_valid,
     out_ready(0) => filter_out_ready
@@ -914,20 +981,39 @@ begin
   port map(
     clk           => clk,
     reset         => reset,
-    key_in_dvalid => dly_l_returnflag_chars_dvalid and dly_l_linestatus_chars_dvalid,
-    key_in_data   => dly_l_returnflag_chars & dly_l_linestatus_chars,
+    key_in_dvalid => key_stream_chars_dvalid,
+    key_in_data   => key_stream_chars,
     in_valid      => filter_out_valid,
     in_ready      => filter_out_ready,
     in_dvalid     => filter_out_strb,
     in_last       => filter_out_last,
     in_data       => reduce_in_data,
-    out_valid     => out_data_valid_s,
-    out_ready     => out_data_ready_s,
-    out_last      => out_data_last_s,
-    out_data      => out_data_s, -- This holds them all
+    out_valid     => buf_in_out_data_valid_s,
+    out_enable    => out_data_enable_s,
+    out_ready     => buf_in_out_data_ready_s,
+    out_last      => buf_in_out_data_last_s,
+    out_data      => buf_in_out_data_s, -- This holds them all
     probe_ready   => probe_ready,
     hash_len      => num_entries,
     probe_valid   => probe_valid
+  );
+  --Reduce output slice
+  reduce_out_slice : StreamBuffer
+  generic map(
+    MIN_DEPTH  => 2,
+    DATA_WIDTH => 16 + 9 * 64 + 1 -- last bit
+  )
+  port map(
+    clk                                => clk,
+    reset                              => reset,
+    in_valid                           => buf_in_out_data_valid_s,
+    in_ready                           => buf_in_out_data_ready_s,
+    in_data(16 + 9 * 64)               => buf_in_out_data_last_s,
+    in_data(16 + 9 * 64 - 1 downto 0)  => buf_in_out_data_s,
+    out_valid                          => out_data_valid_s,
+    out_ready                          => out_data_ready_s,
+    out_data(16 + 9 * 64)              => out_data_last_s,
+    out_data(16 + 9 * 64 - 1 downto 0) => out_data_s
   );
   sync_output_streams : StreamSync
   generic map(
@@ -939,6 +1025,7 @@ begin
     reset        => reset,
     in_valid(0)  => out_data_valid_s,
     in_ready(0)  => out_data_ready_s,
+
     out_valid(0) => sum_qty_valid,
     out_valid(1) => avg_qty_valid,
     out_valid(2) => sum_base_price_valid,
@@ -972,8 +1059,11 @@ begin
   sum_qty_data            <= out_data_s(447 downto 384);
   sum_base_price_data     <= out_data_s(511 downto 448);
   --sum_dsc <= out_data_s(575 downto 512);
-  returnflag_o_chars_data <= out_data_s(583 downto 576);
+  linestatus_o_chars_data <= out_data_s(583 downto 576);
   returnflag_o_chars_data <= out_data_s(591 downto 584);
+
+  len_linestatus_o_valid  <= linestatus_o_chars_valid;
+  len_returnflag_o_valid  <= returnflag_o_chars_valid;
 
   --Number output streams
   l_sum_qty_valid         <= sum_qty_valid;
@@ -985,40 +1075,46 @@ begin
   l_sum_base_price_valid  <= sum_base_price_valid;
   sum_base_price_ready    <= l_sum_base_price_ready;
   l_sum_base_price_dvalid <= '1';
-  l_sum_base_price_last   <= sum_base_price_last;
+  l_sum_base_price_last   <= out_data_last_s;
   l_sum_base_price        <= sum_base_price_data;
+
+  l_sum_disc_price_valid  <= sum_disc_price_valid;
+  sum_disc_price_ready    <= l_sum_disc_price_ready;
+  l_sum_disc_price_dvalid <= '1';
+  l_sum_disc_price_last   <= out_data_last_s;
+  l_sum_disc_price        <= sum_disc_price_data;
 
   l_sum_charge_valid      <= sum_charge_valid;
   sum_charge_ready        <= l_sum_charge_ready;
   l_sum_charge_dvalid     <= '1';
-  l_sum_charge_last       <= sum_charge_last;
+  l_sum_charge_last       <= out_data_last_s;
   l_sum_charge            <= sum_charge_data;
 
   l_avg_qty_valid         <= avg_qty_valid;
   avg_qty_ready           <= l_avg_qty_ready;
   l_avg_qty_dvalid        <= '1';
-  l_avg_qty_last          <= avg_qty_last;
+  l_avg_qty_last          <= out_data_last_s;
   l_avg_qty               <= avg_qty_data;
 
   l_avg_price_valid       <= avg_price_valid;
   avg_price_ready         <= l_avg_price_ready;
   l_avg_price_dvalid      <= '1';
-  l_avg_price_last        <= avg_price_last;
+  l_avg_price_last        <= out_data_last_s;
   l_avg_price             <= avg_price_data;
 
   l_avg_disc_valid        <= avg_disc_valid;
   avg_disc_ready          <= l_avg_disc_ready;
   l_avg_disc_dvalid       <= '1';
-  l_avg_disc_last         <= avg_disc_last;
+  l_avg_disc_last         <= out_data_last_s;
   l_avg_disc              <= avg_disc_data;
 
   l_count_order_valid     <= count_order_valid;
   count_order_ready       <= l_count_order_ready;
   l_count_order_dvalid    <= '1';
-  l_count_order_last      <= count_order_last;
+  l_count_order_last      <= out_data_last_s;
   l_count_order           <= count_order_data;
 
-  len_linestatus_o_length <= (31 downto 16 => '0') & num_entries;
+  len_linestatus_o_length <= std_logic_vector(to_unsigned(1, 32));
   -- Output interface logic
   linestatus_interface :
   StringWriterInterface
@@ -1059,7 +1155,7 @@ begin
   );
 
   -- Output interface logic
-  len_returnflag_o_length <= (31 downto 16 => '0') & num_entries;
+  len_returnflag_o_length <= std_logic_vector(to_unsigned(1, 32));
   returnflag_interface :
   StringWriterInterface
   generic map(
@@ -1101,51 +1197,55 @@ begin
   -- Holds the interfacing logic.
   chars_proc :
   process (rs,
-    l_returnflag_o_chars_ready,
-    l_returnflag_chars_count,
-    l_linestatus_o_chars_ready,
-    l_linestatus_chars_count,
-    l_avg_price_ready,
-    l_avg_qty_ready,
-    l_avg_disc_ready,
-    l_sum_qty_ready,
-    l_sum_base_price_ready,
-    l_sum_disc_price_ready,
-    l_sum_charge_ready,
-    l_count_order_ready,
-    returnflag_o_chars_data,
-    linestatus_o_chars_data,
-    sum_qty_data,
-    sum_disc_price_data,
-    sum_charge_data,
-    avg_qty_data,
-    avg_disc_data,
-    avg_price_data,
-    count_order_data,
-    sum_base_price_data,
+    --l_returnflag_o_chars_ready,
+    --l_returnflag_chars_count,
+    --l_linestatus_o_chars_ready,
+    --l_linestatus_chars_count,
+    --l_avg_price_ready,
+    --l_avg_qty_ready,
+    --l_avg_disc_ready,
+    --l_sum_qty_ready,
+    --l_sum_base_price_ready,
+    --l_sum_disc_price_ready,
+    --l_sum_charge_ready,
+    --l_count_order_ready,
+    --returnflag_o_chars_data,
+    --linestatus_o_chars_data,
+    --sum_qty_data,
+    --sum_disc_price_data,
+    --sum_charge_data,
+    --avg_qty_data,
+    --avg_disc_data,
+    --avg_price_data,
+    --count_order_data,
+    --sum_base_price_data,
     probe_valid,
     num_entries,
+    out_data_last_s,
 
-    cmd_in_valid
+    cmd_in_valid,
+    interface_in_valid
     ) is
-    variable vs                 : sregs_record;
-    variable l_returnflag_o     : chars_out_record;
-    variable l_linestatus_o     : chars_out_record;
-    variable l_sum_qty_o        : prim64_record;
-    variable l_sum_base_price_o : prim64_record;
-    variable l_sum_disc_price_o : prim64_record;
-    variable l_sum_charge_o     : prim64_record;
-    variable l_avg_qty_o        : prim64_record;
-    variable l_avg_price_o      : prim64_record;
-    variable l_avg_disc_o       : prim64_record;
-    variable l_count_order_o    : prim64_record;
+    variable vs : sregs_record;
+    --variable l_returnflag_o     : chars_out_record;
+    --variable l_linestatus_o     : chars_out_record;
+    --variable l_sum_qty_o        : prim64_record;
+    --variable l_sum_base_price_o : prim64_record;
+    --variable l_sum_disc_price_o : prim64_record;
+    --variable l_sum_charge_o     : prim64_record;
+    --variable l_avg_qty_o        : prim64_record;
+    --variable l_avg_price_o      : prim64_record;
+    --variable l_avg_disc_o       : prim64_record;
+    --variable l_count_order_o    : prim64_record;
   begin
 
     vs := rs;
 
-    probe_ready      <= '0';
-    cmd_in_ready     <= '0';
-    enable_interface <= '0';
+    probe_ready        <= '0';
+    cmd_in_ready       <= '0';
+    interface_in_ready <= '0';
+    enable_interface   <= '0';
+    out_data_enable_s  <= '0';
 
     case vs.state is
       when STATE_IDLE =>
@@ -1154,19 +1254,25 @@ begin
         end if;
       when STATE_BUILD =>
         probe_ready <= '1';
-        if probe_valid = '1' then
-          cmd_in_ready <= '1';
+        if probe_valid = '1' then --Build phase is done.
+          vs.state := STATE_CMD;
+        end if;
+      when STATE_CMD => --Wait for cmd stream on writer logic
+        cmd_in_ready <= '1';
+        if interface_in_valid = '1' then
           vs.state := STATE_INTERFACE;
         end if;
       when STATE_INTERFACE =>
         -- There are 10 different Array writers.
-        cmd_in_ready     <= '1';
-        enable_interface <= '1';
+        enable_interface  <= '1';
+        out_data_enable_s <= '1';
         if out_data_last_s = '1' then
+          interface_in_ready <= '1';
           vs.state := STATE_DONE;
         end if;
 
       when STATE_DONE =>
+        interface_in_ready <= '1';
         vs.state := STATE_IDLE;
     end case;
 

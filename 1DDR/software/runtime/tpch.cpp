@@ -337,19 +337,25 @@ int main(int argc, char **argv)
     return -1;
   }
   // Take the data back.
-  const int device_buffer_offset = 10;
+  const int device_buffer_offset = 9;
   platform->CopyDeviceToHost(context->device_buffer(device_buffer_offset).device_address, res_l_returnflag_off, sizeof(int32_t) * (num_strings + 1));
   platform->CopyDeviceToHost(context->device_buffer(device_buffer_offset + 1).device_address, res_l_returnflag_val, sizeof(int32_t) * num_chars);
   platform->CopyDeviceToHost(context->device_buffer(device_buffer_offset + 2).device_address, res_l_linestatus_off, sizeof(int32_t) * (num_strings + 1));
   platform->CopyDeviceToHost(context->device_buffer(device_buffer_offset + 3).device_address, res_l_linestatus_val, sizeof(int32_t) * num_chars);
-  platform->CopyDeviceToHost(context->device_buffer(device_buffer_offset + 4).device_address, res_sum_qty_data, sizeof(int32_t) * num_rows);
+  platform->CopyDeviceToHost(context->device_buffer(device_buffer_offset + 4).device_address, res_sum_qty_data, sizeof(int64_t) * num_rows);
   platform->CopyDeviceToHost(context->device_buffer(device_buffer_offset + 5).device_address, res_sum_base_price_data, sizeof(int32_t) * num_rows);
-  platform->CopyDeviceToHost(context->device_buffer(device_buffer_offset + 6).device_address, res_sum_disc_data, sizeof(int32_t) * num_rows);
+  platform->CopyDeviceToHost(context->device_buffer(device_buffer_offset + 6).device_address, res_sum_disc_data, sizeof(int64_t) * num_rows);
   platform->CopyDeviceToHost(context->device_buffer(device_buffer_offset + 7).device_address, res_sum_charge_data, sizeof(int32_t) * num_rows);
-  platform->CopyDeviceToHost(context->device_buffer(device_buffer_offset + 8).device_address, res_avg_qty_data, sizeof(int32_t) * num_rows);
-  platform->CopyDeviceToHost(context->device_buffer(device_buffer_offset + 9).device_address, res_avg_price_data, sizeof(int32_t) * num_rows);
-  platform->CopyDeviceToHost(context->device_buffer(device_buffer_offset + 10).device_address, res_avg_disc_data, sizeof(int32_t) * num_rows);
-  platform->CopyDeviceToHost(context->device_buffer(device_buffer_offset + 11).device_address, res_count_order_data, sizeof(int32_t) * num_rows);
+  platform->CopyDeviceToHost(context->device_buffer(device_buffer_offset + 8).device_address, res_avg_qty_data, sizeof(int64_t) * num_rows);
+  platform->CopyDeviceToHost(context->device_buffer(device_buffer_offset + 9).device_address, res_avg_price_data, sizeof(int64_t) * num_rows);
+  platform->CopyDeviceToHost(context->device_buffer(device_buffer_offset + 10).device_address, res_avg_disc_data, sizeof(int64_t) * num_rows);
+  platform->CopyDeviceToHost(context->device_buffer(device_buffer_offset + 11).device_address, res_count_order_data, sizeof(int64_t) * num_rows);
+
+  std::cout<< "Copy operation is done.\n";
+  std::cout<<"l_returnflag, l_linestatus, sum_qty, sum_base, sum_disc, sum_charge, avg_qty, avg_price, avg_disc, count_order\n"
+  for(int i = 0; i< num_rows; ++i)
+  {
+  }
 
   return 0;
 }

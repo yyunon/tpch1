@@ -1,0 +1,5 @@
+.hdl_checker/
+work/
+xsim.dir/
+*.log
+*.pb

@@ -71,9 +71,6 @@ architecture Behavioral of StringWriterInterface is
     cmd : cmd_out_record;
     len : len_record;
   end record;
-  --State registers
-  signal r : regs_record;
-  signal d : regs_record;
 
   type utf_record is record
     ready  : std_logic;
@@ -99,7 +96,7 @@ architecture Behavioral of StringWriterInterface is
   end record;
   type sregs_record is record
     state : state_type;
-    len   : unsigned(LEN_WIDTH - 1 downto 0);
+    len   : unsigned(31 downto 0);
   end record;
   type buf_out_record is record
     ready : std_logic;
@@ -120,20 +117,14 @@ architecture Behavioral of StringWriterInterface is
   signal ds : sregs_record;
 
 begin
-  -- For now only connect the l_returnflag and l_linestatus streams to their
-  -- corresponding output.
-  output_valid  <= input_valid;
-  input_ready   <= output_ready;
-  output_dvalid <= input_dvalid;
-  output_last   <= input_last;
-  output_length <= input_length;
-  output_count  <= input_count;
 
+  --length stream
   input_ready   <= output_ready;
-  output_dvalid <= input_dvalid;
-  output_last   <= input_last;
-  output_length <= input_length;
-  output_count  <= input_count;
+  output_valid  <= '1';
+  output_dvalid <= '1';
+  output_last   <= input_chars_last;
+  output_length <= std_logic_vector(to_unsigned(1, 32));
+  output_count  <= std_logic_vector(to_unsigned(1, 1));
 
   writer_process :
   process (rs,
@@ -149,6 +140,7 @@ begin
     case vs.state is
       when STATE_IDLE =>
         if enable = '1' then
+          vs.len   := unsigned(input_length);
           vs.state := STATE_PASS;
         end if;
       when STATE_PASS =>
@@ -166,7 +158,12 @@ begin
           vs.len := rs.len - output.utf.count;
           if vs.len = 0 then
             output.utf.last := '1';
-            vs.state        := STATE_IDLE;
+            if enable = '1' then
+              vs.state := STATE_PASS;
+              vs.len   := unsigned(input_length);
+            else
+              vs.state := STATE_IDLE;
+            end if;
           end if;
         end if;
 
@@ -189,6 +186,7 @@ begin
       -- Reset
       if reset = '1' then
         rs.state <= STATE_IDLE;
+        rs.len   <= to_unsigned(1, LEN_WIDTH);
       end if;
     end if;
   end process;
