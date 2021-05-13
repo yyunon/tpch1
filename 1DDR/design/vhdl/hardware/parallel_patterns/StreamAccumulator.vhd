@@ -190,6 +190,8 @@ begin
   hash_in_data  <= data & count;
   key_in_data_s <= bit_address_out when hash_out_ready_s = '1' and hash_out_enable = '1' else
     key_in_data;
+  --key_in_data_s <= key_in_data when in_valid = '1' and hash_out_enable = '1' else
+  --  bit_address_out;
 
   reg_proc :
   process (clk) is
@@ -199,16 +201,17 @@ begin
     if rising_edge(clk) then
 
       out_valid         <= initialized;
-      out_valid_s       <= '0';
+      --out_valid_s       <= '0';
       hash_operation    <= '0';
       --Output logic, will stream the hash and bit table 
       hash_out_valid_s0 <= '0';
       hash_last_s       <= '0';
       bit_address_valid <= '0';
+      --key_in_data_s     <= (others => '0'); -- to input key for reading data from hash table
 
       if in_valid = '1' and in_dvalid = '1' then
-        hash_operation <= '1'; --Update hash table
-        out_valid_s    <= '1';
+        hash_operation <= '1';                               --Update hash table
+        --out_valid_s    <= '1';
         --key_in_data_s  <= key_in_data;
         count_reg := unsigned(hash_out_data_s(63 downto 0)); -- Always least significant bits hold the count.
         count       <= std_logic_vector(count_reg + 1);

@@ -128,7 +128,7 @@ begin
 
     acc_init_value => (others => '0'),
 
-    key_in_data    => key_in_data_s,
+    key_in_data    => key_in_data,
     key_in_dvalid  => key_in_dvalid,
 
     acc_out_valid  => acc_out_valid,
@@ -180,7 +180,7 @@ begin
   dly : StreamSliceArray
   generic map(
     DATA_WIDTH => NUM_KEYS * 8 + NUM_SUMS * 64 + 1,
-    DEPTH      => 10
+    DEPTH      => 2
   )
   port map(
     clk       => clk,

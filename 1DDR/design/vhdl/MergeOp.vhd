@@ -188,7 +188,7 @@ begin
   if OPERATOR = "DISCOUNT" generate
     sync_out_buf : StreamBuffer
     generic map(
-      MIN_DEPTH  => 2,
+      MIN_DEPTH  => 4,
       DATA_WIDTH => NUM_INPUTS * DATA_WIDTH + 2
     )
     port map(
@@ -228,7 +228,7 @@ begin
   if OPERATOR = "CHARGE" generate
     sync_out_buf : StreamBuffer
     generic map(
-      MIN_DEPTH  => 2,
+      MIN_DEPTH  => 4,
       DATA_WIDTH => NUM_INPUTS * DATA_WIDTH + 2
     )
     port map(

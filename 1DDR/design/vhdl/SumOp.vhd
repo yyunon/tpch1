@@ -74,6 +74,7 @@ architecture Behavioral of SumOp is
   signal temp_buffer : sfixed(FIXED_LEFT_INDEX downto FIXED_RIGHT_INDEX);
   signal ops_valid   : std_logic;
   signal ops_ready   : std_logic;
+  signal ops_ready_s : std_logic;
 
   --OP1 Input stream.
   signal op_valid    : std_logic;
@@ -126,9 +127,19 @@ begin
       result <= std_logic_vector(signed(op1_data) + signed(op2_data));
     end process;
   end generate;
+  reg_proc :
+  process (clk) is
+  begin
+    if rising_edge(clk) then
+      ops_ready_s <= out_ready;
+      if reset = '1' then
+        ops_ready_s <= '0';
+      end if;
+    end if;
+  end process;
 
   out_data   <= std_logic_vector(result);
   out_valid  <= op1_valid and op2_valid;
   out_dvalid <= op1_dvalid and op2_dvalid;
-  ops_ready  <= out_ready;
+  ops_ready  <= ops_ready_s;
 end Behavioral;
