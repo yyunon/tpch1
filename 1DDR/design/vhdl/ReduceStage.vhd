@@ -180,7 +180,7 @@ begin
   dly : StreamSliceArray
   generic map(
     DATA_WIDTH => NUM_KEYS * 8 + NUM_SUMS * 64 + 1,
-    DEPTH      => 20
+    DEPTH      => 10
   )
   port map(
     clk       => clk,

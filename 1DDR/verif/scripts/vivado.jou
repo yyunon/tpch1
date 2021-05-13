@@ -210,3 +210,11 @@ close_sim
 close_project
 source ./open_waves.tcl
 open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+close_sim
+close_project
+source ./open_waves.tcl
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+close_sim
+close_project
+source ./open_waves.tcl
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg

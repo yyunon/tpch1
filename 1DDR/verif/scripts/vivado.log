@@ -594,3 +594,25 @@ open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tp
 open_wave_config: Time (s): cpu = 00:00:02 ; elapsed = 00:00:34 . Memory (MB): peak = 10111.027 ; gain = 3.000 ; free physical = 4501 ; free virtual = 13396
 open_wave_database: Time (s): cpu = 00:00:02 ; elapsed = 00:00:35 . Memory (MB): peak = 10111.027 ; gain = 3.000 ; free physical = 4501 ; free virtual = 13396
 # set_property display_limit 5000000 [current_wave_config]
+close_sim
+INFO: [Simtcl 6-16] Simulation closed
+close_project
+source ./open_waves.tcl
+# current_fileset
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/mnt/9a3ce8e2-5558-402f-b9b0-4253be72229d/Xilinx/Vivado/Vivado/2019.2/data/ip'.
+# open_wave_database ../sim/vivado/tpch_c/tb.wdb
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+# set_property display_limit 5000000 [current_wave_config]
+close_sim
+INFO: [Simtcl 6-16] Simulation closed
+close_project
+source ./open_waves.tcl
+# current_fileset
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/mnt/9a3ce8e2-5558-402f-b9b0-4253be72229d/Xilinx/Vivado/Vivado/2019.2/data/ip'.
+# open_wave_database ../sim/vivado/tpch_c/tb.wdb
+open_wave_config /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/verif/scripts/tb.wcfg
+# set_property display_limit 5000000 [current_wave_config]
