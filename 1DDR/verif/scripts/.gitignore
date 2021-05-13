@@ -4,3 +4,5 @@ work/
 xvhdl*
 xsim.dir/
 .Xil/
+*.jou
+*.log
