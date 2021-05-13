@@ -89,9 +89,16 @@ architecture Behavioral of StreamAccumulator is
 
   signal count               : std_logic_vector(DATA_WIDTH - 1 downto 0);
 
+  signal hash_out_valid_s1   : std_logic;
+  signal hash_out_valid_s2   : std_logic;
+  signal hash_out_valid_s0   : std_logic;
+
   signal out_valid_s1        : std_logic;
   signal out_valid_s2        : std_logic;
   signal out_valid_s         : std_logic;
+
+  signal out_ready_s         : std_logic;
+  signal in_ready_s          : std_logic;
   -- hash table vars
   signal hash_out_ready_s1   : std_logic;
   signal hash_out_ready_s2   : std_logic;
@@ -160,10 +167,11 @@ begin
 
   HashTable_inst : HashTable
   generic map(
-    HASH_FUNCTION => "DIRECT",
-    NUM_KEYS      => NUM_KEYS,
-    DATA_WIDTH    => DATA_WIDTH * (NUM_LANES + 1), -- Use count too
-    ADDRESS_WIDTH => 8
+    HASH_FUNCTION       => "DIRECT",
+    NUM_KEYS            => NUM_KEYS,
+    DATA_WIDTH          => DATA_WIDTH * (NUM_LANES + 1), -- Use count too
+    GROUP_ADDRESS_WIDTH => 4,                            --This is for the size of key list
+    ADDRESS_WIDTH       => 8
   )
   port map(
     clk                    => clk,
@@ -178,10 +186,10 @@ begin
     stream_key_out_data    => bit_address_out
   );
 
+  -- HashTable input logic
   hash_in_data  <= data & count;
-  key_in_data_s <= key_in_data when in_valid = '1' and in_dvalid = '1' else
-    bit_address_out
-    when hash_out_ready_s = '1' and hash_out_enable = '1';
+  key_in_data_s <= bit_address_out when hash_out_ready_s = '1' and hash_out_enable = '1' else
+    key_in_data;
 
   reg_proc :
   process (clk) is
@@ -191,15 +199,16 @@ begin
     if rising_edge(clk) then
 
       out_valid         <= initialized;
-      hash_operation    <= '0';
-      --key_in_data_s  <= (others => '0');
-      --Output logic, will stream the hash and bit table 
       out_valid_s       <= '0';
+      hash_operation    <= '0';
+      --Output logic, will stream the hash and bit table 
+      hash_out_valid_s0 <= '0';
       hash_last_s       <= '0';
       bit_address_valid <= '0';
 
       if in_valid = '1' and in_dvalid = '1' then
-        hash_operation <= '1';                               --Update hash table
+        hash_operation <= '1'; --Update hash table
+        out_valid_s    <= '1';
         --key_in_data_s  <= key_in_data;
         count_reg := unsigned(hash_out_data_s(63 downto 0)); -- Always least significant bits hold the count.
         count       <= std_logic_vector(count_reg + 1);
@@ -207,12 +216,13 @@ begin
         initialized <= '1';
         if in_last = '1' then
           initialized <= '0';
+          --out_valid_s <= '0';
           data        <= (others => '0');
         end if;
       elsif hash_out_ready_s = '1' and hash_out_enable = '1' then
         if count_reg_out < unsigned(num_entries) + 1 then
           -- It takes 1 clk cycles to read the hash key and 1 clk cycles to read data.
-          out_valid_s       <= '1';
+          hash_out_valid_s0 <= '1';
 
           bit_address_valid <= '1';
           bit_address_in    <= std_logic_vector(count_reg_out); -- Read the key list
@@ -229,6 +239,7 @@ begin
 
       if reset = '1' then
         initialized <= '1';
+        --out_valid_s <= '1';
         count_reg     := to_unsigned(0, 64);
         count_reg_out := to_unsigned(0, 16);
         data              <= (others => '0');
@@ -236,15 +247,22 @@ begin
         hash_out_ready_s2 <= '0';
       end if;
 
+      -- Aggreagate out registers--------------
+      --out_valid           <= out_valid_s; -- Table read op. takes 1 cyc. Therefore, delay the valid signal. 
+      --out_ready_s         <= out_ready;
+      -------------------------------------------
+
+      -- Hash out registers---------------------
       --key_out_data_s2     <= key_out_data_s;
       hash_key_out_data_s <= key_out_data_s;
 
-      out_valid_s1        <= out_valid_s;
-      out_valid_s2        <= out_valid_s1;
-      hash_out_valid_s    <= out_valid_s2;
+      hash_out_valid_s1   <= hash_out_valid_s0;
+      hash_out_valid_s2   <= hash_out_valid_s1;
+      hash_out_valid_s    <= hash_out_valid_s2;
 
       --hash_last_s1        <= hash_last_s2;
       --hash_last_s         <= hash_last_s1;
+      -------------------------------------------
     end if;
 
   end process;

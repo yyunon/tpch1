@@ -111,6 +111,7 @@ architecture Behavioral of MergeOp is
   signal ops_last              : std_logic := '0';
   signal ops_ready             : std_logic;
   signal ops_data              : std_logic_vector(DATA_WIDTH - 1 downto 0);
+  signal result                : std_logic_vector(DATA_WIDTH - 1 downto 0);
 
   signal sync_streams_in_valid : std_logic_vector(NUM_INPUTS - 1 downto 0);
   signal sync_streams_in_ready : std_logic_vector(NUM_INPUTS - 1 downto 0);
@@ -175,19 +176,16 @@ begin
     out_valid(0) => ops_valid,
     out_ready(0) => ops_ready
   );
+  ops_ready <= not ops_valid or out_s_ready;
 
   discount_fixed_process :
   if OPERATOR = "DISCOUNT" generate
-    decode_inputs :
-    process (buf_data, buf_dvalid, buf_last, buf_data)
-    begin
-      op1_data   <= buf_data(0);
-      op1_dvalid <= buf_dvalid(0);
-      op1_last   <= buf_last(0);
-      op2_data   <= buf_data(1);
-      op2_dvalid <= buf_dvalid(1);
-      op2_last   <= buf_last(1);
-    end process;
+    op1_data   <= buf_data(0);
+    op1_dvalid <= buf_dvalid(0);
+    op1_last   <= buf_last(0);
+    op2_data   <= buf_data(1);
+    op2_dvalid <= buf_dvalid(1);
+    op2_last   <= buf_last(1);
     mult_process :
     process (op1_data, op2_data, ops_valid, out_s_ready) is
       variable temp_buffer_1 : sfixed(fixed_left_index downto fixed_right_index);
@@ -195,38 +193,27 @@ begin
       variable temp_buffer_3 : sfixed(fixed_left_index downto fixed_right_index);
       variable temp_res      : sfixed(2 * fixed_left_index + 1 downto 2 * fixed_right_index);
     begin
-      out_s_valid <= '0';
-      ops_ready   <= '0';
-      ops_dvalid  <= '0';
-      --ops_last_s <= '0';
-      if ops_valid = '1' and out_s_ready = '1' then
-        out_s_valid <= '1';
-        ops_ready   <= '1';
-        temp_buffer_1 := to_sfixed(op1_data, temp_buffer_1'high, temp_buffer_1'low);
-        temp_buffer_2 := to_sfixed(op2_data, temp_buffer_2'high, temp_buffer_2'low);
-        temp_res      := temp_buffer_1 * temp_buffer_2;
-        ops_data <= to_slv(resize(arg => temp_res, left_index => fixed_left_index, right_index => fixed_right_index, round_style => fixed_round_style, overflow_style => fixed_overflow_style));
-      end if;
+      temp_buffer_1 := to_sfixed(op1_data, temp_buffer_1'high, temp_buffer_1'low);
+      temp_buffer_2 := to_sfixed(op2_data, temp_buffer_2'high, temp_buffer_2'low);
+      temp_res      := resize(arg => (to_sfixed(1, 64) - temp_buffer_1), left_index => fixed_left_index, right_index => fixed_right_index, round_style => fixed_round_style, overflow_style => fixed_overflow_style) * temp_buffer_2;
+      ops_data <= to_slv(resize(arg => temp_res, left_index => fixed_left_index, right_index => fixed_right_index, round_style => fixed_round_style, overflow_style => fixed_overflow_style));
     end process;
-    ops_dvalid <= op1_dvalid and op2_dvalid;
-    ops_last   <= op1_last and op2_last;
+    ops_dvalid  <= op1_dvalid and op2_dvalid;
+    ops_last    <= op1_last and op2_last;
+    out_s_valid <= ops_valid;
   end generate;
 
   charge_fixed_process :
   if OPERATOR = "CHARGE" generate
-    decode_inputs :
-    process (buf_data, buf_dvalid, buf_last, buf_data)
-    begin
-      op1_data   <= buf_data(0);
-      op1_dvalid <= buf_dvalid(0);
-      op1_last   <= buf_last(0);
-      op2_data   <= buf_data(1);
-      op2_dvalid <= buf_dvalid(1);
-      op2_last   <= buf_last(1);
-      op3_data   <= buf_data(2);
-      op3_dvalid <= buf_dvalid(2);
-      op3_last   <= buf_last(2);
-    end process;
+    op1_data   <= buf_data(0);
+    op1_dvalid <= buf_dvalid(0);
+    op1_last   <= buf_last(0);
+    op2_data   <= buf_data(1);
+    op2_dvalid <= buf_dvalid(1);
+    op2_last   <= buf_last(1);
+    op3_data   <= buf_data(2);
+    op3_dvalid <= buf_dvalid(2);
+    op3_last   <= buf_last(2);
     mult_process :
     process (op1_data, op2_data, op3_data, ops_valid, out_s_ready) is
       variable temp_buffer_1 : sfixed(fixed_left_index downto fixed_right_index);
@@ -236,24 +223,18 @@ begin
       variable temp_res      : sfixed(2 * fixed_left_index + 1 downto 2 * fixed_right_index);
       variable temp_res_2    : sfixed(2 * fixed_left_index + 1 downto 2 * fixed_right_index);
     begin
-      out_s_valid <= '0';
-      ops_ready   <= '0';
-      ops_dvalid  <= '0';
-      --ops_last_s <= '0';
-      if ops_valid = '1' and out_s_ready = '1' then
-        out_s_valid <= '1';
-        ops_ready   <= '1';
-        temp_buffer_1 := to_sfixed(op1_data, temp_buffer_1'high, temp_buffer_1'low);
-        temp_buffer_2 := to_sfixed(op2_data, temp_buffer_2'high, temp_buffer_2'low);
-        temp_buffer_3 := to_sfixed(op3_data, temp_buffer_3'high, temp_buffer_3'low);
-        temp_res      := temp_buffer_1 * temp_buffer_2;
-        temp_buffer_4 := resize(arg => temp_res, left_index => fixed_left_index, right_index => fixed_right_index, round_style => fixed_round_style, overflow_style => fixed_overflow_style);
-        temp_res_2    := temp_buffer_4 * temp_buffer_3;
-        ops_data <= to_slv(resize(arg => temp_res_2, left_index => fixed_left_index, right_index => fixed_right_index, round_style => fixed_round_style, overflow_style => fixed_overflow_style));
-      end if;
+      temp_buffer_1 := to_sfixed(op1_data, temp_buffer_1'high, temp_buffer_1'low);
+      temp_buffer_2 := to_sfixed(op2_data, temp_buffer_2'high, temp_buffer_2'low);
+      temp_buffer_3 := to_sfixed(op3_data, temp_buffer_3'high, temp_buffer_3'low);
+      temp_res      := resize(arg => (to_sfixed(1, 64) + temp_buffer_1), left_index => fixed_left_index, right_index => fixed_right_index, round_style => fixed_round_style, overflow_style => fixed_overflow_style) * resize(arg => (to_sfixed(1, 64) - temp_buffer_2), left_index => fixed_left_index, right_index => fixed_right_index, round_style => fixed_round_style, overflow_style => fixed_overflow_style);
+      temp_buffer_4 := resize(arg => temp_res, left_index => fixed_left_index, right_index => fixed_right_index, round_style => fixed_round_style, overflow_style => fixed_overflow_style);
+      temp_res_2    := temp_buffer_4 * temp_buffer_3;
+      ops_data <= to_slv(resize(arg => temp_res_2, left_index => fixed_left_index, right_index => fixed_right_index, round_style => fixed_round_style, overflow_style => fixed_overflow_style));
     end process;
-    ops_dvalid <= op1_dvalid and op2_dvalid and op3_dvalid;
-    ops_last   <= op1_last and op2_last and op3_last;
+    ops_dvalid  <= op1_dvalid and op2_dvalid and op3_dvalid;
+    ops_last    <= op1_last and op2_last and op3_last;
+    out_s_valid <= ops_valid;
+
   end generate;
 
   revenue_fixed_process :
@@ -265,12 +246,12 @@ begin
       variable temp_res      : sfixed(2 * FIXED_LEFT_INDEX + 1 downto 2 * FIXED_RIGHT_INDEX);
     begin
       out_s_valid <= '0';
-      ops_ready   <= '0';
+      --ops_ready   <= '0';
       ops_dvalid  <= '0';
       --ops_last_s <= '0';
       if ops_valid = '1' and out_s_ready = '1' then
         out_s_valid <= '1';
-        ops_ready   <= '1';
+        --ops_ready   <= '1';
         temp_buffer_1 := to_sfixed(op1_data, temp_buffer_1'high, temp_buffer_1'low);
         temp_buffer_2 := to_sfixed(op2_data, temp_buffer_2'high, temp_buffer_2'low);
         temp_res      := temp_buffer_1 * temp_buffer_2;

@@ -344,6 +344,7 @@ architecture Implementation of PriceSummary is
   type state_t is (STATE_IDLE,
     STATE_COMMAND,
     STATE_BUILD,
+    STATE_BUILD_UNLOCK,
     STATE_INTERFACE_CMD,
     STATE_INTERFACE,
     STATE_UNLOCK,
@@ -751,58 +752,74 @@ begin
 
         pu_cmd_in_valid <= '1';
         if pu_cmd_in_ready = '1' then
+          state_next <= STATE_BUILD_UNLOCK;
+        end if;
+
+      when STATE_BUILD_UNLOCK => -- We unlock the build stream
+        done                      <= '0';
+        busy                      <= '1';
+        idle                      <= '0';
+        -- Ready to handshake the unlock stream:
+        l_quantity_unl_ready      <= '1';
+        l_discount_unl_ready      <= '1';
+        l_shipdate_unl_ready      <= '1';
+        l_extendedprice_unl_ready <= '1';
+        l_tax_unl_ready           <= '1';
+        l_linestatus_unl_ready    <= '1';
+        l_returnflag_unl_ready    <= '1';
+        if l_discount_unl_valid = '1' and l_quantity_unl_valid = '1' and l_shipdate_unl_valid = '1' and l_extendedprice_unl_valid = '1' and l_linestatus_unl_valid = '1' and l_tax_unl_valid = '1' and l_returnflag_unl_valid = '1' then
           state_next <= STATE_INTERFACE_CMD;
         end if;
 
       when STATE_INTERFACE_CMD =>
         l_returnflag_o.cmd.valid      := '1';
-        l_returnflag_o.cmd.firstIdx   := output_first_idx;
-        l_returnflag_o.cmd.lastIdx    := output_last_idx;
+        l_returnflag_o.cmd.firstIdx   := l_o_firstidx;
+        l_returnflag_o.cmd.lastIdx    := l_o_lastidx;
         l_returnflag_o.cmd.tag        := (others => '0');
 
         l_linestatus_o.cmd.valid      := '1';
-        l_linestatus_o.cmd.firstIdx   := output_first_idx;
-        l_linestatus_o.cmd.lastIdx    := output_last_idx;
+        l_linestatus_o.cmd.firstIdx   := l_o_firstidx;
+        l_linestatus_o.cmd.lastIdx    := l_o_lastidx;
         l_linestatus_o.cmd.tag        := (others => '0');
 
         l_sum_qty.cmd.valid           := '1';
-        l_sum_qty.cmd.firstIdx        := output_first_idx;
-        l_sum_qty.cmd.lastIdx         := output_last_idx;
+        l_sum_qty.cmd.firstIdx        := l_o_firstidx;
+        l_sum_qty.cmd.lastIdx         := l_o_lastidx;
         l_sum_qty.cmd.tag             := (others => '0');
 
         l_sum_base.cmd.valid          := '1';
-        l_sum_base.cmd.firstIdx       := output_first_idx;
-        l_sum_base.cmd.lastIdx        := output_last_idx;
+        l_sum_base.cmd.firstIdx       := l_o_firstidx;
+        l_sum_base.cmd.lastIdx        := l_o_lastidx;
         l_sum_base.cmd.tag            := (others => '0');
 
         l_sum_disc_price.cmd.valid    := '1';
-        l_sum_disc_price.cmd.firstIdx := output_first_idx;
-        l_sum_disc_price.cmd.lastIdx  := output_last_idx;
+        l_sum_disc_price.cmd.firstIdx := l_o_firstidx;
+        l_sum_disc_price.cmd.lastIdx  := l_o_lastidx;
         l_sum_disc_price.cmd.tag      := (others => '0');
 
         l_sum_charge.cmd.valid        := '1';
-        l_sum_charge.cmd.firstIdx     := output_first_idx;
-        l_sum_charge.cmd.lastIdx      := output_last_idx;
+        l_sum_charge.cmd.firstIdx     := l_o_firstidx;
+        l_sum_charge.cmd.lastIdx      := l_o_lastidx;
         l_sum_charge.cmd.tag          := (others => '0');
 
         l_avg_qty.cmd.valid           := '1';
-        l_avg_qty.cmd.firstIdx        := output_first_idx;
-        l_avg_qty.cmd.lastIdx         := output_last_idx;
+        l_avg_qty.cmd.firstIdx        := l_o_firstidx;
+        l_avg_qty.cmd.lastIdx         := l_o_lastidx;
         l_avg_qty.cmd.tag             := (others => '0');
 
         l_avg_price.cmd.valid         := '1';
-        l_avg_price.cmd.firstIdx      := output_first_idx;
-        l_avg_price.cmd.lastIdx       := output_last_idx;
+        l_avg_price.cmd.firstIdx      := l_o_firstidx;
+        l_avg_price.cmd.lastIdx       := l_o_lastidx;
         l_avg_price.cmd.tag           := (others => '0');
 
         l_avg_disc.cmd.valid          := '1';
-        l_avg_disc.cmd.firstIdx       := output_first_idx;
-        l_avg_disc.cmd.lastIdx        := output_last_idx;
+        l_avg_disc.cmd.firstIdx       := l_o_firstidx;
+        l_avg_disc.cmd.lastIdx        := l_o_lastidx;
         l_avg_disc.cmd.tag            := (others => '0');
 
         l_count_order.cmd.valid       := '1';
-        l_count_order.cmd.firstIdx    := output_first_idx;
-        l_count_order.cmd.lastIdx     := output_last_idx;
+        l_count_order.cmd.firstIdx    := l_o_firstidx;
+        l_count_order.cmd.lastIdx     := l_o_lastidx;
         l_count_order.cmd.tag         := (others => '0');
 
         if l_count_order_cmd_ready = '1' and l_avg_disc_cmd_ready = '1' and l_avg_price_cmd_ready = '1' and l_avg_qty_cmd_ready = '1' and l_sum_charge_cmd_ready = '1' and l_sum_disc_price_cmd_ready = '1' and l_sum_base_price_cmd_ready = '1' and l_linestatus_o_cmd_ready = '1' and l_sum_qty_cmd_ready = '1' and l_returnflag_o_cmd_ready = '1' then
@@ -817,18 +834,10 @@ begin
         -- Unlock: the generated interface delivered all items in the stream.
         -- The unlock stream is supplied to make sure all bus transfers of the
         -- corresponding command are completed.
-        done                      <= '1';
-        busy                      <= '0';
-        idle                      <= '1';
+        done <= '1';
+        busy <= '0';
+        idle <= '1';
 
-        -- Ready to handshake the unlock stream:
-        l_quantity_unl_ready      <= '1';
-        l_discount_unl_ready      <= '1';
-        l_shipdate_unl_ready      <= '1';
-        l_extendedprice_unl_ready <= '1';
-        l_tax_unl_ready           <= '1';
-        l_linestatus_unl_ready    <= '1';
-        l_returnflag_unl_ready    <= '1';
         -- Unlock the output stream too
         l_returnflag_o.unl.ready   := '1';
         l_linestatus_o.unl.ready   := '1';
@@ -837,11 +846,12 @@ begin
         l_sum_disc_price.unl.ready := '1';
         l_sum_charge.unl.ready     := '1';
         l_avg_qty.unl.ready        := '1';
+        l_avg_disc.unl.ready       := '1';
         l_avg_price.unl.ready      := '1';
         l_count_order.unl.ready    := '1';
 
         -- Handshake when it is valid and go to the done state.
-        if l_discount_unl_valid = '1' and l_quantity_unl_valid = '1' and l_shipdate_unl_valid = '1' and l_extendedprice_unl_valid = '1' and l_linestatus_unl_valid = '1' and l_tax_unl_valid = '1' and l_returnflag_unl_valid = '1' and l_count_order_unl_valid = '1' and l_avg_disc_unl_valid = '1' and l_avg_price_unl_valid = '1' and l_avg_qty_unl_valid = '1' and l_sum_charge_unl_valid = '1' and l_sum_disc_price_unl_valid = '1' and l_sum_base_price_unl_valid = '1' and l_linestatus_o_unl_valid = '1' and l_sum_qty_unl_valid = '1' and l_returnflag_o_unl_valid = '1' then
+        if l_count_order_unl_valid = '1' and l_avg_disc_unl_valid = '1' and l_avg_price_unl_valid = '1' and l_avg_qty_unl_valid = '1' and l_sum_charge_unl_valid = '1' and l_sum_disc_price_unl_valid = '1' and l_sum_base_price_unl_valid = '1' and l_sum_qty_unl_valid = '1' then
           state_next <= STATE_DONE;
         end if;
 
@@ -850,7 +860,9 @@ begin
         done       <= '1';
         busy       <= '0';
         idle       <= '1';
-        state_next <= STATE_IDLE;
+        if reset = '1' then
+          state_next <= STATE_IDLE;
+        end if;
         -- Wait for the reset signal (typically controlled by the host-side 
         -- software), so we can go to idle again. This reset is not to be
         -- confused with the system-wide reset that travels into the kernel

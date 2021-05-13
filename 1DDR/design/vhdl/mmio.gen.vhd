@@ -2920,7 +2920,7 @@ begin
 
             -- Regular access logic. Write mode: masked.
 
-            f_l_firstidx_r((0)).d := (f_l_firstidx_r((0)).d and not tmp_strb32)
+            f_l_o_firstidx_r((0)).d := (f_l_o_firstidx_r((0)).d and not tmp_strb32)
             or tmp_data32;
             w_ack := true;
 
@@ -2945,7 +2945,7 @@ begin
 
             -- Regular access logic. Write mode: masked.
 
-            f_l_lastidx_r((0)).d := (f_l_lastidx_r((0)).d and not tmp_strb32)
+            f_l_o_lastidx_r((0)).d := (f_l_o_lastidx_r((0)).d and not tmp_strb32)
             or tmp_data32;
             w_ack := true;
 

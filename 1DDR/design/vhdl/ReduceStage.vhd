@@ -59,6 +59,7 @@ architecture Behavioral of ReduceStage is
   signal acc_out_data                  : std_logic_vector(NUM_SUMS * DATA_WIDTH - 1 downto 0);
 
   -- Accumulator input stream.
+  signal key_in_data_s                 : std_logic_vector(NUM_KEYS * 8 - 1 downto 0);
   signal acc_in_valid                  : std_logic;
   signal acc_in_ready                  : std_logic;
   signal acc_in_data                   : std_logic_vector(NUM_SUMS * DATA_WIDTH - 1 downto 0);
@@ -71,14 +72,15 @@ architecture Behavioral of ReduceStage is
   -- Operator input stream.
   signal op_s_in_valid                 : std_logic;
   signal op_s_in_ready                 : std_logic;
+  signal op_s_in_data                  : std_logic_vector(NUM_SUMS * DATA_WIDTH + NUM_KEYS * 8 downto 0);
   -- Compensate counter -> sequencer path if the operation is low-latency.
   signal dly_in_valid                  : std_logic;
   signal dly_in_ready                  : std_logic;
-  signal dly_in_data                   : std_logic_vector(NUM_SUMS * DATA_WIDTH downto 0);
+  signal dly_in_data                   : std_logic_vector(NUM_SUMS * DATA_WIDTH + NUM_KEYS * 8 downto 0);
 
   signal dly_out_valid                 : std_logic;
   signal dly_out_ready                 : std_logic;
-  signal dly_out_data                  : std_logic_vector(NUM_SUMS * DATA_WIDTH downto 0);
+  signal dly_out_data                  : std_logic_vector(NUM_SUMS * DATA_WIDTH + NUM_KEYS * 8 downto 0);
 
   -- hash controller output slice
   signal hash_out_valid                : std_logic := '0';
@@ -126,7 +128,7 @@ begin
 
     acc_init_value => (others => '0'),
 
-    key_in_data    => key_in_data,
+    key_in_data    => key_in_data_s,
     key_in_dvalid  => key_in_dvalid,
 
     acc_out_valid  => acc_out_valid,
@@ -173,12 +175,12 @@ begin
 
   );
 
-  dly_in_data <= in_dvalid & in_data;
+  dly_in_data <= in_dvalid & in_data & key_in_data;
 
   dly : StreamSliceArray
   generic map(
-    DATA_WIDTH => NUM_SUMS * 64 + 1,
-    DEPTH      => 10
+    DATA_WIDTH => NUM_KEYS * 8 + NUM_SUMS * 64 + 1,
+    DEPTH      => 20
   )
   port map(
     clk       => clk,
@@ -190,9 +192,10 @@ begin
 
     out_valid => op_s_in_valid,
     out_ready => op_s_in_ready,
-    out_data  => dly_out_data
+    out_data  => op_s_in_data
 
   );
+  key_in_data_s <= op_s_in_data(NUM_KEYS * 8 - 1 downto 0);
 
   operator : SumOp
   generic map(
@@ -208,8 +211,8 @@ begin
 
     op1_valid  => op_s_in_valid,
     op1_ready  => op_s_in_ready,
-    op1_dvalid => dly_out_data(NUM_SUMS * DATA_WIDTH),
-    op1_data   => dly_out_data(NUM_SUMS * DATA_WIDTH - 1 downto 0),
+    op1_dvalid => op_s_in_data(NUM_SUMS * DATA_WIDTH + NUM_KEYS * 8),
+    op1_data   => op_s_in_data(NUM_SUMS * DATA_WIDTH + NUM_KEYS * 8 - 1 downto NUM_KEYS * 8),
 
     op2_valid  => acc_out_valid,
     op2_ready  => acc_out_ready,

@@ -122,7 +122,7 @@ begin
   input_ready   <= output_ready;
   output_valid  <= '1';
   output_dvalid <= '1';
-  output_last   <= input_chars_last;
+  output_last   <= '1';
   output_length <= std_logic_vector(to_unsigned(1, 32));
   output_count  <= std_logic_vector(to_unsigned(1, 1));
 
@@ -139,6 +139,7 @@ begin
     vs := rs;
     case vs.state is
       when STATE_IDLE =>
+        output.utf.last := '0';
         if enable = '1' then
           vs.len   := unsigned(input_length);
           vs.state := STATE_PASS;
@@ -149,7 +150,6 @@ begin
         output.utf.ready  := output_chars_ready;
         output.utf.data   := input_chars;
         output.utf.count  := unsigned(input_chars_count);
-        output.utf.last   := '0';
         output.utf.dvalid := '1';
         output.utf.valid  := input_chars_valid;
 

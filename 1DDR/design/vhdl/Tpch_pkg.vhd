@@ -74,10 +74,11 @@ package Tpch_pkg is
     generic (
 
       -- Width of the stream data vector.
-      HASH_FUNCTION : string  := "";
-      NUM_KEYS      : natural := 1;
-      DATA_WIDTH    : natural := 64;
-      ADDRESS_WIDTH : natural := 8
+      HASH_FUNCTION       : string  := "";
+      NUM_KEYS            : natural := 1;
+      DATA_WIDTH          : natural := 64;
+      GROUP_ADDRESS_WIDTH : natural := 5;
+      ADDRESS_WIDTH       : natural := 8
     );
     port (
 

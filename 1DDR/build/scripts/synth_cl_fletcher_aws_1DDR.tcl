@@ -70,7 +70,7 @@ puts "AWS FPGA: Reading IP blocks";
 
 #Read floatino to fixed converter ip
 read_ip [ list \
-  $CL_DIR/ip/floating_point_0/floating_point_0.xci
+  $CL_DIR/ip/floating_point_32/floating_point_0.xci
 ]
 
 #Read DDR IP

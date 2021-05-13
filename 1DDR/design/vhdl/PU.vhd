@@ -253,13 +253,13 @@ architecture Behavioral of PU is
 
   -- Converter inout buffers 
   constant EXTENDEDPRICE_CONVERTER_IN_DEPTH  : integer                       := 2;
-  constant EXTENDEDPRICE_CONVERTER_OUT_DEPTH : integer                       := 2;
+  constant EXTENDEDPRICE_CONVERTER_OUT_DEPTH : integer                       := 8;
   constant DISCOUNT_CONVERTER_IN_DEPTH       : integer                       := 2;
-  constant DISCOUNT_CONVERTER_OUT_DEPTH      : integer                       := 2;
+  constant DISCOUNT_CONVERTER_OUT_DEPTH      : integer                       := 8;
   constant QUANTITY_CONVERTER_IN_DEPTH       : integer                       := 2;
-  constant QUANTITY_CONVERTER_OUT_DEPTH      : integer                       := 2;
+  constant QUANTITY_CONVERTER_OUT_DEPTH      : integer                       := 8;
   constant TAX_CONVERTER_IN_DEPTH            : integer                       := 2;
-  constant TAX_CONVERTER_OUT_DEPTH           : integer                       := 2;
+  constant TAX_CONVERTER_OUT_DEPTH           : integer                       := 8;
 
   -- Filter in out buffers2
   constant COMPARE_FILTER_IN_DEPTH           : integer                       := 2; --DATE
@@ -476,6 +476,13 @@ architecture Behavioral of PU is
   signal filter_out_ready                    : std_logic := '0';
   signal filter_out_last                     : std_logic;
   signal filter_out_strb                     : std_logic;
+
+  signal buf_filter_out_valid                : std_logic := '0';
+  signal buf_filter_out_ready                : std_logic := '0';
+  signal buf_filter_out_last                 : std_logic;
+  signal buf_filter_out_strb                 : std_logic;
+  signal buf_filter_out_data                 : std_logic_vector(5 * 64 - 1 downto 0);
+  signal buf_filter_out_key                  : std_logic_vector(15 downto 0);
   -- signal filter_out_strb        : std_logic;
   signal probe_valid                         : std_logic;
   signal probe_ready                         : std_logic;
@@ -485,7 +492,7 @@ architecture Behavioral of PU is
   constant ZERO                              : std_logic_vector(3 downto 0) := (others => '0');
 begin
   output_first_idx <= (others       => '0');
-  output_last_idx  <= (31 downto 16 => '0') & num_entries;
+  output_last_idx  <= (31 downto 16 => '0') & std_logic_vector(unsigned(num_entries) - 1);
   --Integrated Logic Analyzers (ILA): This module works 
   --for only one of the instances. 
   logic_analyzer_gen :
@@ -673,7 +680,7 @@ begin
     out_data(31 downto 0) => dly_l_shipdate
 
   );
-
+  -- Merge 2 key streams--------------------------------------------
   dly_returnflag : StreamBuffer
   generic map(
     DATA_WIDTH => 8 + 2,
@@ -853,6 +860,7 @@ begin
   sum_charge_inputs(0)        <= conv_l_tax;
   sum_charge_inputs(1)        <= conv_l_discount;
   sum_charge_inputs(2)        <= conv_l_extendedprice;
+
   sum_charge_merger : MergeOp
   generic map(
     FIXED_LEFT_INDEX  => FIXED_LEFT_INDEX,
@@ -899,6 +907,7 @@ begin
 
   sum_disc_price_inputs(0)        <= conv_l_discount;
   sum_disc_price_inputs(1)        <= conv_l_extendedprice;
+
   sum_disc_price_merger : MergeOp
   generic map(
     FIXED_LEFT_INDEX  => FIXED_LEFT_INDEX,
@@ -968,6 +977,27 @@ begin
   filter_out_strb <= filter_in_data;
   filter_out_last <= conv_l_quantity_last and conv_l_discount_last and conv_l_extendedprice_last and disc_price_reduce_in_last and charge_reduce_in_last;
 
+  reduce_in_buffer : StreamBuffer
+  generic map(
+    MIN_DEPTH  => 8,
+    DATA_WIDTH => 5 * DATA_WIDTH + 16 + 2 --SUM LANES + KEY LANES + LAST + STRB,
+  )
+  port map(
+    clk                                                     => clk,
+    reset                                                   => reset,
+    in_valid                                                => filter_out_valid,
+    in_ready                                                => filter_out_ready,
+    in_data(5 * DATA_WIDTH + 16 + 1)                        => filter_out_strb,
+    in_data(5 * DATA_WIDTH + 16)                            => filter_out_last,
+    in_data(5 * DATA_WIDTH + 16 - 1 downto 5 * DATA_WIDTH)  => key_stream_chars,
+    in_data(5 * DATA_WIDTH - 1 downto 0)                    => reduce_in_data,
+    out_valid                                               => buf_filter_out_valid,
+    out_ready                                               => buf_filter_out_ready,
+    out_data(5 * DATA_WIDTH + 16 + 1)                       => buf_filter_out_strb,
+    out_data(5 * DATA_WIDTH + 16)                           => buf_filter_out_last,
+    out_data(5 * DATA_WIDTH + 16 - 1 downto 5 * DATA_WIDTH) => buf_filter_out_key,
+    out_data(5 * DATA_WIDTH - 1 downto 0)                   => buf_filter_out_data
+  );
   avg_discount_reduce_stage : ReduceStage
   generic map(
     FIXED_LEFT_INDEX  => FIXED_LEFT_INDEX,
@@ -981,13 +1011,13 @@ begin
   port map(
     clk           => clk,
     reset         => reset,
-    key_in_dvalid => key_stream_chars_dvalid,
-    key_in_data   => key_stream_chars,
-    in_valid      => filter_out_valid,
-    in_ready      => filter_out_ready,
-    in_dvalid     => filter_out_strb,
-    in_last       => filter_out_last,
-    in_data       => reduce_in_data,
+    key_in_dvalid => '1',
+    key_in_data   => buf_filter_out_key,
+    in_valid      => buf_filter_out_valid,
+    in_ready      => buf_filter_out_ready,
+    in_dvalid     => buf_filter_out_strb,
+    in_last       => buf_filter_out_last,
+    in_data       => buf_filter_out_data,
     out_valid     => buf_in_out_data_valid_s,
     out_enable    => out_data_enable_s,
     out_ready     => buf_in_out_data_ready_s,
@@ -1069,7 +1099,7 @@ begin
   l_sum_qty_valid         <= sum_qty_valid;
   sum_qty_ready           <= l_sum_qty_ready;
   l_sum_qty_dvalid        <= '1';
-  l_sum_qty_last          <= sum_qty_last;
+  l_sum_qty_last          <= out_data_last_s;
   l_sum_qty               <= sum_qty_data;
 
   l_sum_base_price_valid  <= sum_base_price_valid;
