@@ -1144,7 +1144,7 @@ begin
   l_count_order_last      <= out_data_last_s;
   l_count_order           <= count_order_data;
 
-  len_linestatus_o_length <= std_logic_vector(to_unsigned(1, 32));
+  len_linestatus_o_length <= (31 downto 16 => '0') & std_logic_vector(unsigned(num_entries) - 1);
   -- Output interface logic
   linestatus_interface :
   StringWriterInterface
@@ -1185,7 +1185,7 @@ begin
   );
 
   -- Output interface logic
-  len_returnflag_o_length <= std_logic_vector(to_unsigned(1, 32));
+  len_returnflag_o_length <= (31 downto 16 => '0') & std_logic_vector(unsigned(num_entries) - 1);
   returnflag_interface :
   StringWriterInterface
   generic map(

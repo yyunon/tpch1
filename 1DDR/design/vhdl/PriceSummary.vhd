@@ -510,6 +510,8 @@ begin
   combinatorial_proc : process (
     l_firstIdx,
     l_lastIdx,
+    l_o_firstIdx,
+    l_o_lastIdx,
 
     l_quantity_unl_valid,
     l_extendedprice_unl_valid,
@@ -834,7 +836,7 @@ begin
         -- Unlock: the generated interface delivered all items in the stream.
         -- The unlock stream is supplied to make sure all bus transfers of the
         -- corresponding command are completed.
-        done <= '1';
+        done <= '0';
         busy <= '0';
         idle <= '1';
 
@@ -851,15 +853,15 @@ begin
         l_count_order.unl.ready    := '1';
 
         -- Handshake when it is valid and go to the done state.
-        if l_count_order_unl_valid = '1' and l_avg_disc_unl_valid = '1' and l_avg_price_unl_valid = '1' and l_avg_qty_unl_valid = '1' and l_sum_charge_unl_valid = '1' and l_sum_disc_price_unl_valid = '1' and l_sum_base_price_unl_valid = '1' and l_sum_qty_unl_valid = '1' then
+        if l_count_order_unl_valid = '1' and l_avg_disc_unl_valid = '1' and l_avg_price_unl_valid = '1' and l_avg_qty_unl_valid = '1' and l_sum_charge_unl_valid = '1' and l_sum_disc_price_unl_valid = '1' and l_sum_base_price_unl_valid = '1' and l_sum_qty_unl_valid = '1' and l_returnflag_o_unl_valid = '1' and l_linestatus_o_unl_valid = '1' then
           state_next <= STATE_DONE;
         end if;
 
       when STATE_DONE =>
         -- Done: the kernel is done with its job.
-        done       <= '1';
-        busy       <= '0';
-        idle       <= '1';
+        done <= '1';
+        busy <= '0';
+        idle <= '1';
         if reset = '1' then
           state_next <= STATE_IDLE;
         end if;

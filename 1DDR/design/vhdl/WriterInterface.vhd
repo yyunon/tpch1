@@ -54,18 +54,21 @@ architecture Behavioral of StringWriterInterface is
   type len_record is record
     ready  : std_logic;
     valid  : std_logic;
-    data   : std_logic_vector(LEN_WIDTH - 1 downto 0);
+    data   : std_logic_vector(31 downto 0);
     last   : std_logic;
     dvalid : std_logic;
   end record;
   type cmd_in_record is record
-    len : unsigned(INDEX_WIDTH - 1 downto 0);
-  end record;
-  type cmd_out_record is record
-    ready : std_logic;
+    len  : unsigned(INDEX_WIDTH - 1 downto 0);
+    min  : unsigned(LEN_WIDTH - 1 downto 0);
+    mask : unsigned(LEN_WIDTH - 1 downto 0);
   end record;
   type regs_record is record
     state : state_type;
+    cmd   : cmd_in_record;
+  end record;
+  type cmd_out_record is record
+    ready : std_logic;
   end record;
   type out_record is record
     cmd : cmd_out_record;
@@ -116,17 +119,70 @@ architecture Behavioral of StringWriterInterface is
   signal rs : sregs_record;
   signal ds : sregs_record;
 
+  signal r  : regs_record;
+  signal d  : regs_record;
 begin
 
   --length stream
-  input_ready   <= output_ready;
-  output_valid  <= '1';
-  output_dvalid <= '1';
-  output_last   <= '1';
-  output_length <= std_logic_vector(to_unsigned(1, 32));
-  output_count  <= std_logic_vector(to_unsigned(1, 1));
+  --input_ready   <= output_ready;
+  --output_valid  <= '1';
+  --output_dvalid <= '1';
+  --output_last   <= '1';
+  --output_length <= std_logic_vector(to_unsigned(1, 32));
+  --output_count  <= std_logic_vector(to_unsigned(1, 1));
 
-  writer_process :
+  writer_process_len :
+  process (r, enable, output_ready) is
+    variable v : regs_record;
+    variable o : out_record;
+  begin
+    v            := r;
+    o.len.data   := std_logic_vector(to_unsigned(1, 32));
+    o.len.valid  := '0';
+    o.len.dvalid := '1';
+    o.cmd.ready  := '0';
+
+    case v.state is
+      when STATE_IDLE =>
+        o.len.valid := '0';
+        o.len.ready := '0';
+        if enable = '1' and o.len.last /= '1' then
+          v.cmd.len := unsigned(input_length);
+          v.state   := STATE_PASS;
+        end if;
+      when STATE_PASS =>
+        o.len.valid  := '1';
+        o.len.ready  := '1';
+        o.len.dvalid := '1';
+        o.len.last   := '0';
+
+        if r.cmd.len - 1 = 0 then
+          o.len.last := '1';
+        end if;
+
+        if output_ready = '1' and o.len.valid = '1' then
+          v.cmd.len := r.cmd.len - 1;
+
+          if v.cmd.len = 0 then
+            v.state := STATE_IDLE;
+          else
+            v.state := STATE_PASS;
+          end if;
+        end if;
+    end case;
+
+    d             <= v;
+
+    output_valid  <= o.len.valid;
+    input_ready   <= o.len.ready;
+    output_last   <= o.len.last;
+    output_length <= o.len.data;
+    output_dvalid <= o.len.dvalid;
+    output_count  <= "1";
+
+  end process;
+
+  writer_process_char :
   process (rs,
     enable,
     input_chars,
@@ -158,12 +214,9 @@ begin
           vs.len := rs.len - output.utf.count;
           if vs.len = 0 then
             output.utf.last := '1';
-            if enable = '1' then
-              vs.state := STATE_PASS;
-              vs.len   := unsigned(input_length);
-            else
-              vs.state := STATE_IDLE;
-            end if;
+            vs.state        := STATE_IDLE;
+          else
+            vs.state := STATE_PASS;
           end if;
         end if;
 
@@ -182,10 +235,12 @@ begin
     if rising_edge(clk) then
       -- Register new state
       rs <= ds;
+      r  <= d;
 
       -- Reset
       if reset = '1' then
         rs.state <= STATE_IDLE;
+        r.state  <= STATE_IDLE;
         rs.len   <= to_unsigned(1, LEN_WIDTH);
       end if;
     end if;
