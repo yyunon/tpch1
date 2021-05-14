@@ -836,7 +836,7 @@ begin
         -- Unlock: the generated interface delivered all items in the stream.
         -- The unlock stream is supplied to make sure all bus transfers of the
         -- corresponding command are completed.
-        done <= '0';
+        done <= '1';
         busy <= '0';
         idle <= '1';
 

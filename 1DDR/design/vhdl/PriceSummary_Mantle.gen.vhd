@@ -65,11 +65,16 @@ entity PriceSummary_Mantle is
     wr_mst_wreq_ready  : in std_logic;
     wr_mst_wreq_addr   : out std_logic_vector(BUS_ADDR_WIDTH - 1 downto 0);
     wr_mst_wreq_len    : out std_logic_vector(BUS_LEN_WIDTH - 1 downto 0);
+    wr_mst_wreq_last   : out std_logic;
     wr_mst_wdat_valid  : out std_logic;
     wr_mst_wdat_ready  : in std_logic;
     wr_mst_wdat_data   : out std_logic_vector(BUS_DATA_WIDTH - 1 downto 0);
     wr_mst_wdat_strobe : out std_logic_vector(BUS_DATA_WIDTH/8 - 1 downto 0);
-    wr_mst_wdat_last   : out std_logic
+    wr_mst_wdat_last   : out std_logic;
+    wr_mst_wrep_valid  : in std_logic;
+    wr_mst_wrep_ready  : out std_logic;
+    wr_mst_wrep_ok     : in std_logic
+
   );
 end entity;
 
@@ -649,6 +654,7 @@ architecture Implementation of PriceSummary_Mantle is
       l_shipdate_unl_valid             : out std_logic;
       l_shipdate_unl_ready             : in std_logic;
       l_shipdate_unl_tag               : out std_logic_vector(TAG_WIDTH - 1 downto 0);
+
       l_returnflag_o_valid             : in std_logic;
       l_returnflag_o_ready             : out std_logic;
       l_returnflag_o_dvalid            : in std_logic;
@@ -665,11 +671,15 @@ architecture Implementation of PriceSummary_Mantle is
       l_returnflag_o_bus_wreq_ready    : in std_logic;
       l_returnflag_o_bus_wreq_addr     : out std_logic_vector(L_RETURNFLAG_O_BUS_ADDR_WIDTH - 1 downto 0);
       l_returnflag_o_bus_wreq_len      : out std_logic_vector(L_RETURNFLAG_O_BUS_LEN_WIDTH - 1 downto 0);
+      l_returnflag_o_bus_wreq_last     : out std_logic;
       l_returnflag_o_bus_wdat_valid    : out std_logic;
       l_returnflag_o_bus_wdat_ready    : in std_logic;
       l_returnflag_o_bus_wdat_data     : out std_logic_vector(L_RETURNFLAG_O_BUS_DATA_WIDTH - 1 downto 0);
       l_returnflag_o_bus_wdat_strobe   : out std_logic_vector(L_RETURNFLAG_O_BUS_DATA_WIDTH/8 - 1 downto 0);
       l_returnflag_o_bus_wdat_last     : out std_logic;
+      l_returnflag_o_bus_wrep_valid    : in std_logic;
+      l_returnflag_o_bus_wrep_ready    : out std_logic;
+      l_returnflag_o_bus_wrep_ok       : in std_logic;
       l_returnflag_o_cmd_valid         : in std_logic;
       l_returnflag_o_cmd_ready         : out std_logic;
       l_returnflag_o_cmd_firstIdx      : in std_logic_vector(INDEX_WIDTH - 1 downto 0);
@@ -695,11 +705,15 @@ architecture Implementation of PriceSummary_Mantle is
       l_linestatus_o_bus_wreq_ready    : in std_logic;
       l_linestatus_o_bus_wreq_addr     : out std_logic_vector(L_LINESTATUS_O_BUS_ADDR_WIDTH - 1 downto 0);
       l_linestatus_o_bus_wreq_len      : out std_logic_vector(L_LINESTATUS_O_BUS_LEN_WIDTH - 1 downto 0);
+      l_linestatus_o_bus_wreq_last     : out std_logic;
       l_linestatus_o_bus_wdat_valid    : out std_logic;
       l_linestatus_o_bus_wdat_ready    : in std_logic;
       l_linestatus_o_bus_wdat_data     : out std_logic_vector(L_LINESTATUS_O_BUS_DATA_WIDTH - 1 downto 0);
       l_linestatus_o_bus_wdat_strobe   : out std_logic_vector(L_LINESTATUS_O_BUS_DATA_WIDTH/8 - 1 downto 0);
       l_linestatus_o_bus_wdat_last     : out std_logic;
+      l_linestatus_o_bus_wrep_valid    : in std_logic;
+      l_linestatus_o_bus_wrep_ready    : out std_logic;
+      l_linestatus_o_bus_wrep_ok       : in std_logic;
       l_linestatus_o_cmd_valid         : in std_logic;
       l_linestatus_o_cmd_ready         : out std_logic;
       l_linestatus_o_cmd_firstIdx      : in std_logic_vector(INDEX_WIDTH - 1 downto 0);
@@ -718,11 +732,15 @@ architecture Implementation of PriceSummary_Mantle is
       l_sum_qty_bus_wreq_ready         : in std_logic;
       l_sum_qty_bus_wreq_addr          : out std_logic_vector(L_SUM_QTY_BUS_ADDR_WIDTH - 1 downto 0);
       l_sum_qty_bus_wreq_len           : out std_logic_vector(L_SUM_QTY_BUS_LEN_WIDTH - 1 downto 0);
+      l_sum_qty_bus_wreq_last          : out std_logic;
       l_sum_qty_bus_wdat_valid         : out std_logic;
       l_sum_qty_bus_wdat_ready         : in std_logic;
       l_sum_qty_bus_wdat_data          : out std_logic_vector(L_SUM_QTY_BUS_DATA_WIDTH - 1 downto 0);
       l_sum_qty_bus_wdat_strobe        : out std_logic_vector(L_SUM_QTY_BUS_DATA_WIDTH/8 - 1 downto 0);
       l_sum_qty_bus_wdat_last          : out std_logic;
+      l_sum_qty_bus_wrep_valid         : in std_logic;
+      l_sum_qty_bus_wrep_ready         : out std_logic;
+      l_sum_qty_bus_wrep_ok            : in std_logic;
       l_sum_qty_cmd_valid              : in std_logic;
       l_sum_qty_cmd_ready              : out std_logic;
       l_sum_qty_cmd_firstIdx           : in std_logic_vector(INDEX_WIDTH - 1 downto 0);
@@ -741,11 +759,15 @@ architecture Implementation of PriceSummary_Mantle is
       l_sum_base_price_bus_wreq_ready  : in std_logic;
       l_sum_base_price_bus_wreq_addr   : out std_logic_vector(L_SUM_BASE_PRICE_BUS_ADDR_WIDTH - 1 downto 0);
       l_sum_base_price_bus_wreq_len    : out std_logic_vector(L_SUM_BASE_PRICE_BUS_LEN_WIDTH - 1 downto 0);
+      l_sum_base_price_bus_wreq_last   : out std_logic;
       l_sum_base_price_bus_wdat_valid  : out std_logic;
       l_sum_base_price_bus_wdat_ready  : in std_logic;
       l_sum_base_price_bus_wdat_data   : out std_logic_vector(L_SUM_BASE_PRICE_BUS_DATA_WIDTH - 1 downto 0);
       l_sum_base_price_bus_wdat_strobe : out std_logic_vector(L_SUM_BASE_PRICE_BUS_DATA_WIDTH/8 - 1 downto 0);
       l_sum_base_price_bus_wdat_last   : out std_logic;
+      l_sum_base_price_bus_wrep_valid  : in std_logic;
+      l_sum_base_price_bus_wrep_ready  : out std_logic;
+      l_sum_base_price_bus_wrep_ok     : in std_logic;
       l_sum_base_price_cmd_valid       : in std_logic;
       l_sum_base_price_cmd_ready       : out std_logic;
       l_sum_base_price_cmd_firstIdx    : in std_logic_vector(INDEX_WIDTH - 1 downto 0);
@@ -764,11 +786,15 @@ architecture Implementation of PriceSummary_Mantle is
       l_sum_disc_price_bus_wreq_ready  : in std_logic;
       l_sum_disc_price_bus_wreq_addr   : out std_logic_vector(L_SUM_DISC_PRICE_BUS_ADDR_WIDTH - 1 downto 0);
       l_sum_disc_price_bus_wreq_len    : out std_logic_vector(L_SUM_DISC_PRICE_BUS_LEN_WIDTH - 1 downto 0);
+      l_sum_disc_price_bus_wreq_last   : out std_logic;
       l_sum_disc_price_bus_wdat_valid  : out std_logic;
       l_sum_disc_price_bus_wdat_ready  : in std_logic;
       l_sum_disc_price_bus_wdat_data   : out std_logic_vector(L_SUM_DISC_PRICE_BUS_DATA_WIDTH - 1 downto 0);
       l_sum_disc_price_bus_wdat_strobe : out std_logic_vector(L_SUM_DISC_PRICE_BUS_DATA_WIDTH/8 - 1 downto 0);
       l_sum_disc_price_bus_wdat_last   : out std_logic;
+      l_sum_disc_price_bus_wrep_valid  : in std_logic;
+      l_sum_disc_price_bus_wrep_ready  : out std_logic;
+      l_sum_disc_price_bus_wrep_ok     : in std_logic;
       l_sum_disc_price_cmd_valid       : in std_logic;
       l_sum_disc_price_cmd_ready       : out std_logic;
       l_sum_disc_price_cmd_firstIdx    : in std_logic_vector(INDEX_WIDTH - 1 downto 0);
@@ -787,11 +813,15 @@ architecture Implementation of PriceSummary_Mantle is
       l_sum_charge_bus_wreq_ready      : in std_logic;
       l_sum_charge_bus_wreq_addr       : out std_logic_vector(L_SUM_CHARGE_BUS_ADDR_WIDTH - 1 downto 0);
       l_sum_charge_bus_wreq_len        : out std_logic_vector(L_SUM_CHARGE_BUS_LEN_WIDTH - 1 downto 0);
+      l_sum_charge_bus_wreq_last       : out std_logic;
       l_sum_charge_bus_wdat_valid      : out std_logic;
       l_sum_charge_bus_wdat_ready      : in std_logic;
       l_sum_charge_bus_wdat_data       : out std_logic_vector(L_SUM_CHARGE_BUS_DATA_WIDTH - 1 downto 0);
       l_sum_charge_bus_wdat_strobe     : out std_logic_vector(L_SUM_CHARGE_BUS_DATA_WIDTH/8 - 1 downto 0);
       l_sum_charge_bus_wdat_last       : out std_logic;
+      l_sum_charge_bus_wrep_valid      : in std_logic;
+      l_sum_charge_bus_wrep_ready      : out std_logic;
+      l_sum_charge_bus_wrep_ok         : in std_logic;
       l_sum_charge_cmd_valid           : in std_logic;
       l_sum_charge_cmd_ready           : out std_logic;
       l_sum_charge_cmd_firstIdx        : in std_logic_vector(INDEX_WIDTH - 1 downto 0);
@@ -810,11 +840,15 @@ architecture Implementation of PriceSummary_Mantle is
       l_avg_qty_bus_wreq_ready         : in std_logic;
       l_avg_qty_bus_wreq_addr          : out std_logic_vector(L_AVG_QTY_BUS_ADDR_WIDTH - 1 downto 0);
       l_avg_qty_bus_wreq_len           : out std_logic_vector(L_AVG_QTY_BUS_LEN_WIDTH - 1 downto 0);
+      l_avg_qty_bus_wreq_last          : out std_logic;
       l_avg_qty_bus_wdat_valid         : out std_logic;
       l_avg_qty_bus_wdat_ready         : in std_logic;
       l_avg_qty_bus_wdat_data          : out std_logic_vector(L_AVG_QTY_BUS_DATA_WIDTH - 1 downto 0);
       l_avg_qty_bus_wdat_strobe        : out std_logic_vector(L_AVG_QTY_BUS_DATA_WIDTH/8 - 1 downto 0);
       l_avg_qty_bus_wdat_last          : out std_logic;
+      l_avg_qty_bus_wrep_valid         : in std_logic;
+      l_avg_qty_bus_wrep_ready         : out std_logic;
+      l_avg_qty_bus_wrep_ok            : in std_logic;
       l_avg_qty_cmd_valid              : in std_logic;
       l_avg_qty_cmd_ready              : out std_logic;
       l_avg_qty_cmd_firstIdx           : in std_logic_vector(INDEX_WIDTH - 1 downto 0);
@@ -833,11 +867,15 @@ architecture Implementation of PriceSummary_Mantle is
       l_avg_price_bus_wreq_ready       : in std_logic;
       l_avg_price_bus_wreq_addr        : out std_logic_vector(L_AVG_PRICE_BUS_ADDR_WIDTH - 1 downto 0);
       l_avg_price_bus_wreq_len         : out std_logic_vector(L_AVG_PRICE_BUS_LEN_WIDTH - 1 downto 0);
+      l_avg_price_bus_wreq_last        : out std_logic;
       l_avg_price_bus_wdat_valid       : out std_logic;
       l_avg_price_bus_wdat_ready       : in std_logic;
       l_avg_price_bus_wdat_data        : out std_logic_vector(L_AVG_PRICE_BUS_DATA_WIDTH - 1 downto 0);
       l_avg_price_bus_wdat_strobe      : out std_logic_vector(L_AVG_PRICE_BUS_DATA_WIDTH/8 - 1 downto 0);
       l_avg_price_bus_wdat_last        : out std_logic;
+      l_avg_price_bus_wrep_valid       : in std_logic;
+      l_avg_price_bus_wrep_ready       : out std_logic;
+      l_avg_price_bus_wrep_ok          : in std_logic;
       l_avg_price_cmd_valid            : in std_logic;
       l_avg_price_cmd_ready            : out std_logic;
       l_avg_price_cmd_firstIdx         : in std_logic_vector(INDEX_WIDTH - 1 downto 0);
@@ -856,11 +894,15 @@ architecture Implementation of PriceSummary_Mantle is
       l_avg_disc_bus_wreq_ready        : in std_logic;
       l_avg_disc_bus_wreq_addr         : out std_logic_vector(L_AVG_DISC_BUS_ADDR_WIDTH - 1 downto 0);
       l_avg_disc_bus_wreq_len          : out std_logic_vector(L_AVG_DISC_BUS_LEN_WIDTH - 1 downto 0);
+      l_avg_disc_bus_wreq_last         : out std_logic;
       l_avg_disc_bus_wdat_valid        : out std_logic;
       l_avg_disc_bus_wdat_ready        : in std_logic;
       l_avg_disc_bus_wdat_data         : out std_logic_vector(L_AVG_DISC_BUS_DATA_WIDTH - 1 downto 0);
       l_avg_disc_bus_wdat_strobe       : out std_logic_vector(L_AVG_DISC_BUS_DATA_WIDTH/8 - 1 downto 0);
       l_avg_disc_bus_wdat_last         : out std_logic;
+      l_avg_disc_bus_wrep_valid        : in std_logic;
+      l_avg_disc_bus_wrep_ready        : out std_logic;
+      l_avg_disc_bus_wrep_ok           : in std_logic;
       l_avg_disc_cmd_valid             : in std_logic;
       l_avg_disc_cmd_ready             : out std_logic;
       l_avg_disc_cmd_firstIdx          : in std_logic_vector(INDEX_WIDTH - 1 downto 0);
@@ -879,11 +921,15 @@ architecture Implementation of PriceSummary_Mantle is
       l_count_order_bus_wreq_ready     : in std_logic;
       l_count_order_bus_wreq_addr      : out std_logic_vector(L_COUNT_ORDER_BUS_ADDR_WIDTH - 1 downto 0);
       l_count_order_bus_wreq_len       : out std_logic_vector(L_COUNT_ORDER_BUS_LEN_WIDTH - 1 downto 0);
+      l_count_order_bus_wreq_last      : out std_logic;
       l_count_order_bus_wdat_valid     : out std_logic;
       l_count_order_bus_wdat_ready     : in std_logic;
       l_count_order_bus_wdat_data      : out std_logic_vector(L_COUNT_ORDER_BUS_DATA_WIDTH - 1 downto 0);
       l_count_order_bus_wdat_strobe    : out std_logic_vector(L_COUNT_ORDER_BUS_DATA_WIDTH/8 - 1 downto 0);
       l_count_order_bus_wdat_last      : out std_logic;
+      l_count_order_bus_wrep_valid     : in std_logic;
+      l_count_order_bus_wrep_ready     : out std_logic;
+      l_count_order_bus_wrep_ok        : in std_logic;
       l_count_order_cmd_valid          : in std_logic;
       l_count_order_cmd_ready          : out std_logic;
       l_count_order_cmd_firstIdx       : in std_logic_vector(INDEX_WIDTH - 1 downto 0);
@@ -1097,11 +1143,15 @@ architecture Implementation of PriceSummary_Mantle is
   signal PriceSummaryWriter_l_inst_l_returnflag_o_bus_wreq_ready       : std_logic;
   signal PriceSummaryWriter_l_inst_l_returnflag_o_bus_wreq_addr        : std_logic_vector(BUS_ADDR_WIDTH - 1 downto 0);
   signal PriceSummaryWriter_l_inst_l_returnflag_o_bus_wreq_len         : std_logic_vector(BUS_LEN_WIDTH - 1 downto 0);
+  signal PriceSummaryWriter_l_inst_l_returnflag_o_bus_wreq_last        : std_logic;
   signal PriceSummaryWriter_l_inst_l_returnflag_o_bus_wdat_valid       : std_logic;
   signal PriceSummaryWriter_l_inst_l_returnflag_o_bus_wdat_ready       : std_logic;
   signal PriceSummaryWriter_l_inst_l_returnflag_o_bus_wdat_data        : std_logic_vector(BUS_DATA_WIDTH - 1 downto 0);
   signal PriceSummaryWriter_l_inst_l_returnflag_o_bus_wdat_strobe      : std_logic_vector(BUS_DATA_WIDTH/8 - 1 downto 0);
   signal PriceSummaryWriter_l_inst_l_returnflag_o_bus_wdat_last        : std_logic;
+  signal PriceSummaryWriter_l_inst_l_returnflag_o_bus_wrep_valid       : std_logic;
+  signal PriceSummaryWriter_l_inst_l_returnflag_o_bus_wrep_ready       : std_logic;
+  signal PriceSummaryWriter_l_inst_l_returnflag_o_bus_wrep_ok          : std_logic;
 
   signal PriceSummaryWriter_l_inst_l_returnflag_o_cmd_valid            : std_logic;
   signal PriceSummaryWriter_l_inst_l_returnflag_o_cmd_ready            : std_logic;
@@ -1131,11 +1181,15 @@ architecture Implementation of PriceSummary_Mantle is
   signal PriceSummaryWriter_l_inst_l_linestatus_o_bus_wreq_ready       : std_logic;
   signal PriceSummaryWriter_l_inst_l_linestatus_o_bus_wreq_addr        : std_logic_vector(BUS_ADDR_WIDTH - 1 downto 0);
   signal PriceSummaryWriter_l_inst_l_linestatus_o_bus_wreq_len         : std_logic_vector(BUS_LEN_WIDTH - 1 downto 0);
+  signal PriceSummaryWriter_l_inst_l_linestatus_o_bus_wreq_last        : std_logic;
   signal PriceSummaryWriter_l_inst_l_linestatus_o_bus_wdat_valid       : std_logic;
   signal PriceSummaryWriter_l_inst_l_linestatus_o_bus_wdat_ready       : std_logic;
   signal PriceSummaryWriter_l_inst_l_linestatus_o_bus_wdat_data        : std_logic_vector(BUS_DATA_WIDTH - 1 downto 0);
   signal PriceSummaryWriter_l_inst_l_linestatus_o_bus_wdat_strobe      : std_logic_vector(BUS_DATA_WIDTH/8 - 1 downto 0);
   signal PriceSummaryWriter_l_inst_l_linestatus_o_bus_wdat_last        : std_logic;
+  signal PriceSummaryWriter_l_inst_l_linestatus_o_bus_wrep_valid       : std_logic;
+  signal PriceSummaryWriter_l_inst_l_linestatus_o_bus_wrep_ready       : std_logic;
+  signal PriceSummaryWriter_l_inst_l_linestatus_o_bus_wrep_ok          : std_logic;
 
   signal PriceSummaryWriter_l_inst_l_linestatus_o_cmd_valid            : std_logic;
   signal PriceSummaryWriter_l_inst_l_linestatus_o_cmd_ready            : std_logic;
@@ -1158,11 +1212,15 @@ architecture Implementation of PriceSummary_Mantle is
   signal PriceSummaryWriter_l_inst_l_sum_qty_bus_wreq_ready            : std_logic;
   signal PriceSummaryWriter_l_inst_l_sum_qty_bus_wreq_addr             : std_logic_vector(BUS_ADDR_WIDTH - 1 downto 0);
   signal PriceSummaryWriter_l_inst_l_sum_qty_bus_wreq_len              : std_logic_vector(BUS_LEN_WIDTH - 1 downto 0);
+  signal PriceSummaryWriter_l_inst_l_sum_qty_bus_wreq_last             : std_logic;
   signal PriceSummaryWriter_l_inst_l_sum_qty_bus_wdat_valid            : std_logic;
   signal PriceSummaryWriter_l_inst_l_sum_qty_bus_wdat_ready            : std_logic;
   signal PriceSummaryWriter_l_inst_l_sum_qty_bus_wdat_data             : std_logic_vector(BUS_DATA_WIDTH - 1 downto 0);
   signal PriceSummaryWriter_l_inst_l_sum_qty_bus_wdat_strobe           : std_logic_vector(BUS_DATA_WIDTH/8 - 1 downto 0);
   signal PriceSummaryWriter_l_inst_l_sum_qty_bus_wdat_last             : std_logic;
+  signal PriceSummaryWriter_l_inst_l_sum_qty_bus_wrep_valid            : std_logic;
+  signal PriceSummaryWriter_l_inst_l_sum_qty_bus_wrep_ready            : std_logic;
+  signal PriceSummaryWriter_l_inst_l_sum_qty_bus_wrep_ok               : std_logic;
 
   signal PriceSummaryWriter_l_inst_l_sum_qty_cmd_valid                 : std_logic;
   signal PriceSummaryWriter_l_inst_l_sum_qty_cmd_ready                 : std_logic;
@@ -1185,11 +1243,15 @@ architecture Implementation of PriceSummary_Mantle is
   signal PriceSummaryWriter_l_inst_l_sum_base_price_bus_wreq_ready     : std_logic;
   signal PriceSummaryWriter_l_inst_l_sum_base_price_bus_wreq_addr      : std_logic_vector(BUS_ADDR_WIDTH - 1 downto 0);
   signal PriceSummaryWriter_l_inst_l_sum_base_price_bus_wreq_len       : std_logic_vector(BUS_LEN_WIDTH - 1 downto 0);
+  signal PriceSummaryWriter_l_inst_l_sum_base_price_bus_wreq_last      : std_logic;
   signal PriceSummaryWriter_l_inst_l_sum_base_price_bus_wdat_valid     : std_logic;
   signal PriceSummaryWriter_l_inst_l_sum_base_price_bus_wdat_ready     : std_logic;
   signal PriceSummaryWriter_l_inst_l_sum_base_price_bus_wdat_data      : std_logic_vector(BUS_DATA_WIDTH - 1 downto 0);
   signal PriceSummaryWriter_l_inst_l_sum_base_price_bus_wdat_strobe    : std_logic_vector(BUS_DATA_WIDTH/8 - 1 downto 0);
   signal PriceSummaryWriter_l_inst_l_sum_base_price_bus_wdat_last      : std_logic;
+  signal PriceSummaryWriter_l_inst_l_sum_base_price_bus_wrep_valid     : std_logic;
+  signal PriceSummaryWriter_l_inst_l_sum_base_price_bus_wrep_ready     : std_logic;
+  signal PriceSummaryWriter_l_inst_l_sum_base_price_bus_wrep_ok        : std_logic;
 
   signal PriceSummaryWriter_l_inst_l_sum_base_price_cmd_valid          : std_logic;
   signal PriceSummaryWriter_l_inst_l_sum_base_price_cmd_ready          : std_logic;
@@ -1212,11 +1274,15 @@ architecture Implementation of PriceSummary_Mantle is
   signal PriceSummaryWriter_l_inst_l_sum_disc_price_bus_wreq_ready     : std_logic;
   signal PriceSummaryWriter_l_inst_l_sum_disc_price_bus_wreq_addr      : std_logic_vector(BUS_ADDR_WIDTH - 1 downto 0);
   signal PriceSummaryWriter_l_inst_l_sum_disc_price_bus_wreq_len       : std_logic_vector(BUS_LEN_WIDTH - 1 downto 0);
+  signal PriceSummaryWriter_l_inst_l_sum_disc_price_bus_wreq_last      : std_logic;
   signal PriceSummaryWriter_l_inst_l_sum_disc_price_bus_wdat_valid     : std_logic;
   signal PriceSummaryWriter_l_inst_l_sum_disc_price_bus_wdat_ready     : std_logic;
   signal PriceSummaryWriter_l_inst_l_sum_disc_price_bus_wdat_data      : std_logic_vector(BUS_DATA_WIDTH - 1 downto 0);
   signal PriceSummaryWriter_l_inst_l_sum_disc_price_bus_wdat_strobe    : std_logic_vector(BUS_DATA_WIDTH/8 - 1 downto 0);
   signal PriceSummaryWriter_l_inst_l_sum_disc_price_bus_wdat_last      : std_logic;
+  signal PriceSummaryWriter_l_inst_l_sum_disc_price_bus_wrep_valid     : std_logic;
+  signal PriceSummaryWriter_l_inst_l_sum_disc_price_bus_wrep_ready     : std_logic;
+  signal PriceSummaryWriter_l_inst_l_sum_disc_price_bus_wrep_ok        : std_logic;
 
   signal PriceSummaryWriter_l_inst_l_sum_disc_price_cmd_valid          : std_logic;
   signal PriceSummaryWriter_l_inst_l_sum_disc_price_cmd_ready          : std_logic;
@@ -1239,11 +1305,15 @@ architecture Implementation of PriceSummary_Mantle is
   signal PriceSummaryWriter_l_inst_l_sum_charge_bus_wreq_ready         : std_logic;
   signal PriceSummaryWriter_l_inst_l_sum_charge_bus_wreq_addr          : std_logic_vector(BUS_ADDR_WIDTH - 1 downto 0);
   signal PriceSummaryWriter_l_inst_l_sum_charge_bus_wreq_len           : std_logic_vector(BUS_LEN_WIDTH - 1 downto 0);
+  signal PriceSummaryWriter_l_inst_l_sum_charge_bus_wreq_last          : std_logic;
   signal PriceSummaryWriter_l_inst_l_sum_charge_bus_wdat_valid         : std_logic;
   signal PriceSummaryWriter_l_inst_l_sum_charge_bus_wdat_ready         : std_logic;
   signal PriceSummaryWriter_l_inst_l_sum_charge_bus_wdat_data          : std_logic_vector(BUS_DATA_WIDTH - 1 downto 0);
   signal PriceSummaryWriter_l_inst_l_sum_charge_bus_wdat_strobe        : std_logic_vector(BUS_DATA_WIDTH/8 - 1 downto 0);
   signal PriceSummaryWriter_l_inst_l_sum_charge_bus_wdat_last          : std_logic;
+  signal PriceSummaryWriter_l_inst_l_sum_charge_bus_wrep_valid         : std_logic;
+  signal PriceSummaryWriter_l_inst_l_sum_charge_bus_wrep_ready         : std_logic;
+  signal PriceSummaryWriter_l_inst_l_sum_charge_bus_wrep_ok            : std_logic;
 
   signal PriceSummaryWriter_l_inst_l_sum_charge_cmd_valid              : std_logic;
   signal PriceSummaryWriter_l_inst_l_sum_charge_cmd_ready              : std_logic;
@@ -1266,11 +1336,15 @@ architecture Implementation of PriceSummary_Mantle is
   signal PriceSummaryWriter_l_inst_l_avg_qty_bus_wreq_ready            : std_logic;
   signal PriceSummaryWriter_l_inst_l_avg_qty_bus_wreq_addr             : std_logic_vector(BUS_ADDR_WIDTH - 1 downto 0);
   signal PriceSummaryWriter_l_inst_l_avg_qty_bus_wreq_len              : std_logic_vector(BUS_LEN_WIDTH - 1 downto 0);
+  signal PriceSummaryWriter_l_inst_l_avg_qty_bus_wreq_last             : std_logic;
   signal PriceSummaryWriter_l_inst_l_avg_qty_bus_wdat_valid            : std_logic;
   signal PriceSummaryWriter_l_inst_l_avg_qty_bus_wdat_ready            : std_logic;
   signal PriceSummaryWriter_l_inst_l_avg_qty_bus_wdat_data             : std_logic_vector(BUS_DATA_WIDTH - 1 downto 0);
   signal PriceSummaryWriter_l_inst_l_avg_qty_bus_wdat_strobe           : std_logic_vector(BUS_DATA_WIDTH/8 - 1 downto 0);
   signal PriceSummaryWriter_l_inst_l_avg_qty_bus_wdat_last             : std_logic;
+  signal PriceSummaryWriter_l_inst_l_avg_qty_bus_wrep_valid            : std_logic;
+  signal PriceSummaryWriter_l_inst_l_avg_qty_bus_wrep_ready            : std_logic;
+  signal PriceSummaryWriter_l_inst_l_avg_qty_bus_wrep_ok               : std_logic;
 
   signal PriceSummaryWriter_l_inst_l_avg_qty_cmd_valid                 : std_logic;
   signal PriceSummaryWriter_l_inst_l_avg_qty_cmd_ready                 : std_logic;
@@ -1293,11 +1367,15 @@ architecture Implementation of PriceSummary_Mantle is
   signal PriceSummaryWriter_l_inst_l_avg_price_bus_wreq_ready          : std_logic;
   signal PriceSummaryWriter_l_inst_l_avg_price_bus_wreq_addr           : std_logic_vector(BUS_ADDR_WIDTH - 1 downto 0);
   signal PriceSummaryWriter_l_inst_l_avg_price_bus_wreq_len            : std_logic_vector(BUS_LEN_WIDTH - 1 downto 0);
+  signal PriceSummaryWriter_l_inst_l_avg_price_bus_wreq_last           : std_logic;
   signal PriceSummaryWriter_l_inst_l_avg_price_bus_wdat_valid          : std_logic;
   signal PriceSummaryWriter_l_inst_l_avg_price_bus_wdat_ready          : std_logic;
   signal PriceSummaryWriter_l_inst_l_avg_price_bus_wdat_data           : std_logic_vector(BUS_DATA_WIDTH - 1 downto 0);
   signal PriceSummaryWriter_l_inst_l_avg_price_bus_wdat_strobe         : std_logic_vector(BUS_DATA_WIDTH/8 - 1 downto 0);
   signal PriceSummaryWriter_l_inst_l_avg_price_bus_wdat_last           : std_logic;
+  signal PriceSummaryWriter_l_inst_l_avg_price_bus_wrep_valid          : std_logic;
+  signal PriceSummaryWriter_l_inst_l_avg_price_bus_wrep_ready          : std_logic;
+  signal PriceSummaryWriter_l_inst_l_avg_price_bus_wrep_ok             : std_logic;
 
   signal PriceSummaryWriter_l_inst_l_avg_price_cmd_valid               : std_logic;
   signal PriceSummaryWriter_l_inst_l_avg_price_cmd_ready               : std_logic;
@@ -1320,11 +1398,15 @@ architecture Implementation of PriceSummary_Mantle is
   signal PriceSummaryWriter_l_inst_l_avg_disc_bus_wreq_ready           : std_logic;
   signal PriceSummaryWriter_l_inst_l_avg_disc_bus_wreq_addr            : std_logic_vector(BUS_ADDR_WIDTH - 1 downto 0);
   signal PriceSummaryWriter_l_inst_l_avg_disc_bus_wreq_len             : std_logic_vector(BUS_LEN_WIDTH - 1 downto 0);
+  signal PriceSummaryWriter_l_inst_l_avg_disc_bus_wreq_last            : std_logic;
   signal PriceSummaryWriter_l_inst_l_avg_disc_bus_wdat_valid           : std_logic;
   signal PriceSummaryWriter_l_inst_l_avg_disc_bus_wdat_ready           : std_logic;
   signal PriceSummaryWriter_l_inst_l_avg_disc_bus_wdat_data            : std_logic_vector(BUS_DATA_WIDTH - 1 downto 0);
   signal PriceSummaryWriter_l_inst_l_avg_disc_bus_wdat_strobe          : std_logic_vector(BUS_DATA_WIDTH/8 - 1 downto 0);
   signal PriceSummaryWriter_l_inst_l_avg_disc_bus_wdat_last            : std_logic;
+  signal PriceSummaryWriter_l_inst_l_avg_disc_bus_wrep_valid           : std_logic;
+  signal PriceSummaryWriter_l_inst_l_avg_disc_bus_wrep_ready           : std_logic;
+  signal PriceSummaryWriter_l_inst_l_avg_disc_bus_wrep_ok              : std_logic;
 
   signal PriceSummaryWriter_l_inst_l_avg_disc_cmd_valid                : std_logic;
   signal PriceSummaryWriter_l_inst_l_avg_disc_cmd_ready                : std_logic;
@@ -1347,11 +1429,15 @@ architecture Implementation of PriceSummary_Mantle is
   signal PriceSummaryWriter_l_inst_l_count_order_bus_wreq_ready        : std_logic;
   signal PriceSummaryWriter_l_inst_l_count_order_bus_wreq_addr         : std_logic_vector(BUS_ADDR_WIDTH - 1 downto 0);
   signal PriceSummaryWriter_l_inst_l_count_order_bus_wreq_len          : std_logic_vector(BUS_LEN_WIDTH - 1 downto 0);
+  signal PriceSummaryWriter_l_inst_l_count_order_bus_wreq_last         : std_logic;
   signal PriceSummaryWriter_l_inst_l_count_order_bus_wdat_valid        : std_logic;
   signal PriceSummaryWriter_l_inst_l_count_order_bus_wdat_ready        : std_logic;
   signal PriceSummaryWriter_l_inst_l_count_order_bus_wdat_data         : std_logic_vector(BUS_DATA_WIDTH - 1 downto 0);
   signal PriceSummaryWriter_l_inst_l_count_order_bus_wdat_strobe       : std_logic_vector(BUS_DATA_WIDTH/8 - 1 downto 0);
   signal PriceSummaryWriter_l_inst_l_count_order_bus_wdat_last         : std_logic;
+  signal PriceSummaryWriter_l_inst_l_count_order_bus_wrep_valid        : std_logic;
+  signal PriceSummaryWriter_l_inst_l_count_order_bus_wrep_ready        : std_logic;
+  signal PriceSummaryWriter_l_inst_l_count_order_bus_wrep_ok           : std_logic;
 
   signal PriceSummaryWriter_l_inst_l_count_order_cmd_valid             : std_logic;
   signal PriceSummaryWriter_l_inst_l_count_order_cmd_ready             : std_logic;
@@ -1733,21 +1819,29 @@ architecture Implementation of PriceSummary_Mantle is
   signal WRAW64DW512LW8BS1BM16_inst_mst_wreq_ready                     : std_logic;
   signal WRAW64DW512LW8BS1BM16_inst_mst_wreq_addr                      : std_logic_vector(BUS_ADDR_WIDTH - 1 downto 0);
   signal WRAW64DW512LW8BS1BM16_inst_mst_wreq_len                       : std_logic_vector(BUS_LEN_WIDTH - 1 downto 0);
+  signal WRAW64DW512LW8BS1BM16_inst_mst_wreq_last                      : std_logic;
   signal WRAW64DW512LW8BS1BM16_inst_mst_wdat_valid                     : std_logic;
   signal WRAW64DW512LW8BS1BM16_inst_mst_wdat_ready                     : std_logic;
   signal WRAW64DW512LW8BS1BM16_inst_mst_wdat_data                      : std_logic_vector(BUS_DATA_WIDTH - 1 downto 0);
   signal WRAW64DW512LW8BS1BM16_inst_mst_wdat_strobe                    : std_logic_vector(BUS_DATA_WIDTH/8 - 1 downto 0);
   signal WRAW64DW512LW8BS1BM16_inst_mst_wdat_last                      : std_logic;
+  signal WRAW64DW512LW8BS1BM16_inst_mst_wrep_valid                     : std_logic;
+  signal WRAW64DW512LW8BS1BM16_inst_mst_wrep_ready                     : std_logic;
+  signal WRAW64DW512LW8BS1BM16_inst_mst_wrep_ok                        : std_logic;
 
   signal WRAW64DW512LW8BS1BM16_inst_bsv_wreq_valid                     : std_logic_vector(9 downto 0);
   signal WRAW64DW512LW8BS1BM16_inst_bsv_wreq_ready                     : std_logic_vector(9 downto 0);
   signal WRAW64DW512LW8BS1BM16_inst_bsv_wreq_addr                      : std_logic_vector(10 * BUS_ADDR_WIDTH - 1 downto 0);
   signal WRAW64DW512LW8BS1BM16_inst_bsv_wreq_len                       : std_logic_vector(10 * BUS_LEN_WIDTH - 1 downto 0);
+  signal WRAW64DW512LW8BS1BM16_inst_bsv_wreq_last                      : std_logic_vector(9 downto 0);
   signal WRAW64DW512LW8BS1BM16_inst_bsv_wdat_valid                     : std_logic_vector(9 downto 0);
   signal WRAW64DW512LW8BS1BM16_inst_bsv_wdat_ready                     : std_logic_vector(9 downto 0);
   signal WRAW64DW512LW8BS1BM16_inst_bsv_wdat_data                      : std_logic_vector(10 * BUS_DATA_WIDTH - 1 downto 0);
   signal WRAW64DW512LW8BS1BM16_inst_bsv_wdat_strobe                    : std_logic_vector(10 * BUS_DATA_WIDTH/8 - 1 downto 0);
   signal WRAW64DW512LW8BS1BM16_inst_bsv_wdat_last                      : std_logic_vector(9 downto 0);
+  signal WRAW64DW512LW8BS1BM16_inst_bsv_wrep_valid                     : std_logic_vector(9 downto 0);
+  signal WRAW64DW512LW8BS1BM16_inst_bsv_wrep_ready                     : std_logic_vector(9 downto 0);
+  signal WRAW64DW512LW8BS1BM16_inst_bsv_wrep_ok                        : std_logic_vector(9 downto 0);
 begin
   PriceSummary_Nucleus_inst : PriceSummary_Nucleus
   generic map(
@@ -1903,6 +1997,7 @@ begin
     l_shipdate_cmd_lastIdx        => PriceSummary_Nucleus_inst_l_shipdate_cmd_lastIdx,
     l_shipdate_cmd_ctrl           => PriceSummary_Nucleus_inst_l_shipdate_cmd_ctrl,
     l_shipdate_cmd_tag            => PriceSummary_Nucleus_inst_l_shipdate_cmd_tag,
+
     l_returnflag_o_valid          => PriceSummaryWriter_Nucleus_inst_l_returnflag_o_valid,
     l_returnflag_o_ready          => PriceSummaryWriter_Nucleus_inst_l_returnflag_o_ready,
     l_returnflag_o_dvalid         => PriceSummaryWriter_Nucleus_inst_l_returnflag_o_dvalid,
@@ -2322,6 +2417,7 @@ begin
     l_shipdate_unl_valid             => PriceSummary_l_inst_l_shipdate_unl_valid,
     l_shipdate_unl_ready             => PriceSummary_l_inst_l_shipdate_unl_ready,
     l_shipdate_unl_tag               => PriceSummary_l_inst_l_shipdate_unl_tag,
+
     l_returnflag_o_valid             => PriceSummaryWriter_l_inst_l_returnflag_o_valid,
     l_returnflag_o_ready             => PriceSummaryWriter_l_inst_l_returnflag_o_ready,
     l_returnflag_o_dvalid            => PriceSummaryWriter_l_inst_l_returnflag_o_dvalid,
@@ -2338,11 +2434,15 @@ begin
     l_returnflag_o_bus_wreq_ready    => PriceSummaryWriter_l_inst_l_returnflag_o_bus_wreq_ready,
     l_returnflag_o_bus_wreq_addr     => PriceSummaryWriter_l_inst_l_returnflag_o_bus_wreq_addr,
     l_returnflag_o_bus_wreq_len      => PriceSummaryWriter_l_inst_l_returnflag_o_bus_wreq_len,
+    l_returnflag_o_bus_wreq_last     => PriceSummaryWriter_l_inst_l_returnflag_o_bus_wreq_last,
     l_returnflag_o_bus_wdat_valid    => PriceSummaryWriter_l_inst_l_returnflag_o_bus_wdat_valid,
     l_returnflag_o_bus_wdat_ready    => PriceSummaryWriter_l_inst_l_returnflag_o_bus_wdat_ready,
     l_returnflag_o_bus_wdat_data     => PriceSummaryWriter_l_inst_l_returnflag_o_bus_wdat_data,
     l_returnflag_o_bus_wdat_strobe   => PriceSummaryWriter_l_inst_l_returnflag_o_bus_wdat_strobe,
     l_returnflag_o_bus_wdat_last     => PriceSummaryWriter_l_inst_l_returnflag_o_bus_wdat_last,
+    l_returnflag_o_bus_wrep_valid    => PriceSummaryWriter_l_inst_l_returnflag_o_bus_wrep_valid,
+    l_returnflag_o_bus_wrep_ready    => PriceSummaryWriter_l_inst_l_returnflag_o_bus_wrep_ready,
+    l_returnflag_o_bus_wrep_ok       => PriceSummaryWriter_l_inst_l_returnflag_o_bus_wrep_ok,
     l_returnflag_o_cmd_valid         => PriceSummaryWriter_l_inst_l_returnflag_o_cmd_valid,
     l_returnflag_o_cmd_ready         => PriceSummaryWriter_l_inst_l_returnflag_o_cmd_ready,
     l_returnflag_o_cmd_firstIdx      => PriceSummaryWriter_l_inst_l_returnflag_o_cmd_firstIdx,
@@ -2368,11 +2468,15 @@ begin
     l_linestatus_o_bus_wreq_ready    => PriceSummaryWriter_l_inst_l_linestatus_o_bus_wreq_ready,
     l_linestatus_o_bus_wreq_addr     => PriceSummaryWriter_l_inst_l_linestatus_o_bus_wreq_addr,
     l_linestatus_o_bus_wreq_len      => PriceSummaryWriter_l_inst_l_linestatus_o_bus_wreq_len,
+    l_linestatus_o_bus_wreq_last     => PriceSummaryWriter_l_inst_l_linestatus_o_bus_wreq_last,
     l_linestatus_o_bus_wdat_valid    => PriceSummaryWriter_l_inst_l_linestatus_o_bus_wdat_valid,
     l_linestatus_o_bus_wdat_ready    => PriceSummaryWriter_l_inst_l_linestatus_o_bus_wdat_ready,
     l_linestatus_o_bus_wdat_data     => PriceSummaryWriter_l_inst_l_linestatus_o_bus_wdat_data,
     l_linestatus_o_bus_wdat_strobe   => PriceSummaryWriter_l_inst_l_linestatus_o_bus_wdat_strobe,
     l_linestatus_o_bus_wdat_last     => PriceSummaryWriter_l_inst_l_linestatus_o_bus_wdat_last,
+    l_linestatus_o_bus_wrep_valid    => PriceSummaryWriter_l_inst_l_linestatus_o_bus_wrep_valid,
+    l_linestatus_o_bus_wrep_ready    => PriceSummaryWriter_l_inst_l_linestatus_o_bus_wrep_ready,
+    l_linestatus_o_bus_wrep_ok       => PriceSummaryWriter_l_inst_l_linestatus_o_bus_wrep_ok,
     l_linestatus_o_cmd_valid         => PriceSummaryWriter_l_inst_l_linestatus_o_cmd_valid,
     l_linestatus_o_cmd_ready         => PriceSummaryWriter_l_inst_l_linestatus_o_cmd_ready,
     l_linestatus_o_cmd_firstIdx      => PriceSummaryWriter_l_inst_l_linestatus_o_cmd_firstIdx,
@@ -2391,11 +2495,15 @@ begin
     l_sum_qty_bus_wreq_ready         => PriceSummaryWriter_l_inst_l_sum_qty_bus_wreq_ready,
     l_sum_qty_bus_wreq_addr          => PriceSummaryWriter_l_inst_l_sum_qty_bus_wreq_addr,
     l_sum_qty_bus_wreq_len           => PriceSummaryWriter_l_inst_l_sum_qty_bus_wreq_len,
+    l_sum_qty_bus_wreq_last          => PriceSummaryWriter_l_inst_l_sum_qty_bus_wreq_last,
     l_sum_qty_bus_wdat_valid         => PriceSummaryWriter_l_inst_l_sum_qty_bus_wdat_valid,
     l_sum_qty_bus_wdat_ready         => PriceSummaryWriter_l_inst_l_sum_qty_bus_wdat_ready,
     l_sum_qty_bus_wdat_data          => PriceSummaryWriter_l_inst_l_sum_qty_bus_wdat_data,
     l_sum_qty_bus_wdat_strobe        => PriceSummaryWriter_l_inst_l_sum_qty_bus_wdat_strobe,
     l_sum_qty_bus_wdat_last          => PriceSummaryWriter_l_inst_l_sum_qty_bus_wdat_last,
+    l_sum_qty_bus_wrep_valid         => PriceSummaryWriter_l_inst_l_sum_qty_bus_wrep_valid,
+    l_sum_qty_bus_wrep_ready         => PriceSummaryWriter_l_inst_l_sum_qty_bus_wrep_ready,
+    l_sum_qty_bus_wrep_ok            => PriceSummaryWriter_l_inst_l_sum_qty_bus_wrep_ok,
     l_sum_qty_cmd_valid              => PriceSummaryWriter_l_inst_l_sum_qty_cmd_valid,
     l_sum_qty_cmd_ready              => PriceSummaryWriter_l_inst_l_sum_qty_cmd_ready,
     l_sum_qty_cmd_firstIdx           => PriceSummaryWriter_l_inst_l_sum_qty_cmd_firstIdx,
@@ -2414,11 +2522,15 @@ begin
     l_sum_base_price_bus_wreq_ready  => PriceSummaryWriter_l_inst_l_sum_base_price_bus_wreq_ready,
     l_sum_base_price_bus_wreq_addr   => PriceSummaryWriter_l_inst_l_sum_base_price_bus_wreq_addr,
     l_sum_base_price_bus_wreq_len    => PriceSummaryWriter_l_inst_l_sum_base_price_bus_wreq_len,
+    l_sum_base_price_bus_wreq_last   => PriceSummaryWriter_l_inst_l_sum_base_price_bus_wreq_last,
     l_sum_base_price_bus_wdat_valid  => PriceSummaryWriter_l_inst_l_sum_base_price_bus_wdat_valid,
     l_sum_base_price_bus_wdat_ready  => PriceSummaryWriter_l_inst_l_sum_base_price_bus_wdat_ready,
     l_sum_base_price_bus_wdat_data   => PriceSummaryWriter_l_inst_l_sum_base_price_bus_wdat_data,
     l_sum_base_price_bus_wdat_strobe => PriceSummaryWriter_l_inst_l_sum_base_price_bus_wdat_strobe,
     l_sum_base_price_bus_wdat_last   => PriceSummaryWriter_l_inst_l_sum_base_price_bus_wdat_last,
+    l_sum_base_price_bus_wrep_valid  => PriceSummaryWriter_l_inst_l_sum_base_price_bus_wrep_valid,
+    l_sum_base_price_bus_wrep_ready  => PriceSummaryWriter_l_inst_l_sum_base_price_bus_wrep_ready,
+    l_sum_base_price_bus_wrep_ok     => PriceSummaryWriter_l_inst_l_sum_base_price_bus_wrep_ok,
     l_sum_base_price_cmd_valid       => PriceSummaryWriter_l_inst_l_sum_base_price_cmd_valid,
     l_sum_base_price_cmd_ready       => PriceSummaryWriter_l_inst_l_sum_base_price_cmd_ready,
     l_sum_base_price_cmd_firstIdx    => PriceSummaryWriter_l_inst_l_sum_base_price_cmd_firstIdx,
@@ -2437,11 +2549,15 @@ begin
     l_sum_disc_price_bus_wreq_ready  => PriceSummaryWriter_l_inst_l_sum_disc_price_bus_wreq_ready,
     l_sum_disc_price_bus_wreq_addr   => PriceSummaryWriter_l_inst_l_sum_disc_price_bus_wreq_addr,
     l_sum_disc_price_bus_wreq_len    => PriceSummaryWriter_l_inst_l_sum_disc_price_bus_wreq_len,
+    l_sum_disc_price_bus_wreq_last   => PriceSummaryWriter_l_inst_l_sum_disc_price_bus_wreq_last,
     l_sum_disc_price_bus_wdat_valid  => PriceSummaryWriter_l_inst_l_sum_disc_price_bus_wdat_valid,
     l_sum_disc_price_bus_wdat_ready  => PriceSummaryWriter_l_inst_l_sum_disc_price_bus_wdat_ready,
     l_sum_disc_price_bus_wdat_data   => PriceSummaryWriter_l_inst_l_sum_disc_price_bus_wdat_data,
     l_sum_disc_price_bus_wdat_strobe => PriceSummaryWriter_l_inst_l_sum_disc_price_bus_wdat_strobe,
     l_sum_disc_price_bus_wdat_last   => PriceSummaryWriter_l_inst_l_sum_disc_price_bus_wdat_last,
+    l_sum_disc_price_bus_wrep_valid  => PriceSummaryWriter_l_inst_l_sum_disc_price_bus_wrep_valid,
+    l_sum_disc_price_bus_wrep_ready  => PriceSummaryWriter_l_inst_l_sum_disc_price_bus_wrep_ready,
+    l_sum_disc_price_bus_wrep_ok     => PriceSummaryWriter_l_inst_l_sum_disc_price_bus_wrep_ok,
     l_sum_disc_price_cmd_valid       => PriceSummaryWriter_l_inst_l_sum_disc_price_cmd_valid,
     l_sum_disc_price_cmd_ready       => PriceSummaryWriter_l_inst_l_sum_disc_price_cmd_ready,
     l_sum_disc_price_cmd_firstIdx    => PriceSummaryWriter_l_inst_l_sum_disc_price_cmd_firstIdx,
@@ -2460,11 +2576,15 @@ begin
     l_sum_charge_bus_wreq_ready      => PriceSummaryWriter_l_inst_l_sum_charge_bus_wreq_ready,
     l_sum_charge_bus_wreq_addr       => PriceSummaryWriter_l_inst_l_sum_charge_bus_wreq_addr,
     l_sum_charge_bus_wreq_len        => PriceSummaryWriter_l_inst_l_sum_charge_bus_wreq_len,
+    l_sum_charge_bus_wreq_last       => PriceSummaryWriter_l_inst_l_sum_charge_bus_wreq_last,
     l_sum_charge_bus_wdat_valid      => PriceSummaryWriter_l_inst_l_sum_charge_bus_wdat_valid,
     l_sum_charge_bus_wdat_ready      => PriceSummaryWriter_l_inst_l_sum_charge_bus_wdat_ready,
     l_sum_charge_bus_wdat_data       => PriceSummaryWriter_l_inst_l_sum_charge_bus_wdat_data,
     l_sum_charge_bus_wdat_strobe     => PriceSummaryWriter_l_inst_l_sum_charge_bus_wdat_strobe,
     l_sum_charge_bus_wdat_last       => PriceSummaryWriter_l_inst_l_sum_charge_bus_wdat_last,
+    l_sum_charge_bus_wrep_valid      => PriceSummaryWriter_l_inst_l_sum_charge_bus_wrep_valid,
+    l_sum_charge_bus_wrep_ready      => PriceSummaryWriter_l_inst_l_sum_charge_bus_wrep_ready,
+    l_sum_charge_bus_wrep_ok         => PriceSummaryWriter_l_inst_l_sum_charge_bus_wrep_ok,
     l_sum_charge_cmd_valid           => PriceSummaryWriter_l_inst_l_sum_charge_cmd_valid,
     l_sum_charge_cmd_ready           => PriceSummaryWriter_l_inst_l_sum_charge_cmd_ready,
     l_sum_charge_cmd_firstIdx        => PriceSummaryWriter_l_inst_l_sum_charge_cmd_firstIdx,
@@ -2483,11 +2603,15 @@ begin
     l_avg_qty_bus_wreq_ready         => PriceSummaryWriter_l_inst_l_avg_qty_bus_wreq_ready,
     l_avg_qty_bus_wreq_addr          => PriceSummaryWriter_l_inst_l_avg_qty_bus_wreq_addr,
     l_avg_qty_bus_wreq_len           => PriceSummaryWriter_l_inst_l_avg_qty_bus_wreq_len,
+    l_avg_qty_bus_wreq_last          => PriceSummaryWriter_l_inst_l_avg_qty_bus_wreq_last,
     l_avg_qty_bus_wdat_valid         => PriceSummaryWriter_l_inst_l_avg_qty_bus_wdat_valid,
     l_avg_qty_bus_wdat_ready         => PriceSummaryWriter_l_inst_l_avg_qty_bus_wdat_ready,
     l_avg_qty_bus_wdat_data          => PriceSummaryWriter_l_inst_l_avg_qty_bus_wdat_data,
     l_avg_qty_bus_wdat_strobe        => PriceSummaryWriter_l_inst_l_avg_qty_bus_wdat_strobe,
     l_avg_qty_bus_wdat_last          => PriceSummaryWriter_l_inst_l_avg_qty_bus_wdat_last,
+    l_avg_qty_bus_wrep_valid         => PriceSummaryWriter_l_inst_l_avg_qty_bus_wrep_valid,
+    l_avg_qty_bus_wrep_ready         => PriceSummaryWriter_l_inst_l_avg_qty_bus_wrep_ready,
+    l_avg_qty_bus_wrep_ok            => PriceSummaryWriter_l_inst_l_avg_qty_bus_wrep_ok,
     l_avg_qty_cmd_valid              => PriceSummaryWriter_l_inst_l_avg_qty_cmd_valid,
     l_avg_qty_cmd_ready              => PriceSummaryWriter_l_inst_l_avg_qty_cmd_ready,
     l_avg_qty_cmd_firstIdx           => PriceSummaryWriter_l_inst_l_avg_qty_cmd_firstIdx,
@@ -2506,11 +2630,15 @@ begin
     l_avg_price_bus_wreq_ready       => PriceSummaryWriter_l_inst_l_avg_price_bus_wreq_ready,
     l_avg_price_bus_wreq_addr        => PriceSummaryWriter_l_inst_l_avg_price_bus_wreq_addr,
     l_avg_price_bus_wreq_len         => PriceSummaryWriter_l_inst_l_avg_price_bus_wreq_len,
+    l_avg_price_bus_wreq_last        => PriceSummaryWriter_l_inst_l_avg_price_bus_wreq_last,
     l_avg_price_bus_wdat_valid       => PriceSummaryWriter_l_inst_l_avg_price_bus_wdat_valid,
     l_avg_price_bus_wdat_ready       => PriceSummaryWriter_l_inst_l_avg_price_bus_wdat_ready,
     l_avg_price_bus_wdat_data        => PriceSummaryWriter_l_inst_l_avg_price_bus_wdat_data,
     l_avg_price_bus_wdat_strobe      => PriceSummaryWriter_l_inst_l_avg_price_bus_wdat_strobe,
     l_avg_price_bus_wdat_last        => PriceSummaryWriter_l_inst_l_avg_price_bus_wdat_last,
+    l_avg_price_bus_wrep_valid       => PriceSummaryWriter_l_inst_l_avg_price_bus_wrep_valid,
+    l_avg_price_bus_wrep_ready       => PriceSummaryWriter_l_inst_l_avg_price_bus_wrep_ready,
+    l_avg_price_bus_wrep_ok          => PriceSummaryWriter_l_inst_l_avg_price_bus_wrep_ok,
     l_avg_price_cmd_valid            => PriceSummaryWriter_l_inst_l_avg_price_cmd_valid,
     l_avg_price_cmd_ready            => PriceSummaryWriter_l_inst_l_avg_price_cmd_ready,
     l_avg_price_cmd_firstIdx         => PriceSummaryWriter_l_inst_l_avg_price_cmd_firstIdx,
@@ -2529,11 +2657,15 @@ begin
     l_avg_disc_bus_wreq_ready        => PriceSummaryWriter_l_inst_l_avg_disc_bus_wreq_ready,
     l_avg_disc_bus_wreq_addr         => PriceSummaryWriter_l_inst_l_avg_disc_bus_wreq_addr,
     l_avg_disc_bus_wreq_len          => PriceSummaryWriter_l_inst_l_avg_disc_bus_wreq_len,
+    l_avg_disc_bus_wreq_last         => PriceSummaryWriter_l_inst_l_avg_disc_bus_wreq_last,
     l_avg_disc_bus_wdat_valid        => PriceSummaryWriter_l_inst_l_avg_disc_bus_wdat_valid,
     l_avg_disc_bus_wdat_ready        => PriceSummaryWriter_l_inst_l_avg_disc_bus_wdat_ready,
     l_avg_disc_bus_wdat_data         => PriceSummaryWriter_l_inst_l_avg_disc_bus_wdat_data,
     l_avg_disc_bus_wdat_strobe       => PriceSummaryWriter_l_inst_l_avg_disc_bus_wdat_strobe,
     l_avg_disc_bus_wdat_last         => PriceSummaryWriter_l_inst_l_avg_disc_bus_wdat_last,
+    l_avg_disc_bus_wrep_valid        => PriceSummaryWriter_l_inst_l_avg_disc_bus_wrep_valid,
+    l_avg_disc_bus_wrep_ready        => PriceSummaryWriter_l_inst_l_avg_disc_bus_wrep_ready,
+    l_avg_disc_bus_wrep_ok           => PriceSummaryWriter_l_inst_l_avg_disc_bus_wrep_ok,
     l_avg_disc_cmd_valid             => PriceSummaryWriter_l_inst_l_avg_disc_cmd_valid,
     l_avg_disc_cmd_ready             => PriceSummaryWriter_l_inst_l_avg_disc_cmd_ready,
     l_avg_disc_cmd_firstIdx          => PriceSummaryWriter_l_inst_l_avg_disc_cmd_firstIdx,
@@ -2552,11 +2684,15 @@ begin
     l_count_order_bus_wreq_ready     => PriceSummaryWriter_l_inst_l_count_order_bus_wreq_ready,
     l_count_order_bus_wreq_addr      => PriceSummaryWriter_l_inst_l_count_order_bus_wreq_addr,
     l_count_order_bus_wreq_len       => PriceSummaryWriter_l_inst_l_count_order_bus_wreq_len,
+    l_count_order_bus_wreq_last      => PriceSummaryWriter_l_inst_l_count_order_bus_wreq_last,
     l_count_order_bus_wdat_valid     => PriceSummaryWriter_l_inst_l_count_order_bus_wdat_valid,
     l_count_order_bus_wdat_ready     => PriceSummaryWriter_l_inst_l_count_order_bus_wdat_ready,
     l_count_order_bus_wdat_data      => PriceSummaryWriter_l_inst_l_count_order_bus_wdat_data,
     l_count_order_bus_wdat_strobe    => PriceSummaryWriter_l_inst_l_count_order_bus_wdat_strobe,
     l_count_order_bus_wdat_last      => PriceSummaryWriter_l_inst_l_count_order_bus_wdat_last,
+    l_count_order_bus_wrep_valid     => PriceSummaryWriter_l_inst_l_count_order_bus_wrep_valid,
+    l_count_order_bus_wrep_ready     => PriceSummaryWriter_l_inst_l_count_order_bus_wrep_ready,
+    l_count_order_bus_wrep_ok        => PriceSummaryWriter_l_inst_l_count_order_bus_wrep_ok,
     l_count_order_cmd_valid          => PriceSummaryWriter_l_inst_l_count_order_cmd_valid,
     l_count_order_cmd_ready          => PriceSummaryWriter_l_inst_l_count_order_cmd_ready,
     l_count_order_cmd_firstIdx       => PriceSummaryWriter_l_inst_l_count_order_cmd_firstIdx,
@@ -2589,15 +2725,23 @@ begin
     mst_wreq_ready  => WRAW64DW512LW8BS1BM16_inst_mst_wreq_ready,
     mst_wreq_addr   => WRAW64DW512LW8BS1BM16_inst_mst_wreq_addr,
     mst_wreq_len    => WRAW64DW512LW8BS1BM16_inst_mst_wreq_len,
+    mst_wreq_last   => WRAW64DW512LW8BS1BM16_inst_mst_wreq_last,
     mst_wdat_valid  => WRAW64DW512LW8BS1BM16_inst_mst_wdat_valid,
     mst_wdat_ready  => WRAW64DW512LW8BS1BM16_inst_mst_wdat_ready,
     mst_wdat_data   => WRAW64DW512LW8BS1BM16_inst_mst_wdat_data,
     mst_wdat_strobe => WRAW64DW512LW8BS1BM16_inst_mst_wdat_strobe,
     mst_wdat_last   => WRAW64DW512LW8BS1BM16_inst_mst_wdat_last,
+    mst_wrep_valid  => WRAW64DW512LW8BS1BM16_inst_mst_wrep_valid,
+    mst_wrep_ready  => WRAW64DW512LW8BS1BM16_inst_mst_wrep_ready,
+    mst_wrep_ok     => WRAW64DW512LW8BS1BM16_inst_mst_wrep_ok,
     bsv_wreq_valid  => WRAW64DW512LW8BS1BM16_inst_bsv_wreq_valid,
     bsv_wreq_ready  => WRAW64DW512LW8BS1BM16_inst_bsv_wreq_ready,
     bsv_wreq_len    => WRAW64DW512LW8BS1BM16_inst_bsv_wreq_len,
+    bsv_wreq_last   => WRAW64DW512LW8BS1BM16_inst_bsv_wreq_last,
     bsv_wreq_addr   => WRAW64DW512LW8BS1BM16_inst_bsv_wreq_addr,
+    bsv_wrep_valid  => WRAW64DW512LW8BS1BM16_inst_bsv_wrep_valid,
+    bsv_wrep_ready  => WRAW64DW512LW8BS1BM16_inst_bsv_wrep_ready,
+    bsv_wrep_ok     => WRAW64DW512LW8BS1BM16_inst_bsv_wrep_ok,
     bsv_wdat_valid  => WRAW64DW512LW8BS1BM16_inst_bsv_wdat_valid,
     bsv_wdat_strobe => WRAW64DW512LW8BS1BM16_inst_bsv_wdat_strobe,
     bsv_wdat_ready  => WRAW64DW512LW8BS1BM16_inst_bsv_wdat_ready,
@@ -2609,11 +2753,15 @@ begin
   WRAW64DW512LW8BS1BM16_inst_mst_wreq_ready                                                                           <= wr_mst_wreq_ready;
   wr_mst_wreq_addr                                                                                                    <= WRAW64DW512LW8BS1BM16_inst_mst_wreq_addr;
   wr_mst_wreq_len                                                                                                     <= WRAW64DW512LW8BS1BM16_inst_mst_wreq_len;
+  wr_mst_wreq_last                                                                                                    <= WRAW64DW512LW8BS1BM16_inst_mst_wreq_last;
   wr_mst_wdat_valid                                                                                                   <= WRAW64DW512LW8BS1BM16_inst_mst_wdat_valid;
   WRAW64DW512LW8BS1BM16_inst_mst_wdat_ready                                                                           <= wr_mst_wdat_ready;
   wr_mst_wdat_data                                                                                                    <= WRAW64DW512LW8BS1BM16_inst_mst_wdat_data;
   wr_mst_wdat_strobe                                                                                                  <= WRAW64DW512LW8BS1BM16_inst_mst_wdat_strobe;
   wr_mst_wdat_last                                                                                                    <= WRAW64DW512LW8BS1BM16_inst_mst_wdat_last;
+  WRAW64DW512LW8BS1BM16_inst_mst_wrep_valid                                                                           <= wr_mst_wrep_valid;
+  wr_mst_wrep_ready                                                                                                   <= WRAW64DW512LW8BS1BM16_inst_mst_wrep_ready;
+  WRAW64DW512LW8BS1BM16_inst_mst_wrep_ok                                                                              <= wr_mst_wrep_ok;
 
   PriceSummaryWriter_Nucleus_inst_l_returnflag_o_unl_valid                                                            <= PriceSummaryWriter_l_inst_l_returnflag_o_unl_valid;
   PriceSummaryWriter_l_inst_l_returnflag_o_unl_ready                                                                  <= PriceSummaryWriter_Nucleus_inst_l_returnflag_o_unl_ready;
@@ -2819,6 +2967,16 @@ begin
   WRAW64DW512LW8BS1BM16_inst_bsv_wreq_len(BUS_LEN_WIDTH * 7 + BUS_LEN_WIDTH - 1 downto BUS_LEN_WIDTH * 7)             <= PriceSummaryWriter_l_inst_l_avg_price_bus_wreq_len;
   WRAW64DW512LW8BS1BM16_inst_bsv_wreq_len(BUS_LEN_WIDTH * 8 + BUS_LEN_WIDTH - 1 downto BUS_LEN_WIDTH * 8)             <= PriceSummaryWriter_l_inst_l_avg_disc_bus_wreq_len;
   WRAW64DW512LW8BS1BM16_inst_bsv_wreq_len(BUS_LEN_WIDTH * 9 + BUS_LEN_WIDTH - 1 downto BUS_LEN_WIDTH * 9)             <= PriceSummaryWriter_l_inst_l_count_order_bus_wreq_len;
+  WRAW64DW512LW8BS1BM16_inst_bsv_wreq_last(0)                                                                         <= PriceSummaryWriter_l_inst_l_returnflag_o_bus_wreq_last;
+  WRAW64DW512LW8BS1BM16_inst_bsv_wreq_last(1)                                                                         <= PriceSummaryWriter_l_inst_l_linestatus_o_bus_wreq_last;
+  WRAW64DW512LW8BS1BM16_inst_bsv_wreq_last(2)                                                                         <= PriceSummaryWriter_l_inst_l_sum_qty_bus_wreq_last;
+  WRAW64DW512LW8BS1BM16_inst_bsv_wreq_last(3)                                                                         <= PriceSummaryWriter_l_inst_l_sum_base_price_bus_wreq_last;
+  WRAW64DW512LW8BS1BM16_inst_bsv_wreq_last(4)                                                                         <= PriceSummaryWriter_l_inst_l_sum_disc_price_bus_wreq_last;
+  WRAW64DW512LW8BS1BM16_inst_bsv_wreq_last(5)                                                                         <= PriceSummaryWriter_l_inst_l_sum_charge_bus_wreq_last;
+  WRAW64DW512LW8BS1BM16_inst_bsv_wreq_last(6)                                                                         <= PriceSummaryWriter_l_inst_l_avg_qty_bus_wreq_last;
+  WRAW64DW512LW8BS1BM16_inst_bsv_wreq_last(7)                                                                         <= PriceSummaryWriter_l_inst_l_avg_price_bus_wreq_last;
+  WRAW64DW512LW8BS1BM16_inst_bsv_wreq_last(8)                                                                         <= PriceSummaryWriter_l_inst_l_avg_disc_bus_wreq_last;
+  WRAW64DW512LW8BS1BM16_inst_bsv_wreq_last(9)                                                                         <= PriceSummaryWriter_l_inst_l_count_order_bus_wreq_last;
   WRAW64DW512LW8BS1BM16_inst_bsv_wreq_addr(BUS_ADDR_WIDTH - 1 downto 0)                                               <= PriceSummaryWriter_l_inst_l_returnflag_o_bus_wreq_addr;
   WRAW64DW512LW8BS1BM16_inst_bsv_wreq_addr(BUS_ADDR_WIDTH + BUS_ADDR_WIDTH - 1 downto BUS_ADDR_WIDTH)                 <= PriceSummaryWriter_l_inst_l_linestatus_o_bus_wreq_addr;
   WRAW64DW512LW8BS1BM16_inst_bsv_wreq_addr(BUS_ADDR_WIDTH * 2 + BUS_ADDR_WIDTH - 1 downto BUS_ADDR_WIDTH * 2)         <= PriceSummaryWriter_l_inst_l_sum_qty_bus_wreq_addr;
@@ -2869,6 +3027,38 @@ begin
   WRAW64DW512LW8BS1BM16_inst_bsv_wdat_data(BUS_DATA_WIDTH * 7 + BUS_DATA_WIDTH - 1 downto BUS_DATA_WIDTH * 7)         <= PriceSummaryWriter_l_inst_l_avg_price_bus_wdat_data;
   WRAW64DW512LW8BS1BM16_inst_bsv_wdat_data(BUS_DATA_WIDTH * 8 + BUS_DATA_WIDTH - 1 downto BUS_DATA_WIDTH * 8)         <= PriceSummaryWriter_l_inst_l_avg_disc_bus_wdat_data;
   WRAW64DW512LW8BS1BM16_inst_bsv_wdat_data(BUS_DATA_WIDTH * 9 + BUS_DATA_WIDTH - 1 downto BUS_DATA_WIDTH * 9)         <= PriceSummaryWriter_l_inst_l_count_order_bus_wdat_data;
+  WRAW64DW512LW8BS1BM16_inst_bsv_wrep_ready(0)                                                                        <= PriceSummaryWriter_l_inst_l_returnflag_o_bus_wrep_ready;
+  WRAW64DW512LW8BS1BM16_inst_bsv_wrep_ready(1)                                                                        <= PriceSummaryWriter_l_inst_l_linestatus_o_bus_wrep_ready;
+  WRAW64DW512LW8BS1BM16_inst_bsv_wrep_ready(2)                                                                        <= PriceSummaryWriter_l_inst_l_sum_qty_bus_wrep_ready;
+  WRAW64DW512LW8BS1BM16_inst_bsv_wrep_ready(3)                                                                        <= PriceSummaryWriter_l_inst_l_sum_base_price_bus_wrep_ready;
+  WRAW64DW512LW8BS1BM16_inst_bsv_wrep_ready(4)                                                                        <= PriceSummaryWriter_l_inst_l_sum_disc_price_bus_wrep_ready;
+  WRAW64DW512LW8BS1BM16_inst_bsv_wrep_ready(5)                                                                        <= PriceSummaryWriter_l_inst_l_sum_charge_bus_wrep_ready;
+  WRAW64DW512LW8BS1BM16_inst_bsv_wrep_ready(6)                                                                        <= PriceSummaryWriter_l_inst_l_avg_qty_bus_wrep_ready;
+  WRAW64DW512LW8BS1BM16_inst_bsv_wrep_ready(7)                                                                        <= PriceSummaryWriter_l_inst_l_avg_price_bus_wrep_ready;
+  WRAW64DW512LW8BS1BM16_inst_bsv_wrep_ready(8)                                                                        <= PriceSummaryWriter_l_inst_l_avg_disc_bus_wrep_ready;
+  WRAW64DW512LW8BS1BM16_inst_bsv_wrep_ready(9)                                                                        <= PriceSummaryWriter_l_inst_l_count_order_bus_wrep_ready;
+
+  PriceSummaryWriter_l_inst_l_sum_qty_bus_wrep_valid                                                                  <= WRAW64DW512LW8BS1BM16_inst_bsv_wrep_valid(2);
+  PriceSummaryWriter_l_inst_l_sum_qty_bus_wrep_ok                                                                     <= WRAW64DW512LW8BS1BM16_inst_bsv_wrep_ok(2);
+  PriceSummaryWriter_l_inst_l_sum_disc_price_bus_wrep_valid                                                           <= WRAW64DW512LW8BS1BM16_inst_bsv_wrep_valid(4);
+  PriceSummaryWriter_l_inst_l_sum_disc_price_bus_wrep_ok                                                              <= WRAW64DW512LW8BS1BM16_inst_bsv_wrep_ok(4);
+  PriceSummaryWriter_l_inst_l_sum_charge_bus_wrep_valid                                                               <= WRAW64DW512LW8BS1BM16_inst_bsv_wrep_valid(5);
+  PriceSummaryWriter_l_inst_l_sum_charge_bus_wrep_ok                                                                  <= WRAW64DW512LW8BS1BM16_inst_bsv_wrep_ok(5);
+  PriceSummaryWriter_l_inst_l_sum_base_price_bus_wrep_valid                                                           <= WRAW64DW512LW8BS1BM16_inst_bsv_wrep_valid(3);
+  PriceSummaryWriter_l_inst_l_sum_base_price_bus_wrep_ok                                                              <= WRAW64DW512LW8BS1BM16_inst_bsv_wrep_ok(3);
+  PriceSummaryWriter_l_inst_l_returnflag_o_bus_wrep_valid                                                             <= WRAW64DW512LW8BS1BM16_inst_bsv_wrep_valid(0);
+  PriceSummaryWriter_l_inst_l_returnflag_o_bus_wrep_ok                                                                <= WRAW64DW512LW8BS1BM16_inst_bsv_wrep_ok(0);
+  PriceSummaryWriter_l_inst_l_linestatus_o_bus_wrep_valid                                                             <= WRAW64DW512LW8BS1BM16_inst_bsv_wrep_valid(1);
+  PriceSummaryWriter_l_inst_l_linestatus_o_bus_wrep_ok                                                                <= WRAW64DW512LW8BS1BM16_inst_bsv_wrep_ok(1);
+  PriceSummaryWriter_l_inst_l_count_order_bus_wrep_valid                                                              <= WRAW64DW512LW8BS1BM16_inst_bsv_wrep_valid(9);
+  PriceSummaryWriter_l_inst_l_count_order_bus_wrep_ok                                                                 <= WRAW64DW512LW8BS1BM16_inst_bsv_wrep_ok(9);
+  PriceSummaryWriter_l_inst_l_avg_qty_bus_wrep_valid                                                                  <= WRAW64DW512LW8BS1BM16_inst_bsv_wrep_valid(6);
+  PriceSummaryWriter_l_inst_l_avg_qty_bus_wrep_ok                                                                     <= WRAW64DW512LW8BS1BM16_inst_bsv_wrep_ok(6);
+  PriceSummaryWriter_l_inst_l_avg_price_bus_wrep_valid                                                                <= WRAW64DW512LW8BS1BM16_inst_bsv_wrep_valid(7);
+  PriceSummaryWriter_l_inst_l_avg_price_bus_wrep_ok                                                                   <= WRAW64DW512LW8BS1BM16_inst_bsv_wrep_ok(7);
+  PriceSummaryWriter_l_inst_l_avg_disc_bus_wrep_valid                                                                 <= WRAW64DW512LW8BS1BM16_inst_bsv_wrep_valid(8);
+  PriceSummaryWriter_l_inst_l_avg_disc_bus_wrep_ok                                                                    <= WRAW64DW512LW8BS1BM16_inst_bsv_wrep_ok(8);
+
   PriceSummaryWriter_l_inst_l_sum_qty_bus_wreq_ready                                                                  <= WRAW64DW512LW8BS1BM16_inst_bsv_wreq_ready(2);
   PriceSummaryWriter_l_inst_l_sum_qty_bus_wdat_ready                                                                  <= WRAW64DW512LW8BS1BM16_inst_bsv_wdat_ready(2);
   PriceSummaryWriter_l_inst_l_sum_disc_price_bus_wreq_ready                                                           <= WRAW64DW512LW8BS1BM16_inst_bsv_wreq_ready(4);

@@ -290,6 +290,11 @@ axi_register_slice_light BAR1_SLICE (
    .m_axi_wlast  (cl_axi_mstr_bus.wlast),
    .m_axi_wstrb  (cl_axi_mstr_bus.wstrb),
 
+   // Write response channel
+   .m_axi_bvalid (cl_axi_mstr_bus.bvalid),
+   .m_axi_bready (cl_axi_mstr_bus.bready),
+   .m_axi_bresp  (cl_axi_mstr_bus.bresp ),
+
    // Slave interface
    .s_axi_awvalid(cl_axi_slv_bus.awvalid),
    .s_axi_awready(cl_axi_slv_bus.awready),

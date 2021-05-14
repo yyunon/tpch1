@@ -192,7 +192,11 @@ begin
     variable vs     : sregs_record;
     variable output : chars_out_record;
   begin
-    vs := rs;
+    vs                := rs;
+    output.utf.valid  := '0';
+    output.utf.dvalid := '1';
+    output.utf.ready  := '0';
+
     case vs.state is
       when STATE_IDLE =>
         output.utf.last := '0';
