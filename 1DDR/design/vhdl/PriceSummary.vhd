@@ -360,6 +360,10 @@ architecture Implementation of PriceSummary is
   signal output_first_idx      : std_logic_vector(32 - 1 downto 0);
   signal output_last_idx       : std_logic_vector(32 - 1 downto 0);
 
+  --unlock stream signals
+  signal pricesummary_valid    : std_logic;
+  signal pricesummary_ready    : std_logic;
+
 begin
   processing_unit_0 : PU
   generic map(
@@ -528,16 +532,17 @@ begin
     l_linestatus_cmd_ready,
     l_shipdate_cmd_ready,
 
-    l_count_order_unl_valid,
-    l_avg_disc_unl_valid,
-    l_avg_price_unl_valid,
-    l_avg_qty_unl_valid,
-    l_sum_charge_unl_valid,
-    l_sum_disc_price_unl_valid,
-    l_sum_base_price_unl_valid,
-    l_linestatus_o_unl_valid,
-    l_sum_qty_unl_valid,
-    l_returnflag_o_unl_valid,
+    pricesummary_valid,
+    --l_count_order_unl_valid,
+    --l_avg_disc_unl_valid,
+    --l_avg_price_unl_valid,
+    --l_avg_qty_unl_valid,
+    --l_sum_charge_unl_valid,
+    --l_sum_disc_price_unl_valid,
+    --l_sum_base_price_unl_valid,
+    --l_linestatus_o_unl_valid,
+    --l_sum_qty_unl_valid,
+    --l_returnflag_o_unl_valid,
 
     l_count_order_cmd_ready,
     l_avg_disc_cmd_ready,
@@ -836,24 +841,15 @@ begin
         -- Unlock: the generated interface delivered all items in the stream.
         -- The unlock stream is supplied to make sure all bus transfers of the
         -- corresponding command are completed.
-        done <= '1';
-        busy <= '0';
-        idle <= '1';
+        done               <= '0';
+        busy               <= '0';
+        idle               <= '1';
 
         -- Unlock the output stream too
-        l_returnflag_o.unl.ready   := '1';
-        l_linestatus_o.unl.ready   := '1';
-        l_sum_qty.unl.ready        := '1';
-        l_sum_base.unl.ready       := '1';
-        l_sum_disc_price.unl.ready := '1';
-        l_sum_charge.unl.ready     := '1';
-        l_avg_qty.unl.ready        := '1';
-        l_avg_disc.unl.ready       := '1';
-        l_avg_price.unl.ready      := '1';
-        l_count_order.unl.ready    := '1';
-
+        pricesummary_ready <= '1';
         -- Handshake when it is valid and go to the done state.
-        if l_count_order_unl_valid = '1' and l_avg_disc_unl_valid = '1' and l_avg_price_unl_valid = '1' and l_avg_qty_unl_valid = '1' and l_sum_charge_unl_valid = '1' and l_sum_disc_price_unl_valid = '1' and l_sum_base_price_unl_valid = '1' and l_sum_qty_unl_valid = '1' and l_returnflag_o_unl_valid = '1' and l_linestatus_o_unl_valid = '1' then
+        --if l_count_order_unl_valid = '1' and l_avg_disc_unl_valid = '1' and l_avg_price_unl_valid = '1' and l_avg_qty_unl_valid = '1' and l_sum_charge_unl_valid = '1' and l_sum_disc_price_unl_valid = '1' and l_sum_base_price_unl_valid = '1' and l_sum_qty_unl_valid = '1' and l_returnflag_o_unl_valid = '1' and l_linestatus_o_unl_valid = '1' then
+        if pricesummary_valid = '1' then
           state_next <= STATE_DONE;
         end if;
 
@@ -921,17 +917,51 @@ begin
     l_count_order_cmd_lastIdx     <= l_count_order.cmd.lastIdx;
     l_count_order_cmd_tag         <= l_count_order.cmd.tag;
 
-    l_returnflag_o_unl_ready      <= l_returnflag_o.unl.ready;
-    l_linestatus_o_unl_ready      <= l_linestatus_o.unl.ready;
-    l_sum_qty_unl_ready           <= l_sum_qty.unl.ready;
-    l_sum_base_price_unl_ready    <= l_sum_base.unl.ready;
-    l_sum_disc_price_unl_ready    <= l_sum_disc_price.unl.ready;
-    l_sum_charge_unl_ready        <= l_sum_charge.unl.ready;
-    l_avg_qty_unl_ready           <= l_avg_qty.unl.ready;
-    l_avg_price_unl_ready         <= l_avg_price.unl.ready;
-    l_avg_disc_unl_ready          <= l_avg_disc.unl.ready;
-    l_count_order_unl_ready       <= l_count_order.unl.ready;
+    --l_returnflag_o_unl_ready      <= l_returnflag_o.unl.ready;
+    --l_linestatus_o_unl_ready      <= l_linestatus_o.unl.ready;
+    --l_sum_qty_unl_ready           <= l_sum_qty.unl.ready;
+    --l_sum_base_price_unl_ready    <= l_sum_base.unl.ready;
+    --l_sum_disc_price_unl_ready    <= l_sum_disc_price.unl.ready;
+    --l_sum_charge_unl_ready        <= l_sum_charge.unl.ready;
+    --l_avg_qty_unl_ready           <= l_avg_qty.unl.ready;
+    --l_avg_price_unl_ready         <= l_avg_price.unl.ready;
+    --l_avg_disc_unl_ready          <= l_avg_disc.unl.ready;
+    --l_count_order_unl_ready       <= l_count_order.unl.ready;
   end process;
+
+  unl_sync : StreamSync
+  generic map(
+    NUM_INPUTS  => 10,
+    NUM_OUTPUTS => 1
+  )
+  port map(
+    clk          => kcd_clk,
+    reset        => kcd_reset,
+    out_valid(0) => pricesummary_valid,
+    out_ready(0) => pricesummary_ready,
+
+    in_valid(0)  => l_count_order_unl_valid,
+    in_valid(1)  => l_avg_disc_unl_valid,
+    in_valid(2)  => l_avg_price_unl_valid,
+    in_valid(3)  => l_avg_qty_unl_valid,
+    in_valid(4)  => l_sum_charge_unl_valid,
+    in_valid(5)  => l_sum_disc_price_unl_valid,
+    in_valid(6)  => l_sum_base_price_unl_valid,
+    in_valid(7)  => l_sum_qty_unl_valid,
+    in_valid(8)  => l_returnflag_o_unl_valid,
+    in_valid(9)  => l_linestatus_o_unl_valid,
+
+    in_ready(0)  => l_count_order_unl_ready,
+    in_ready(1)  => l_avg_disc_unl_ready,
+    in_ready(2)  => l_avg_price_unl_ready,
+    in_ready(3)  => l_avg_qty_unl_ready,
+    in_ready(4)  => l_sum_charge_unl_ready,
+    in_ready(5)  => l_sum_disc_price_unl_ready,
+    in_ready(6)  => l_sum_base_price_unl_ready,
+    in_ready(7)  => l_sum_qty_unl_ready,
+    in_ready(8)  => l_returnflag_o_unl_ready,
+    in_ready(9)  => l_linestatus_o_unl_ready
+  );
 
   -- Sequential part:
   sequential_proc : process (kcd_clk)
