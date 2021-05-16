@@ -264,7 +264,8 @@ package Tpch_pkg is
       interface_in_ready          : out std_logic
     );
   end component;
-  component Float_to_Fixed is
+
+  component TypeConverter is
     generic (
 
       FIXED_LEFT_INDEX  : integer;
@@ -272,11 +273,13 @@ package Tpch_pkg is
       DATA_WIDTH        : natural;
       INPUT_MIN_DEPTH   : natural;
       OUTPUT_MIN_DEPTH  : natural;
-      CONVERTER_TYPE    : string -- := "flopoco" := "xilinx_ip";
+      CONVERTER_IP      : string; -- := "flopoco" := "xilinx_ip";
+      CONVERTER_TYPE    : string  -- := "Float2Fix" := "Fix2Float";
 
     );
     port (
       clk        : in std_logic;
+      enable     : in std_logic := '1';
       reset      : in std_logic;
 
       in_valid   : in std_logic;

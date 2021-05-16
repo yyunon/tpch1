@@ -53,16 +53,19 @@ end HashTable;
 
 architecture Behavioral of HashTable is
   type state_t is (STATE_IDLE, STATE_UPDATE);
+  constant DIGEST_SIZE           : integer := 10;
 
   signal state, state_next       : state_t;
 
+  signal key_in_data_s           : std_logic_vector(NUM_KEYS * ADDRESS_WIDTH - 1 downto 0);
+
   signal operation_s             : std_logic;
   signal write_enable            : std_logic;
-  signal write_address           : std_logic_vector(NUM_KEYS * ADDRESS_WIDTH - 1 downto 0);
+  signal write_address           : std_logic_vector(DIGEST_SIZE - 1 downto 0);
   signal write_data              : std_logic_vector(DATA_WIDTH downto 0);
 
   signal read_enable             : std_logic;
-  signal read_address            : std_logic_vector(NUM_KEYS * ADDRESS_WIDTH - 1 downto 0);
+  signal read_address            : std_logic_vector(DIGEST_SIZE - 1 downto 0);
   signal read_data               : std_logic_vector(DATA_WIDTH downto 0);
 
   signal bit_table_write_enable  : std_logic;
@@ -85,10 +88,18 @@ begin
     std_logic_vector(hash_pointer);
   stream_key_out_data <= bit_table_read_data(NUM_KEYS * ADDRESS_WIDTH - 1 downto 0);
 
-  hash_function_gen :
+  key_in_data_s       <= key_in_data;
+
+  hash_function_gen_direct :
   if HASH_FUNCTION = "DIRECT" generate
     --bit_table_read_address <= key_in_data;
     read_address <= key_in_data;
+  end generate;
+
+  hash_function_gen_alias :
+  if HASH_FUNCTION = "MODULO32" generate
+    --bit_table_read_address <= key_in_data;
+    read_address <= key_in_data(12 downto 8) & key_in_data(4 downto 0);
   end generate;
 
   bit_table : UtilRam1R1W -- This will hold the keys.
@@ -110,7 +121,7 @@ begin
   hash_table : UtilRam1R1W
   generic map(
     WIDTH      => DATA_WIDTH + 1,
-    DEPTH_LOG2 => NUM_KEYS * ADDRESS_WIDTH
+    DEPTH_LOG2 => DIGEST_SIZE
   )
   port map(
     w_clk  => clk,
@@ -147,7 +158,7 @@ begin
           -- update bit table
           bit_table_write_enable  <= '1';
           bit_table_write_address <= std_logic_vector(hash_pointer);
-          bit_table_write_data    <= read_address;
+          bit_table_write_data    <= key_in_data_s;
           state_next              <= STATE_IDLE;
           hash_counter := hash_counter + to_unsigned(1, NUM_KEYS * ADDRESS_WIDTH); -- Increment the hash pointer to the next address
           --hash_counter := hash_counter + 1;

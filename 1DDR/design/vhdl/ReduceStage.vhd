@@ -263,7 +263,7 @@ begin
     variable temp_buffer_quantity      : sfixed(FIXED_LEFT_INDEX downto FIXED_RIGHT_INDEX);
     variable temp_buffer_extendedprice : sfixed(FIXED_LEFT_INDEX downto FIXED_RIGHT_INDEX);
     variable temp_buffer_discount      : sfixed(FIXED_LEFT_INDEX downto FIXED_RIGHT_INDEX);
-    variable temp_buffer_2             : sfixed(FIXED_LEFT_INDEX downto FIXED_RIGHT_INDEX);
+    variable temp_buffer_2             : sfixed(FIXED_LEFT_INDEX downto FIXED_RIGHT_INDEX) := to_sfixed(1, FIXED_LEFT_INDEX, FIXED_RIGHT_INDEX);
     variable divide_out_quantity       : sfixed(FIXED_LEFT_INDEX - FIXED_RIGHT_INDEX downto FIXED_RIGHT_INDEX - FIXED_LEFT_INDEX - 1);
     variable divide_out_extendedprice  : sfixed(FIXED_LEFT_INDEX - FIXED_RIGHT_INDEX downto FIXED_RIGHT_INDEX - FIXED_LEFT_INDEX - 1);
     variable divide_out_discount       : sfixed(FIXED_LEFT_INDEX - FIXED_RIGHT_INDEX downto FIXED_RIGHT_INDEX - FIXED_LEFT_INDEX - 1);
@@ -276,12 +276,18 @@ begin
       temp_buffer_extendedprice := to_sfixed(out_data_s(127 downto 64), temp_buffer_1'high, temp_buffer_1'low);
       temp_buffer_discount      := to_sfixed(out_data_s(63 downto 0), temp_buffer_1'high, temp_buffer_1'low);
       temp_buffer_2             := to_sfixed(count_var, temp_buffer_2'high, temp_buffer_2'low);
-      divide_out_quantity       := temp_buffer_quantity / temp_buffer_2;
-      divide_out_extendedprice  := temp_buffer_quantity / temp_buffer_2;
-      divide_out_discount       := temp_buffer_quantity / temp_buffer_2;
-      avg_vec(191 downto 128)   := to_slv(resize(arg => divide_out_quantity, left_index => FIXED_LEFT_INDEX, right_index => FIXED_RIGHT_INDEX, round_style => fixed_round_style, overflow_style => fixed_overflow_style));
-      avg_vec(127 downto 64)    := to_slv(resize(arg => divide_out_extendedprice, left_index => FIXED_LEFT_INDEX, right_index => FIXED_RIGHT_INDEX, round_style => fixed_round_style, overflow_style => fixed_overflow_style));
-      avg_vec(63 downto 0)      := to_slv(resize(arg => divide_out_discount, left_index => FIXED_LEFT_INDEX, right_index => FIXED_RIGHT_INDEX, round_style => fixed_round_style, overflow_style => fixed_overflow_style));
+      if count_var /= 0 then
+        divide_out_quantity      := temp_buffer_quantity / temp_buffer_2;
+        divide_out_extendedprice := temp_buffer_extendedprice / temp_buffer_2;
+        divide_out_discount      := temp_buffer_discount / temp_buffer_2;
+        avg_vec(191 downto 128)  := to_slv(resize(arg => divide_out_quantity, left_index => FIXED_LEFT_INDEX, right_index => FIXED_RIGHT_INDEX, round_style => fixed_round_style, overflow_style => fixed_overflow_style));
+        avg_vec(127 downto 64)   := to_slv(resize(arg => divide_out_extendedprice, left_index => FIXED_LEFT_INDEX, right_index => FIXED_RIGHT_INDEX, round_style => fixed_round_style, overflow_style => fixed_overflow_style));
+        avg_vec(63 downto 0)     := to_slv(resize(arg => divide_out_discount, left_index => FIXED_LEFT_INDEX, right_index => FIXED_RIGHT_INDEX, round_style => fixed_round_style, overflow_style => fixed_overflow_style));
+      else
+        avg_vec(191 downto 128) := to_slv(temp_buffer_quantity);
+        avg_vec(127 downto 64)  := to_slv(temp_buffer_extendedprice);
+        avg_vec(63 downto 0)    := to_slv(temp_buffer_discount);
+      end if;
       avg_out_data_s <= avg_vec;
 
     end if;

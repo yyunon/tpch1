@@ -167,7 +167,7 @@ begin
 
   HashTable_inst : HashTable
   generic map(
-    HASH_FUNCTION       => "DIRECT",
+    HASH_FUNCTION       => "MODULO32",
     NUM_KEYS            => NUM_KEYS,
     DATA_WIDTH          => DATA_WIDTH * (NUM_LANES + 1), -- Use count too
     GROUP_ADDRESS_WIDTH => 4,                            --This is for the size of key list
