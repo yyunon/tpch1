@@ -44,10 +44,6 @@ puts "AWS FPGA: ([clock format [clock seconds] -format %T]) Reading developer's 
 read_verilog -sv [glob $ENC_SRC_DIR/*.?v]
 read_vhdl -vhdl2008 [ glob $ENC_SRC_DIR/*.vhd ]
 
-read_bd [ list \
-  $CL_DIR/ip/cl_axi_interconnect_1m2s/cl_axi_interconnect.bd
-]
-
 #---- End of section replaced by User ----
 
 puts "AWS FPGA: Reading AWS Shell design";
@@ -100,9 +96,9 @@ read_ip [ list \
 ]
 
 # Additional IP's that might be needed if using the DDR
-#read_bd [ list \
-#  $HDK_SHELL_DESIGN_DIR/ip/cl_axi_interconnect/cl_axi_interconnect.bd
-#]
+read_bd [ list \
+  $HDK_SHELL_DESIGN_DIR/ip/cl_axi_interconnect/cl_axi_interconnect.bd
+]
 
 puts "AWS FPGA: Reading AWS constraints";
 

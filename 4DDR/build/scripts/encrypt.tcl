@@ -89,6 +89,7 @@ file copy -force $CL_DIR/design/vhdl/hardware/arrays/ArrayReaderList.vhd $TARGET
 file copy -force $CL_DIR/design/vhdl/hardware/arrays/ArrayReaderLevel.vhd $TARGET_DIR
 file copy -force $CL_DIR/design/vhdl/hardware/arrays/ArrayReaderArb.vhd $TARGET_DIR
 file copy -force $CL_DIR/design/vhdl/hardware/arrays/ArrayReader.vhd $TARGET_DIR
+file copy -force $CL_DIR/design/vhdl/hardware/fixed_generic_pkg_mod.vhd  $TARGET_DIR
 file copy -force $CL_DIR/design/vhdl/PriceSummary_l.gen.vhd $TARGET_DIR
 file copy -force $CL_DIR/design/vhdl/vhdmmio_pkg.gen.vhd $TARGET_DIR
 file copy -force $CL_DIR/design/vhdl/mmio_pkg.gen.vhd $TARGET_DIR
@@ -126,26 +127,30 @@ file copy -force $CL_DIR/design/vhdl/AxiTop.gen.vhd $TARGET_DIR
 file copy -force $CL_DIR/design/cl_dram_dma_defines.vh                                  $TARGET_DIR
 file copy -force $CL_DIR/design/cl_id_defines.vh                                        $TARGET_DIR
 file copy -force $CL_DIR/design/cl_dram_dma_pkg.sv                                      $TARGET_DIR
-file copy -force $CL_DIR/design/cl_fletcher_aws_1DDR.sv                                 $TARGET_DIR
+file copy -force $CL_DIR/design/cl_fletcher_aws_4DDR.sv                                 $TARGET_DIR
+file copy -force $CL_DIR/design/cl_tst.sv                                               $TARGET_DIR
+file copy -force $CL_DIR/design/cl_int_tst.sv                                           $TARGET_DIR
+file copy -force $CL_DIR/design/mem_scrb.sv                                             $TARGET_DIR
+file copy -force $CL_DIR/design/cl_tst_scrb.sv                                          $TARGET_DIR
+file copy -force $CL_DIR/design/cl_int_slv.sv                                           $TARGET_DIR
+file copy -force $CL_DIR/design/cl_pcim_mstr.sv                                         $TARGET_DIR
 file copy -force $CL_DIR/design/cl_vio.sv                                               $TARGET_DIR
 file copy -force $CL_DIR/design/cl_dma_pcis_slv.sv                                      $TARGET_DIR
 file copy -force $CL_DIR/design/cl_ila.sv                                               $TARGET_DIR
-
-
+file copy -force $CL_DIR/design/cl_ocl_slv.sv                                           $TARGET_DIR
 #---- End of section replaced by Developr ---
-
-
+#
 
 # Make sure files have write permissions for the encryption
 
-exec chmod +w {*}[glob $TARGET_DIR/*]
+ exec chmod +w {*}[glob $TARGET_DIR/*]
 
-set TOOL_VERSION $::env(VIVADO_TOOL_VERSION)
-set vivado_version [string range [version -short] 0 5]
-puts "AWS FPGA: VIVADO_TOOL_VERSION $TOOL_VERSION"
-puts "vivado_version $vivado_version"
+ set TOOL_VERSION $::env(VIVADO_TOOL_VERSION)
+ set vivado_version [string range [version -short] 0 5]
+ puts "AWS FPGA: VIVADO_TOOL_VERSION $TOOL_VERSION"
+ puts "vivado_version $vivado_version"
 
-# encrypt .v/.sv/.vh/inc as verilog files
-encrypt -k $HDK_SHELL_DIR/build/scripts/vivado_keyfile_2017_4.txt -lang verilog -quiet [glob -nocomplain -- $TARGET_DIR/*.{v,sv}] [glob -nocomplain -- $TARGET_DIR/*.vh] [glob -nocomplain -- $TARGET_DIR/*.inc]
-# encrypt *vhdl files
-encrypt -k $HDK_SHELL_DIR/build/scripts/vivado_vhdl_keyfile_2017_4.txt -lang vhdl -quiet [ glob -nocomplain -- $TARGET_DIR/*.vhd? ]
+ # encrypt .v/.sv/.vh/inc as verilog files
+ encrypt -k $HDK_SHELL_DIR/build/scripts/vivado_keyfile_2017_4.txt -lang verilog -quiet [glob -nocomplain -- $TARGET_DIR/*.{v,sv}] [glob -nocomplain -- $TARGET_DIR/*.vh] [glob -nocomplain -- $TARGET_DIR/*.inc]
+ # encrypt *vhdl files
+ encrypt -k $HDK_SHELL_DIR/build/scripts/vivado_vhdl_keyfile_2017_4.txt -lang vhdl -quiet [ glob -nocomplain -- $TARGET_DIR/*.vhd? ]

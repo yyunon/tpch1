@@ -132,7 +132,7 @@ begin
   --output_count  <= std_logic_vector(to_unsigned(1, 1));
 
   writer_process_len :
-  process (r, enable, output_ready) is
+  process (r, enable, output_ready, input_length) is
     variable v : regs_record;
     variable o : out_record;
   begin
@@ -186,7 +186,7 @@ begin
   process (rs,
     enable,
     input_chars,
-    input_chars_valid,
+    input_chars_valid, input_length,
     input_chars_count,
     output_chars_ready) is
     variable vs     : sregs_record;
@@ -245,7 +245,7 @@ begin
       if reset = '1' then
         rs.state <= STATE_IDLE;
         r.state  <= STATE_IDLE;
-        rs.len   <= to_unsigned(1, LEN_WIDTH);
+        rs.len   <= to_unsigned(1, 32);
       end if;
     end if;
   end process;

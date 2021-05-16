@@ -374,7 +374,7 @@ begin
     LEN_WIDTH         => LEN_WIDTH,
     INDEX_WIDTH       => INDEX_WIDTH,
     CONVERTERS        => "FLOAT_TO_FIXED", -- TODO: Implement this
-    ILA               => ""
+    ILA               => "TRUE"
   )
   port map(
     clk                         => kcd_clk,
