@@ -54,20 +54,22 @@
 // (in parentheses) to your own signal names.
 
 //----------- Begin Cut here for INSTANTIATION Template ---// INST_TAG
-floating_point_0 your_instance_name (
+floating_point_1 your_instance_name (
   .aclk(aclk),                                  // input wire aclk
   .s_axis_a_tvalid(s_axis_a_tvalid),            // input wire s_axis_a_tvalid
+  .s_axis_a_tready(s_axis_a_tready),            // output wire s_axis_a_tready
   .s_axis_a_tdata(s_axis_a_tdata),              // input wire [63 : 0] s_axis_a_tdata
-  .s_axis_a_tuser(s_axis_a_tuser),              // input wire [1 : 0] s_axis_a_tuser
+  .s_axis_a_tuser(s_axis_a_tuser),              // input wire [0 : 0] s_axis_a_tuser
   .s_axis_a_tlast(s_axis_a_tlast),              // input wire s_axis_a_tlast
   .m_axis_result_tvalid(m_axis_result_tvalid),  // output wire m_axis_result_tvalid
+  .m_axis_result_tready(m_axis_result_tready),  // input wire m_axis_result_tready
   .m_axis_result_tdata(m_axis_result_tdata),    // output wire [63 : 0] m_axis_result_tdata
-  .m_axis_result_tuser(m_axis_result_tuser),    // output wire [1 : 0] m_axis_result_tuser
+  .m_axis_result_tuser(m_axis_result_tuser),    // output wire [0 : 0] m_axis_result_tuser
   .m_axis_result_tlast(m_axis_result_tlast)    // output wire m_axis_result_tlast
 );
 // INST_TAG_END ------ End INSTANTIATION Template ---------
 
-// You must compile the wrapper file floating_point_0.v when simulating
-// the core, floating_point_0. When compiling the wrapper file, be sure to
+// You must compile the wrapper file floating_point_1.v when simulating
+// the core, floating_point_1. When compiling the wrapper file, be sure to
 // reference the Verilog simulation library.
 

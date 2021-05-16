@@ -62,7 +62,7 @@
 -- Using this testbench
 --
 -- This testbench instantiates your generated Floating-point core
--- instance named "floating_point_0".
+-- instance named "floating_point_1".
 --
 -- Use Vivado's Run Simulation flow to run this testbench.  See the Vivado
 -- documentation for details.
@@ -74,10 +74,10 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use ieee.math_real.all;
 
-entity tb_floating_point_0 is
-end tb_floating_point_0;
+entity tb_floating_point_1 is
+end tb_floating_point_1;
 
-architecture tb of tb_floating_point_0 is
+architecture tb of tb_floating_point_1 is
 
   -----------------------------------------------------------------------
   -- Timing constants
@@ -85,7 +85,7 @@ architecture tb of tb_floating_point_0 is
   constant CLOCK_PERIOD : time := 100 ns;
   constant T_HOLD       : time := 10 ns;
   constant T_STROBE     : time := CLOCK_PERIOD - (1 ns);
-  constant DUT_DELAY    : time := CLOCK_PERIOD * 6;
+  constant DUT_DELAY    : time := CLOCK_PERIOD * 10;
 
   -----------------------------------------------------------------------
   -- Testbench types and signals
@@ -120,93 +120,48 @@ architecture tb of tb_floating_point_0 is
     end if;
   end function width_limit;
 
-  -- Function to convert a real number to a std_logic_vector floating point representation
-  function real_to_flt(x : real;                       -- real number to convert
-                       s : floating_point_special_t;   -- indicates special values to convert (overrides x)
-                       w, fw : integer)                -- total and fractional bit width of result
+  -- Function to convert a real number to a std_logic_vector fixed point representation
+  function real_to_fix(x     : real;     -- real number to convert
+                       w, fw : integer)  -- total and fractional bit width of result
     return std_logic_vector is
-    constant EW       : integer := w - fw;
-    constant FW_LIM   : integer := width_limit(fw);    -- limited internal value of fractional bit width
-    constant E_BIAS   : integer := 2 ** (EW - 1) - 1;
-    constant MANT_MAX : real    := 2.0 - 1.0 / real(2 ** (FW_LIM - 1));
-    variable result   : std_logic_vector(w-1 downto 0) := (others => '0');
-    variable sign     : std_logic := '0';
-    variable exp      : integer   := 0;
-    variable mant     : real;
-    variable mant_int : integer;
+    constant IW            : integer := w - fw;             -- integer bit width including sign bit
+    constant FW_LIM        : integer := width_limit(fw);    -- limited internal value of fractional bit width
+    constant IW_LIM        : integer := width_limit(IW);    -- limited internal value of integer bit width
+    constant FIX_MAX       : integer := 2 ** (IW_LIM - 1);  -- maximum fixed-point number rounded up to the next integer
+    constant FRACT_INT_MAX : integer := 2 ** FW_LIM - 1;    -- maximum fractional part scaled to be stored as an integer
+    variable result        : std_logic_vector(w-1 downto 0) := (others => '0');
+    variable x_int         : integer;
+    variable x_fract       : real;
+    variable x_fract_int   : integer;
   begin
 
-    -- Handle special cases
-    case s is
-      when zero_pos =>  -- plus zero
-        result(w-1) := '0';                          -- sign bit clear
-        result(w-2 downto 0) := (others => '0');     -- exponent and mantissa clear
+    -- Integer part
+    x_int := integer(floor(x));
 
-      when zero_neg =>  -- minus zero
-        result(w-1) := '1';                          -- sign bit set
-        result(w-2 downto 0) := (others => '0');     -- exponent and mantissa clear
+    -- Fractional part
+    -- To avoid VHDL's integer type overflowing, use at most 30 fractional bits and 30 integer bits
+    x_fract := x - real(x_int);
+    x_fract_int := integer(x_fract * real(2 ** FW_LIM));  -- implicit round-to-nearest
+    -- If the round-to-nearest has rounded the fractional part up to the 1.0, use 0.0 and increment the integer part
+    if x_fract_int > FRACT_INT_MAX then
+      x_int := x_int + 1;
+      x_fract_int := 0;
+    end if;
 
-      when inf_pos =>   -- plus infinity
-        result(w-1) := '0';                          -- sign bit clear
-        result(w-2 downto fw-1) := (others => '1');  -- exponent
-        result(fw-2 downto 0)   := (others => '0');  -- mantissa
+    -- Ensure that x_int will fit into the number of integer bits available, wrapping if necessary
+    while x_int < -FIX_MAX loop
+      x_int := x_int + 2 * FIX_MAX;
+    end loop;
+    while x_int >= FIX_MAX loop
+      x_int := x_int - 2 * FIX_MAX;
+    end loop;
 
-      when inf_neg =>   -- minus infinity
-        result(w-1) := '1';                          -- sign bit set
-        result(w-2 downto fw-1) := (others => '1');  -- exponent
-        result(fw-2 downto 0)   := (others => '0');  -- mantissa
-
-      when nan =>       -- Not a Number
-        result(w-1) := '0';                          -- sign bit
-        result(w-2 downto fw-1) := (others => '1');  -- exponent
-        result(fw-2)            := '1';              -- MSB of mantissa set
-        result(fw-3 downto 0)   := (others => '0');  -- rest of mantissa clear
-
-      -- NOTE: out_of_range might be possible under some circumstances, but it can be represented
-      when normal | out_of_range =>
-        -- Handle normal numbers
-
-        -- Zero must be requested using s = zero_pos or s = zero_neg, not s = normal and x = 0.0
-        assert x /= 0.0
-          report "ERROR: real_to_flt: zero must be requested using s = zero_pos or s = zero_neg, not s = normal and x = 0.0"
-          severity failure;
-
-        -- Get sign bit
-        if x < 0.0 then
-          sign := '1';
-          mant := -x;
-        else
-          sign := '0';
-          mant := x;
-        end if;
-
-        -- Normalize input to calculate exponent
-        while mant < 1.0 loop
-          exp  := exp - 1;
-          mant := mant * 2.0;
-        end loop;
-        while mant > MANT_MAX loop
-          exp  := exp + 1;
-          mant := mant / 2.0;
-        end loop;
-
-        -- Remove hidden bit and convert to std_logic_vector
-        -- To avoid VHDL's integer type overflowing, use at most 30 bits of the mantissa
-        mant := mant - 1.0;
-        mant_int := integer(mant * real(2 ** (FW_LIM - 1)));  -- implicit round-to-nearest
-        result(fw - 2 downto fw - FW_LIM) := std_logic_vector(to_unsigned(mant_int, FW_LIM - 1));
-
-        -- Add exponent bias and convert to std_logic_vector
-        exp := exp + E_BIAS;
-        result(w - 2 downto fw - 1) := std_logic_vector(to_unsigned(exp, EW));
-
-        -- Add sign bit
-        result(w - 1) := sign;
-
-    end case;
+    -- Form twos complement std_logic_vector result
+    result(w-1 downto fw) := std_logic_vector(to_signed(x_int, IW));
+    result(fw-1 downto fw-FW_LIM) := std_logic_vector(to_unsigned(x_fract_int, FW_LIM));
 
     return result;
-  end function real_to_flt;
+  end function real_to_fix;
 
 
   -- Function to identify special numbers in a std_logic_vector floating point representation
@@ -365,14 +320,16 @@ architecture tb of tb_floating_point_0 is
 
   -- A operand slave channel signals
   signal s_axis_a_tvalid         : std_logic := '0';  -- payload is valid
+  signal s_axis_a_tready         : std_logic := '1';  -- slave is ready
   signal s_axis_a_tdata          : std_logic_vector(63 downto 0) := (others => '0');  -- data payload
-  signal s_axis_a_tuser          : std_logic_vector(1 downto 0) := (others => '0');  -- user-defined payload
+  signal s_axis_a_tuser          : std_logic_vector(0 downto 0) := (others => '0');  -- user-defined payload
   signal s_axis_a_tlast          : std_logic := '0';  -- indicates end of packet
 
   -- Result master channel signals
   signal m_axis_result_tvalid    : std_logic := '0';
+  signal m_axis_result_tready    : std_logic := '1';
   signal m_axis_result_tdata     : std_logic_vector(63 downto 0) := (others => '0');  -- data payload
-  signal m_axis_result_tuser     : std_logic_vector(1 downto 0) := (others => '0');  -- exceptions and user-defined payload
+  signal m_axis_result_tuser     : std_logic_vector(0 downto 0) := (others => '0');  -- exceptions and user-defined payload
   signal m_axis_result_tlast     : std_logic := '0';  -- indicates end of packet
 
   -----------------------------------------------------------------------
@@ -383,19 +340,19 @@ architecture tb of tb_floating_point_0 is
   -----------------------------------------------------------------------
 
   -- A operand slave channel alias signals
-  signal s_axis_a_tdata_real    : real := 0.0;  -- floating-point value using VHDL 'real' data type
-  signal s_axis_a_tdata_special : floating_point_special_t := normal;  -- indicate special values
-  signal s_axis_a_tdata_sign    : std_logic := '0';  -- sign bit
-  signal s_axis_a_tdata_exp     : std_logic_vector(10 downto 0) := (others => '0');  -- exponent (biased)
-  signal s_axis_a_tdata_mant    : std_logic_vector(51 downto 0) := (others => '0');  -- mantissa (without hidden bit)
+  signal s_axis_a_tdata_real    : real := 0.0;  -- fixed-point value using VHDL 'real' data type
+  signal s_axis_a_tdata_int     : std_logic_vector(31 downto 0) := (others => '0');  -- integer part (including sign bit)
+  signal s_axis_a_tdata_fract   : std_logic_vector(31 downto 0) := (others => '0');  -- fractional part
 
 
 
   -- Result master channel alias signals
-  signal m_axis_result_tdata_real     : real := 0.0;  -- fixed-point value using VHDL 'real' data type
-  signal m_axis_result_tdata_int      : std_logic_vector(45 downto 0) := (others => '0');  -- integer part (including sign bit)
-  signal m_axis_result_tdata_fract    : std_logic_vector(17 downto 0) := (others => '0');  -- fractional part
-  signal m_axis_result_tuser_a              : std_logic_vector(1 downto 0) := (others => '0');  -- A user-defined payload
+  signal m_axis_result_tdata_real     : real := 0.0;  -- floating-point value using VHDL 'real' data type
+  signal m_axis_result_tdata_special  : floating_point_special_t := normal;  -- indicate special values
+  signal m_axis_result_tdata_sign     : std_logic := '0';  -- sign bit
+  signal m_axis_result_tdata_exp     : std_logic_vector(10 downto 0) := (others => '0');  -- exponent (biased)
+  signal m_axis_result_tdata_mant    : std_logic_vector(51 downto 0) := (others => '0');  -- mantissa (without hidden bit)
+  signal m_axis_result_tuser_a              : std_logic_vector(0 downto 0) := (others => '0');  -- A user-defined payload
 
 begin
 
@@ -403,17 +360,19 @@ begin
   -- Instantiate the DUT
   -----------------------------------------------------------------------
 
-  dut : entity work.floating_point_0
+  dut : entity work.floating_point_1
     port map (
       -- Global signals
       aclk                    => aclk,
     -- AXI4-Stream slave channel for operand A
       s_axis_a_tvalid         => s_axis_a_tvalid,
+      s_axis_a_tready         => s_axis_a_tready,
       s_axis_a_tdata          => s_axis_a_tdata,
       s_axis_a_tuser          => s_axis_a_tuser,
       s_axis_a_tlast          => s_axis_a_tlast,
       -- AXI4-Stream master channel for output result
       m_axis_result_tvalid    => m_axis_result_tvalid,
+      m_axis_result_tready    => m_axis_result_tready,
       m_axis_result_tdata     => m_axis_result_tdata,
       m_axis_result_tuser     => m_axis_result_tuser,
       m_axis_result_tlast     => m_axis_result_tlast
@@ -460,12 +419,12 @@ begin
 
     -- Run the same consecutive series of 100 operations, while demonstrating use and effect of AXI handshaking signals
     sim_phase <= phase_axi_handshake;
-    wait for 122 * CLOCK_PERIOD;
+    wait for 132 * CLOCK_PERIOD;
 
 
     -- Run operations that demonstrate the use of special floating-point values (+/- zero, +/- infinity, Not a Number)
     sim_phase <= phase_special;
-    wait for 12 * CLOCK_PERIOD;
+    wait for 6 * CLOCK_PERIOD;
     -- Allow operations in progress to complete and the results to be produced
     wait for DUT_DELAY;
 
@@ -478,13 +437,15 @@ begin
 
   -----------------------------------------------------------------------
   -- Generate inputs on the A operand slave channel
+  -- This process also drives:
+  -- + RESULT master channel TREADY input
   -----------------------------------------------------------------------
 
   stimuli_a : process
 
     -- Procedure to drive a single transaction on the A channel
     procedure drive_a_single(tdata : std_logic_vector(63 downto 0);
-                             tuser : std_logic_vector(1 downto 0);
+                             tuser : std_logic_vector(0 downto 0);
                              tlast : std_logic;
                              variable abort : out boolean) is
     begin
@@ -494,34 +455,35 @@ begin
       s_axis_a_tuser  <= tuser;
       s_axis_a_tlast  <= tlast;
       abort := false;
-      wait until rising_edge(aclk);
+      loop
+        wait until rising_edge(aclk);
+        exit when s_axis_a_tready = '1';
+      end loop;
       wait for T_HOLD;
       s_axis_a_tvalid <= '0';
     end procedure drive_a_single;
 
     -- Procedure to drive a series of transactions with incrementing data values on the A channel.
     -- data is the data value for the first transaction
-    -- special indicates special floating-point values, and overrides data
     -- count is the number of transactions to drive
     -- step is the increment to add to the data value on each successive transaction
     procedure drive_a(data    : real;
-                      special : floating_point_special_t;
                       count   : positive := 1;
                       step    : real     := 0.0) is
       variable value     : real := data;
       variable value_slv : std_logic_vector(63 downto 0);
       variable tdata     : std_logic_vector(63 downto 0);
-      variable tuser     : std_logic_vector(1 downto 0);
+      variable tuser     : std_logic_vector(0 downto 0);
       variable tlast     : std_logic;
       variable ip_count  : natural := 0;
       variable abort     : boolean;
     begin
       count_loop : loop
         -- Convert data from real to std_logic_vector
-        value_slv := real_to_flt(value, special, 64, 53);
+        value_slv := real_to_fix(value, 64, 32);
         -- Set up AXI signals
         tdata := value_slv;
-        tuser := std_logic_vector(to_unsigned(ip_count, 2));  -- transaction number in this procedure call
+        tuser := std_logic_vector(to_unsigned(ip_count, 1));  -- transaction number in this procedure call
         if ip_count = count - 1 then
           tlast := '1';  -- TLAST indicates the last transaction in this procedure call
         else
@@ -545,7 +507,7 @@ begin
 
 
     variable tdata : std_logic_vector(63 downto 0) := (others => '0');
-    variable tuser : std_logic_vector(1 downto 0) := (others => '0');
+    variable tuser : std_logic_vector(0 downto 0) := (others => '0');
     variable tlast : std_logic := '1';
     variable abort : boolean;
 
@@ -556,7 +518,7 @@ begin
     wait for T_HOLD;  -- drive inputs T_HOLD after the rising edge of the clock
 
     -- Run a single operation, and wait for the result
-    drive_a(1.0, normal);
+    drive_a(1.0);
 
 
     -- Wait for simulation control to signal the next phase
@@ -565,7 +527,7 @@ begin
 
 
     -- Run a consecutive series of 100 operations with incrementing data
-    drive_a(0.1, normal, 100, 0.1);
+    drive_a(0.1, 100, 0.1);
 
     -- Wait for simulation control to signal the next phase
     wait until sim_phase = phase_axi_handshake;
@@ -573,43 +535,28 @@ begin
 
     -- Run the same consecutive series of 100 operations, while demonstrating use and effect of AXI handshaking signals
     -- 5 normal consecutive transactions
-    drive_a(0.1, normal, 5, 0.1);
+    drive_a(0.1, 5, 0.1);
     -- No transactions for 5 clock cycles
     wait for 5 * CLOCK_PERIOD;
     -- 25 normal consecutive transactions
-    drive_a(0.6, normal, 25, 0.1);
+    drive_a(0.6, 25, 0.1);
     -- No transactions for 15 clock cycles
     wait for 15 * CLOCK_PERIOD;
     -- 20 normal consecutive transactions
-    drive_a(3.1, normal, 20, 0.1);
+    drive_a(3.1, 20, 0.1);
+    -- Apply backpressure (not ready for result) for 10 clock cycles, then release
+    m_axis_result_tready <= '0', '1' after 10 * CLOCK_PERIOD;
   -- 50 normal consecutive transactions
-  drive_a(5.1, normal, 50, 0.1);
+  drive_a(5.1, 50, 0.1);
 
     -- Wait for simulation control to signal the next phase
     wait until sim_phase = phase_special;
     wait for T_HOLD;  -- drive inputs T_HOLD after the rising edge of the clock
 
     -- Run operations that demonstrate the use of special floating-point values (+/- zero, +/- infinity, Not a Number)
-    -- flt_to_fix(plus zero) : result = zero
-    drive_a(0.0, zero_pos);
-    -- flt_to_fix(minus zero) : result = zero
-    drive_a(0.0, zero_neg);
-    -- flt_to_fix(plus infinity) : invalid operation, overflow, result = largest positive fixed point number available
-    drive_a(0.0, inf_pos);
-    -- flt_to_fix(minus infinity) : invalid operation, overflow, result = largest negative fixed point number available
-    drive_a(0.0, inf_neg);
-    -- flt_to_fix(very large number) : overflow, result = largest positive fixed point number available
-    tdata(63) := '0';  -- sign bit
-    tdata(62 downto 52) := std_logic_vector(to_unsigned(2046, 11));  -- biased exponent = largest
-    tdata(51 downto 0) := (others => '1');  -- mantissa without hidden bit = largest
-    drive_a_single(tdata, tuser, tlast, abort);
-    -- flt_to_fix(-(very large number)) : overflow, result = largest negative fixed point number available
-    tdata(63) := '1';  -- sign bit
-    tdata(62 downto 52) := std_logic_vector(to_unsigned(2046, 11));  -- biased exponent = largest
-    tdata(51 downto 0) := (others => '1');  -- mantissa without hidden bit = largest
-    drive_a_single(tdata, tuser, tlast, abort);
-    -- flt_to_fix(Not a Number) : invalid operation, result = largest negative fixed point number available
-    drive_a(0.0, nan);
+    -- fix_to_flt(zero) : result = plus zero
+    drive_a(0.0);
+    -- No other special floating point number can be obtained.
     -- End of test
     wait;
 
@@ -624,6 +571,12 @@ begin
 
   check_outputs : process
     variable check_ok : boolean := true;
+    -- Previous values of RESULT master channel signals
+    variable result_tvalid_prev : std_logic := '0';
+    variable result_tready_prev : std_logic := '1';
+    variable result_tdata_prev  : std_logic_vector(63 downto 0) := (others => '0');
+    variable result_tuser_prev  : std_logic_vector(0 downto 0) := (others => '0');
+    variable result_tlast_prev  : std_logic := '0';
   begin
 
     -- Check outputs T_STROBE time after rising edge of clock
@@ -634,6 +587,7 @@ begin
     -- which would make this demonstration testbench unwieldy.
     -- Instead, check the protocol of the RESULT master channel:
     -- check that the payload is valid (not X) when TVALID is high
+    -- and check that the payload does not change while TVALID is high until TREADY goes high
 
     if m_axis_result_tvalid = '1' then
       if is_x(m_axis_result_tdata) then
@@ -649,10 +603,34 @@ begin
         check_ok := false;
       end if;
 
+      if result_tvalid_prev = '1' and result_tready_prev = '0' then  -- payload must be the same as last cycle
+        if m_axis_result_tdata /= result_tdata_prev then
+          report "ERROR: m_axis_result_tdata changed while m_axis_result_tvalid was high and m_axis_result_tready was low" severity error;
+          check_ok := false;
+        end if;
+        if m_axis_result_tuser /= result_tuser_prev then
+          report "ERROR: m_axis_result_tuser changed while m_axis_result_tvalid was high and m_axis_result_tready was low" severity error;
+          check_ok := false;
+        end if;
+        if m_axis_result_tlast /= result_tlast_prev then
+          report "ERROR: m_axis_result_tlast changed while m_axis_result_tvalid was high and m_axis_result_tready was low" severity error;
+          check_ok := false;
+        end if;
+      end if;
+
     end if;
 
     assert check_ok
       report "ERROR: terminating test with failures." severity failure;
+
+    -- Record payload values for checking next clock cycle
+    if check_ok then
+      result_tvalid_prev := m_axis_result_tvalid;
+      result_tready_prev := m_axis_result_tready;
+      result_tdata_prev  := m_axis_result_tdata;
+      result_tuser_prev  := m_axis_result_tuser;
+      result_tlast_prev  := m_axis_result_tlast;
+    end if;
 
   end process check_outputs;
 
@@ -662,18 +640,18 @@ begin
   -----------------------------------------------------------------------
 
   -- A operand slave channel alias signals
-  s_axis_a_tdata_real    <= flt_to_real(s_axis_a_tdata(63 downto 0), 64, 53);
-  s_axis_a_tdata_special <= flt_to_special(s_axis_a_tdata(63 downto 0), 64, 53);
-  s_axis_a_tdata_sign    <= s_axis_a_tdata(63);
-  s_axis_a_tdata_exp     <= s_axis_a_tdata(62 downto 52);
-  s_axis_a_tdata_mant    <= s_axis_a_tdata(51 downto 0);
+  s_axis_a_tdata_real    <= fix_to_real(s_axis_a_tdata(63 downto 0), 64, 32);
+  s_axis_a_tdata_int     <= s_axis_a_tdata(63 downto 32);
+  s_axis_a_tdata_fract   <= s_axis_a_tdata(31 downto 0);
 
   -- Result master channel alias signals
-  m_axis_result_tdata_real     <= fix_to_real(m_axis_result_tdata(63 downto 0), 64, 18) when m_axis_result_tvalid = '1';
-  m_axis_result_tdata_int      <= m_axis_result_tdata(63 downto 18) when m_axis_result_tvalid = '1';
-  m_axis_result_tdata_fract    <= m_axis_result_tdata(17 downto 0) when m_axis_result_tvalid = '1';
+  m_axis_result_tdata_real     <= flt_to_real(m_axis_result_tdata(63 downto 0), 64, 53) when m_axis_result_tvalid = '1';
+  m_axis_result_tdata_special  <= flt_to_special(m_axis_result_tdata(63 downto 0), 64, 53) when m_axis_result_tvalid = '1';
+  m_axis_result_tdata_sign     <= m_axis_result_tdata(63) when m_axis_result_tvalid = '1';
+  m_axis_result_tdata_exp      <= m_axis_result_tdata(62 downto 52) when m_axis_result_tvalid = '1';
+  m_axis_result_tdata_mant     <= m_axis_result_tdata(51 downto 0) when m_axis_result_tvalid = '1';
 
-  m_axis_result_tuser_a              <= m_axis_result_tuser(1 downto 0) when m_axis_result_tvalid = '1';
+  m_axis_result_tuser_a              <= m_axis_result_tuser(0 downto 0) when m_axis_result_tvalid = '1';
 
 
 
