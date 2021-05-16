@@ -1,4 +1,5 @@
 ${CL_ROOT}/ip/floating_point_32/sim/floating_point_0.vhd
+${CL_ROOT}/ip/floating_point_fixed_1/sim/floating_point_1.vhd
 
 /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/vhlib/util/UtilMisc_pkg.vhd
 /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/vhlib/util/UtilInt_pkg.vhd
@@ -58,6 +59,8 @@ ${CL_ROOT}/ip/floating_point_32/sim/floating_point_0.vhd
 /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/mmio.gen.vhd
 /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/arrays/ArrayCmdCtrlMerger.vhd
 /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/WriterInterface.vhd
+/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/parallel_patterns/ParallelPatterns_pkg.vhd
+/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/TypeConverter.vhd
 /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/parallel_patterns/StreamSliceArray.vhd
 /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/vhlib/stream/StreamElementCounter.vhd
 /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/vhlib/util/UtilRam_pkg.vhd
@@ -65,13 +68,11 @@ ${CL_ROOT}/ip/floating_point_32/sim/floating_point_0.vhd
 /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/HashTable.vhd
 /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/parallel_patterns/StreamAccumulator.vhd
 /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/parallel_patterns/SequenceStream.vhd
-/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/parallel_patterns/ParallelPatterns_pkg.vhd
 /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/parallel_patterns/ReduceStream.vhd
 /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/SumOp.vhd
 /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/ReduceStage.vhd
 /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/vhlib/stream/StreamSync.vhd
 /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/MergeOp.vhd
-/home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/Float_to_Fixed.vhd
 /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/vhlib/stream/StreamSlice.vhd
 /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/vhlib/util/UtilRam1R1W.vhd
 /home/yyunon/thesis_journals/resources/fletcher-aws/examples/tpch1/1DDR/design/vhdl/hardware/vhlib/stream/StreamFIFOCounter.vhd
