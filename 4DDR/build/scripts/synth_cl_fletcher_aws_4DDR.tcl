@@ -72,6 +72,10 @@ puts "AWS FPGA: Reading IP blocks";
 read_ip [ list \
   $CL_DIR/ip/floating_point_32/floating_point_0.xci
 ]
+#Read fixed to floating converter ip
+read_ip [ list \
+  $CL_DIR/ip/floating_point_fixed_1/floating_point_1.xci
+]
 
 #Read DDR IP
 read_ip [ list \
