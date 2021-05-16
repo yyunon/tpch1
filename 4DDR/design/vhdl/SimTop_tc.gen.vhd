@@ -42,7 +42,7 @@ architecture Behavorial of SimTop_tc is
   -----------------------------------------------------------------------------
   -- Default wrapper component.
   -----------------------------------------------------------------------------
-    component Forecast_Mantle is
+    component PriceSummary_Mantle is
     generic (
       INDEX_WIDTH        : integer := 32;
       TAG_WIDTH          : integer := 1;
@@ -309,8 +309,18 @@ begin
     mmio_write32(9, X"00000000", mmio_source, mmio_sink, bcd_clk, bcd_reset);
     mmio_write32(10, X"00000680", mmio_source, mmio_sink, bcd_clk, bcd_reset); -- l discount_values buffer address.
     mmio_write32(11, X"00000000", mmio_source, mmio_sink, bcd_clk, bcd_reset);
-    mmio_write32(12, X"000009c0", mmio_source, mmio_sink, bcd_clk, bcd_reset); -- l shipdate_values buffer address.
+    mmio_write32(12, X"000009c0", mmio_source, mmio_sink, bcd_clk, bcd_reset); -- l tax_values buffer address.
     mmio_write32(13, X"00000000", mmio_source, mmio_sink, bcd_clk, bcd_reset);
+    mmio_write32(14, X"00000d00", mmio_source, mmio_sink, bcd_clk, bcd_reset); -- l returnflag_offsets buffer address.
+    mmio_write32(15, X"00000000", mmio_source, mmio_sink, bcd_clk, bcd_reset);
+    mmio_write32(16, X"00000ec0", mmio_source, mmio_sink, bcd_clk, bcd_reset); -- l returnflag_values buffer address.
+    mmio_write32(17, X"00000000", mmio_source, mmio_sink, bcd_clk, bcd_reset);
+    mmio_write32(18, X"00000f40", mmio_source, mmio_sink, bcd_clk, bcd_reset); -- l linestatus_offsets buffer address.
+    mmio_write32(19, X"00000000", mmio_source, mmio_sink, bcd_clk, bcd_reset);
+    mmio_write32(20, X"00001100", mmio_source, mmio_sink, bcd_clk, bcd_reset); -- l linestatus_values buffer address.
+    mmio_write32(21, X"00000000", mmio_source, mmio_sink, bcd_clk, bcd_reset);
+    mmio_write32(22, X"00001180", mmio_source, mmio_sink, bcd_clk, bcd_reset); -- l shipdate_values buffer address.
+    mmio_write32(23, X"00000000", mmio_source, mmio_sink, bcd_clk, bcd_reset);
 
     -- 3. Write recordbatch bounds.
     mmio_write32(4, X"00000000", mmio_source, mmio_sink, bcd_clk, bcd_reset); -- l first index.
@@ -319,7 +329,7 @@ begin
     -- 4. Write any kernel-specific registers.
 
     -- 5. Start the kernel.
-    mmio_write32(16, X"00000001", mmio_source, mmio_sink, bcd_clk, bcd_reset); -- Start profiling.
+    mmio_write32(44, X"00000001", mmio_source, mmio_sink, bcd_clk, bcd_reset); -- Start profiling.
     mmio_write32(REG_CONTROL, CONTROL_START, mmio_source, mmio_sink, bcd_clk, bcd_reset);
 
     -- 6. Poll for completion
@@ -337,7 +347,7 @@ begin
       exit when read_data_masked = STATUS_DONE;
     end loop;
 
-    mmio_write32(16, X"00000000", mmio_source, mmio_sink, bcd_clk, bcd_reset); -- Stop profiling.
+    mmio_write32(44, X"00000000", mmio_source, mmio_sink, bcd_clk, bcd_reset); -- Stop profiling.
 
     -- 7. Read return register.
     mmio_read32(REG_RETURN0, read_data, mmio_source, mmio_sink, bcd_clk, bcd_reset);
@@ -387,7 +397,7 @@ begin
     SEED                        => 1337,
     RANDOM_REQUEST_TIMING       => false,
     RANDOM_RESPONSE_TIMING      => false,
-    SREC_FILE                   => "/home/yyunon/thesis_journals/resources/tpc-fletcher/tpch1/hardware/memory.srec"
+    SREC_FILE                   => "/home/yyunon/hardware/memory.srec"
   )
   port map (
     clk                         => bcd_clk,
@@ -409,7 +419,7 @@ begin
   -----------------------------------------------------------------------------
   -- Fletcher generated wrapper
   -----------------------------------------------------------------------------
-  Forecast_Mantle_inst : Forecast_Mantle
+  PriceSummary_Mantle_inst : PriceSummary_Mantle
     generic map (
       BUS_ADDR_WIDTH            => BUS_ADDR_WIDTH,
       BUS_DATA_WIDTH            => BUS_DATA_WIDTH,

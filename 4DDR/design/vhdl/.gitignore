@@ -2,3 +2,7 @@ vivado*
 vivado*/
 sources.txt
 sources.*
+xvhdl.*
+.hdl_checker/
+.vscode
+.metals

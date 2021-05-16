@@ -64,7 +64,7 @@ architecture Behavioral of UtilRam1R1W is
 
   -- Shared variable to represent the memory.
   type mem_type is array (2**DEPTH_LOG2-1 downto 0) of std_logic_vector(WIDTH-1 downto 0);
-  signal mem : mem_type;
+  signal mem : mem_type := (others => (others => '0'));
   
   -- RAM style pragmas:
   
