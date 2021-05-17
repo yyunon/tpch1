@@ -134,9 +134,13 @@ begin
     r_data => read_data
   );
 
+  write_address           <= read_address;
+  write_data              <= '1' & in_data;
+  bit_table_write_address <= std_logic_vector(hash_pointer);
+  bit_table_write_data    <= key_in_data_s;
   -- Process to hash the input
   hash_proc :
-  process (state, in_data, read_data, read_address, operation, hash_pointer) is
+  process (state, in_data, read_data, read_address, operation, hash_pointer, key_in_data_s) is
     variable hash_counter : unsigned(NUM_KEYS * ADDRESS_WIDTH - 1 downto 0);
   begin
     state_next             <= state;
@@ -156,16 +160,12 @@ begin
           state_next <= STATE_IDLE;
         else
           -- update bit table
-          bit_table_write_enable  <= '1';
-          bit_table_write_address <= std_logic_vector(hash_pointer);
-          bit_table_write_data    <= key_in_data_s;
-          state_next              <= STATE_IDLE;
+          bit_table_write_enable <= '1';
+          state_next             <= STATE_IDLE;
           hash_counter := hash_counter + to_unsigned(1, NUM_KEYS * ADDRESS_WIDTH); -- Increment the hash pointer to the next address
           --hash_counter := hash_counter + 1;
         end if;
-        write_enable  <= '1';
-        write_data    <= '1' & in_data;
-        write_address <= read_address;
+        write_enable <= '1';
     end case;
     hash_pointer_next <= hash_counter;
   end process;
