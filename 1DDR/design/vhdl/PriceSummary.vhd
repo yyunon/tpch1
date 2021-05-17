@@ -374,7 +374,7 @@ begin
     LEN_WIDTH         => LEN_WIDTH,
     INDEX_WIDTH       => INDEX_WIDTH,
     CONVERTERS        => "FLOAT_TO_FIXED", -- TODO: Implement this
-    ILA               => ""
+    ILA               => "TRUE"
   )
   port map(
     clk                         => kcd_clk,
@@ -574,6 +574,9 @@ begin
     variable l_avg_disc       : out_record;
     variable l_count_order    : out_record;
   begin
+    done                         <= '0';
+    busy                         <= '0';
+    idle                         <= '1';
 
     --Input stream
     l_quantity_cmd_valid         <= '0';
@@ -693,6 +696,8 @@ begin
     l_shipdate_unl_ready      <= '0';
 
     pu_cmd_in_valid           <= '0';
+    pu_interface_in_valid     <= '0';
+    pricesummary_ready        <= '1';
 
     case state is
       when STATE_IDLE =>
