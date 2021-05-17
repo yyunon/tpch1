@@ -233,6 +233,7 @@ int main(int argc, char **argv)
   std::shared_ptr<fletcher::Platform> platform;
   std::shared_ptr<fletcher::Context> context;
 
+  auto t_total_start = std::chrono::high_resolution_clock::now();
   // Create a Fletcher platform object, attempting to autodetect the platform.
 #ifdef SV_TEST
   status = fletcher::Platform::Make("aws_sim", &platform);
@@ -287,7 +288,9 @@ int main(int argc, char **argv)
 
   // "Enable" the context, potentially copying the recordbatch to the device. This depends on your platform.
   // AWS EC2 F1 requires a copy, but OpenPOWER SNAP doesn't.
+  auto t_enable_ctx_start = std::chrono::high_resolution_clock::now();
   context->Enable();
+  auto t_enable_ctx_end = std::chrono::high_resolution_clock::now();
 
   if (!status.ok())
   {
@@ -328,6 +331,7 @@ int main(int argc, char **argv)
   // Take the data back.
   std::cout << "Kernel done!\n";
   const int device_buffer_offset = 9;
+  auto t_get_return_start = std::chrono::high_resolution_clock::now();
   platform->CopyDeviceToHost(context->device_buffer(device_buffer_offset).device_address, res_l_returnflag_off, sizeof(int32_t) * (num_strings + 1));
   platform->CopyDeviceToHost(context->device_buffer(device_buffer_offset + 1).device_address, res_l_returnflag_val, sizeof(int64_t) * num_chars);
   platform->CopyDeviceToHost(context->device_buffer(device_buffer_offset + 2).device_address, res_l_linestatus_off, sizeof(int32_t) * (num_strings + 1));
@@ -340,7 +344,8 @@ int main(int argc, char **argv)
   platform->CopyDeviceToHost(context->device_buffer(device_buffer_offset + 9).device_address, res_avg_price_data, sizeof(int64_t) * num_rows);
   platform->CopyDeviceToHost(context->device_buffer(device_buffer_offset + 10).device_address, res_avg_disc_data, sizeof(int64_t) * num_rows);
   platform->CopyDeviceToHost(context->device_buffer(device_buffer_offset + 11).device_address, res_count_order_data, sizeof(int64_t) * num_rows);
-
+  auto t_get_return_end = std::chrono::high_resolution_clock::now();
+  auto t_total_end = std::chrono::high_resolution_clock::now();
   std::cout << "Copy operation is done.\n";
   std::cout << "l_returnflag, l_linestatus, sum_qty, sum_base, sum_disc, sum_charge, avg_qty, avg_price, avg_disc, count_order\n";
 
@@ -358,6 +363,12 @@ int main(int argc, char **argv)
   //{
   //  std::cout << i << "," << r[i] << "," << l[i] << "," << q[i] << "," << b[i] << "," << d[i] << "," << c[i] << "," << aq[i] << "," << ap[i] << "," << ad[i] << "," << co[i] << "\n";
   //}
+  auto t_enable_ctx = std::chrono::duration_cast<std::chrono::microseconds>(t_enable_ctx_end - t_enable_ctx_start).count();
+  auto t_get_return = std::chrono::duration_cast<std::chrono::microseconds>(t_get_return_end - t_get_return_start).count();
+  auto t_total = std::chrono::duration_cast<std::chrono::microseconds>(t_total_end - t_total_start).count();
+  std::cout << "Get return value: \t" << t_get_return << "us" << std::endl;
+  std::cout << "Total runtime: \t\t" << t_total << "us" << std::endl;
+  std::cout << "Enable context: \t" << t_enable_ctx << "us" << std::endl;
   std::cout << res_l_returnflag_array->ToString() << "\n";
   std::cout << res_l_linestatus_array->ToString() << "\n";
   std::cout << res_sum_qty->ToString() << "\n";
