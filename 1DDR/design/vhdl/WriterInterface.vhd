@@ -138,6 +138,7 @@ begin
   begin
     v            := r;
     o.len.data   := std_logic_vector(to_unsigned(1, 32));
+    o.len.last   := '0';
     o.len.valid  := '0';
     o.len.dvalid := '1';
     o.cmd.ready  := '0';
@@ -188,6 +189,7 @@ begin
     input_chars,
     input_chars_valid,
     input_chars_count,
+    input_length,
     output_chars_ready) is
     variable vs     : sregs_record;
     variable output : chars_out_record;
@@ -196,6 +198,9 @@ begin
     output.utf.valid  := '0';
     output.utf.dvalid := '1';
     output.utf.ready  := '0';
+    output.utf.last   := '0';
+    output.utf.data   := (others => '0');
+    output.utf.count  := (others => '0');
 
     case vs.state is
       when STATE_IDLE =>
@@ -245,7 +250,7 @@ begin
       if reset = '1' then
         rs.state <= STATE_IDLE;
         r.state  <= STATE_IDLE;
-        rs.len   <= to_unsigned(1, LEN_WIDTH);
+        rs.len   <= to_unsigned(1, 32);
       end if;
     end if;
   end process;
