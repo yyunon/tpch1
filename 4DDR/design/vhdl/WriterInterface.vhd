@@ -132,12 +132,13 @@ begin
   --output_count  <= std_logic_vector(to_unsigned(1, 1));
 
   writer_process_len :
-  process (r, enable, output_ready, input_length) is
+  process (r, enable, output_ready) is
     variable v : regs_record;
     variable o : out_record;
   begin
     v            := r;
     o.len.data   := std_logic_vector(to_unsigned(1, 32));
+    o.len.last   := '0';
     o.len.valid  := '0';
     o.len.dvalid := '1';
     o.cmd.ready  := '0';
@@ -186,8 +187,9 @@ begin
   process (rs,
     enable,
     input_chars,
-    input_chars_valid, input_length,
+    input_chars_valid,
     input_chars_count,
+    input_length,
     output_chars_ready) is
     variable vs     : sregs_record;
     variable output : chars_out_record;
@@ -196,6 +198,9 @@ begin
     output.utf.valid  := '0';
     output.utf.dvalid := '1';
     output.utf.ready  := '0';
+    output.utf.last   := '0';
+    output.utf.data   := (others => '0');
+    output.utf.count  := (others => '0');
 
     case vs.state is
       when STATE_IDLE =>

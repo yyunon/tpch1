@@ -504,6 +504,10 @@ architecture Behavioral of PU is
   signal probe_ready                         : std_logic;
   signal num_entries                         : std_logic_vector(15 downto 0);
   signal enable_interface                    : std_logic;
+
+  signal returnflag_key_stream_out_last      : std_logic;
+  signal linestatus_key_stream_out_last      : std_logic;
+  signal key_stream_out_last                 : std_logic;
   --
   constant ZERO                              : std_logic_vector(3 downto 0) := (others => '0');
 begin
@@ -513,54 +517,54 @@ begin
   --for only one of the instances. 
   logic_analyzer_gen :
   if ILA = "TRUE" generate
-    CL_ILA_0 : ila_1
-    PORT MAP (
-          clk                   => clk,
-          probe0(0)             => l_avg_price_valid,
-          probe1                => l_avg_price,
-          probe2                => (others => '0'),
-          probe3(0)             => cmd_in_valid,
-          probe4(0)             => cmd_in_ready,
-          probe5                => l_count_order,
-          probe6(0)             => l_discount_ready,
-          probe7(0)             => l_extendedprice_ready,
-          probe8(0)             => l_quantity_ready,
-          probe9(0)             => l_shipdate_ready,
-          probe10(511 downto 0) => sum_base_price_data & avg_qty_data & avg_price_data & avg_disc_data  & l_tax & l_discount & l_extendedprice & l_quantity,
-          probe11               => (others => '0'),
-          probe12               => (others => '0'),
-          probe13               => (others => '0'),
-          probe14               => (511 downto 368 => '0')& disc_price_reduce_in_data & charge_reduce_in_data & num_entries & l_linestatus_o_chars & l_returnflag_o_chars& key_stream_chars & conv_l_discount & conv_l_extendedprice & conv_l_quantity,
-          probe15               => (others => '0'),
-          probe16(0)            => buf_filter_out_last,
-          probe17               => (others => '0'),
-          probe18               => (others => '0'),
-          probe19               => (others => '0'),
-          probe20               => (others => '0'),
-          probe21               => (others => '0'),
-          probe22(0)            => buf_filter_out_strb,
-          probe23               => (others => '0'),
-          probe24               => (others => '0'),
-          probe25               => (others => '0'),
-          probe26(0)            => buf_filter_out_valid,
-          probe27               => (others => '0'),
-          probe28               => (others => '0'),
-          probe29               => '0' & l_discount_last,
-          probe30(0)            => l_extendedprice_last,
-          probe31               => ZERO(3 downto 1) & l_quantity_last,
-          probe32               => ZERO(3 downto 1)& l_shipdate_last,
-          probe33               => ZERO(3 downto 1)& l_discount_valid,
-          probe34               => ZERO(3 downto 1)& l_extendedprice_valid,
-          probe35(0)            => l_quantity_valid,
-          probe36               => ZERO(3 downto 1) & l_shipdate_valid,
-          probe37               => (others => '0'),
-          probe38               => (others => '0'),
-          probe39               => (others => '0'),
-          probe40(0)            => interface_in_valid,
-          probe41(0)            => interface_in_ready,
-          probe42(0)            => enable_interface,
-          probe43(0)            => len_linestatus_o_valid
-    );
+    --CL_ILA_0 : ila_1
+    --PORT MAP (
+    --      clk                   => clk,
+    --      probe0(0)             => l_avg_price_valid,
+    --      probe1                => l_avg_price,
+    --      probe2                => (others => '0'),
+    --      probe3(0)             => cmd_in_valid,
+    --      probe4(0)             => cmd_in_ready,
+    --      probe5                => l_count_order,
+    --      probe6(0)             => l_discount_ready,
+    --      probe7(0)             => l_extendedprice_ready,
+    --      probe8(0)             => l_quantity_ready,
+    --      probe9(0)             => l_shipdate_ready,
+    --      probe10(511 downto 0) => sum_base_price_data & avg_qty_data & avg_price_data & avg_disc_data  & l_tax & l_discount & l_extendedprice & l_quantity,
+    --      probe11               => (others => '0'),
+    --      probe12               => (others => '0'),
+    --      probe13               => (others => '0'),
+    --      probe14               => (511 downto 368 => '0')& disc_price_reduce_in_data & charge_reduce_in_data & num_entries & l_linestatus_o_chars & l_returnflag_o_chars& key_stream_chars & conv_l_discount & conv_l_extendedprice & conv_l_quantity,
+    --      probe15               => (others => '0'),
+    --      probe16(0)            => buf_filter_out_last,
+    --      probe17               => (others => '0'),
+    --      probe18               => (others => '0'),
+    --      probe19               => (others => '0'),
+    --      probe20               => (others => '0'),
+    --      probe21               => (others => '0'),
+    --      probe22(0)            => buf_filter_out_strb,
+    --      probe23               => (others => '0'),
+    --      probe24               => (others => '0'),
+    --      probe25               => (others => '0'),
+    --      probe26(0)            => buf_filter_out_valid,
+    --      probe27               => (others => '0'),
+    --      probe28               => (others => '0'),
+    --      probe29               => '0' & l_discount_last,
+    --      probe30(0)            => l_extendedprice_last,
+    --      probe31               => ZERO(3 downto 1) & l_quantity_last,
+    --      probe32               => ZERO(3 downto 1)& l_shipdate_last,
+    --      probe33               => ZERO(3 downto 1)& l_discount_valid,
+    --      probe34               => ZERO(3 downto 1)& l_extendedprice_valid,
+    --      probe35(0)            => l_quantity_valid,
+    --      probe36               => ZERO(3 downto 1) & l_shipdate_valid,
+    --      probe37               => (others => '0'),
+    --      probe38               => (others => '0'),
+    --      probe39               => (others => '0'),
+    --      probe40(0)            => interface_in_valid,
+    --      probe41(0)            => interface_in_ready,
+    --      probe42(0)            => enable_interface,
+    --      probe43(0)            => len_linestatus_o_valid
+    --);
   end generate;
   l_returnflag_ready       <= l_returnflag_chars_ready_x;
   l_linestatus_ready       <= l_linestatus_chars_ready_x;
@@ -1119,7 +1123,7 @@ begin
   --l_sum_qty_valid         <= sum_qty_valid;
   --sum_qty_ready           <= l_sum_qty_ready;
   --l_sum_qty_dvalid        <= '1';
-  --l_sum_qty_last          <= out_data_last_s;
+  l_sum_qty_last          <= sum_qty_last;
   --l_sum_qty               <= sum_qty_data;
   sum_qty_converter : TypeConverter
   generic map(
@@ -1143,14 +1147,14 @@ begin
     out_valid  => l_sum_qty_valid,
     out_dvalid => l_sum_qty_dvalid,
     out_ready  => l_sum_qty_ready,
-    out_last   => l_sum_qty_last,
+    out_last   => sum_qty_last,
     out_data   => l_sum_qty
   );
 
   --l_sum_base_price_valid  <= sum_base_price_valid;
   --sum_base_price_ready    <= l_sum_base_price_ready;
   --l_sum_base_price_dvalid <= '1';
-  --l_sum_base_price_last   <= out_data_last_s;
+  l_sum_base_price_last <= sum_base_price_last;
   --l_sum_base_price        <= sum_base_price_data;
   sum_base_price_converter : TypeConverter
   generic map(
@@ -1174,7 +1178,7 @@ begin
     out_valid  => l_sum_base_price_valid,
     out_dvalid => l_sum_base_price_dvalid,
     out_ready  => l_sum_base_price_ready,
-    out_last   => l_sum_base_price_last,
+    out_last   => sum_base_price_last,
     out_data   => l_sum_base_price
   );
 
@@ -1182,6 +1186,7 @@ begin
   --sum_disc_price_ready    <= l_sum_disc_price_ready;
   --l_sum_disc_price_dvalid <= '1';
   --l_sum_disc_price_last   <= out_data_last_s;
+  l_sum_disc_price_last <= sum_disc_price_last;
   --l_sum_disc_price        <= sum_disc_price_data;
   sum_disc_price_converter : TypeConverter
   generic map(
@@ -1205,14 +1210,14 @@ begin
     out_valid  => l_sum_disc_price_valid,
     out_dvalid => l_sum_disc_price_dvalid,
     out_ready  => l_sum_disc_price_ready,
-    out_last   => l_sum_disc_price_last,
+    out_last   => sum_disc_price_last,
     out_data   => l_sum_disc_price
   );
 
   --l_sum_charge_valid      <= sum_charge_valid;
   --sum_charge_ready        <= l_sum_charge_ready;
   --l_sum_charge_dvalid     <= '1';
-  --l_sum_charge_last       <= out_data_last_s;
+  l_sum_charge_last <= sum_charge_last;
   --l_sum_charge            <= sum_charge_data;
   sum_charge_converter : TypeConverter
   generic map(
@@ -1236,14 +1241,14 @@ begin
     out_valid  => l_sum_charge_valid,
     out_dvalid => l_sum_charge_dvalid,
     out_ready  => l_sum_charge_ready,
-    out_last   => l_sum_charge_last,
+    out_last   => sum_charge_last,
     out_data   => l_sum_charge
   );
 
   --l_avg_qty_valid         <= avg_qty_valid;
   --avg_qty_ready           <= l_avg_qty_ready;
   --l_avg_qty_dvalid        <= '1';
-  --l_avg_qty_last          <= out_data_last_s;
+  l_avg_qty_last <= avg_qty_last;
   --l_avg_qty               <= avg_qty_data;
   avg_qty_converter : TypeConverter
   generic map(
@@ -1267,14 +1272,14 @@ begin
     out_valid  => l_avg_qty_valid,
     out_dvalid => l_avg_qty_dvalid,
     out_ready  => l_avg_qty_ready,
-    out_last   => l_avg_qty_last,
+    out_last   => avg_qty_last,
     out_data   => l_avg_qty
   );
 
   --l_avg_price_valid       <= avg_price_valid;
   --avg_price_ready         <= l_avg_price_ready;
   --l_avg_price_dvalid      <= '1';
-  --l_avg_price_last        <= out_data_last_s;
+  l_avg_price_last <= avg_price_last;
   --l_avg_price             <= avg_price_data;
   avg_price_converter : TypeConverter
   generic map(
@@ -1298,14 +1303,14 @@ begin
     out_valid  => l_avg_price_valid,
     out_dvalid => l_avg_price_dvalid,
     out_ready  => l_avg_price_ready,
-    out_last   => l_avg_price_last,
+    out_last   => avg_price_last,
     out_data   => l_avg_price
   );
 
   --l_avg_disc_valid        <= avg_disc_valid;
   --avg_disc_ready          <= l_avg_disc_ready;
   --l_avg_disc_dvalid       <= '1';
-  --l_avg_disc_last         <= out_data_last_s;
+  l_avg_disc_last <= avg_disc_last;
   --l_avg_disc              <= avg_disc_data;
   avg_disc_converter : TypeConverter
   generic map(
@@ -1329,7 +1334,7 @@ begin
     out_valid  => l_avg_disc_valid,
     out_dvalid => l_avg_disc_dvalid,
     out_ready  => l_avg_disc_ready,
-    out_last   => l_avg_disc_last,
+    out_last   => avg_disc_last,
     out_data   => l_avg_disc
   );
 
@@ -1374,7 +1379,7 @@ begin
     output_chars_valid  => l_linestatus_o_chars_valid,
     output_chars_ready  => l_linestatus_o_chars_ready,
     output_chars_dvalid => l_linestatus_o_chars_dvalid,
-    output_chars_last   => l_linestatus_o_chars_last,
+    output_chars_last   => linestatus_key_stream_out_last,
     output_chars        => l_linestatus_o_chars,
     output_chars_count  => l_linestatus_o_chars_count
   );
@@ -1414,11 +1419,14 @@ begin
     output_chars_valid  => l_returnflag_o_chars_valid,
     output_chars_ready  => l_returnflag_o_chars_ready,
     output_chars_dvalid => l_returnflag_o_chars_dvalid,
-    output_chars_last   => l_returnflag_o_chars_last,
+    output_chars_last   => returnflag_key_stream_out_last,
     output_chars        => l_returnflag_o_chars,
     output_chars_count  => l_returnflag_o_chars_count
   );
 
+  l_returnflag_o_chars_last <= returnflag_key_stream_out_last;
+  l_linestatus_o_chars_last <= linestatus_key_stream_out_last;
+  key_stream_out_last       <= out_data_last_s and sum_qty_last and sum_base_price_last and sum_disc_price_last and sum_charge_last and avg_qty_last and avg_price_last and avg_disc_last;
   -- Holds the interfacing logic.
   chars_proc :
   process (rs,
@@ -1446,7 +1454,7 @@ begin
     --sum_base_price_data,
     probe_valid,
     num_entries,
-    out_data_last_s,
+    key_stream_out_last,
 
     cmd_in_valid,
     interface_in_valid
@@ -1491,7 +1499,7 @@ begin
         -- There are 10 different Array writers.
         enable_interface  <= '1';
         out_data_enable_s <= '1';
-        if out_data_last_s = '1' then
+        if key_stream_out_last = '1' then
           interface_in_ready <= '1';
           vs.state := STATE_DONE;
         end if;

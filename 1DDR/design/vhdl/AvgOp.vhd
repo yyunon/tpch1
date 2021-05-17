@@ -25,10 +25,10 @@ use ieee.numeric_std.all;
 library work;
 use work.Stream_pkg.all;
 use work.Tpch_pkg.all;
---USE work.fixed_generic_pkg_mod.ALL;
+USE work.fixed_generic_pkg_mod.ALL;
 
-library ieee_proposed;
-use ieee_proposed.fixed_pkg.all;
+--library ieee_proposed;
+--use ieee_proposed.fixed_pkg.all;
 entity AvgOp is
   generic (
 

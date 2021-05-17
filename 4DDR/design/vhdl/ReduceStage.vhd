@@ -10,7 +10,7 @@ library work;
 use work.ParallelPatterns_pkg.all;
 use work.Stream_pkg.all;
 use work.Tpch_pkg.all;
-use work.fixed_generic_pkg_mod.all;
+USE work.fixed_generic_pkg_mod.ALL;
 
 entity ReduceStage is
   generic (
@@ -289,7 +289,8 @@ begin
         avg_vec(63 downto 0)    := to_slv(temp_buffer_discount);
       end if;
       avg_out_data_s <= avg_vec;
-
+    else
+      avg_out_data_s <= (others => '0');
     end if;
 
   end process;
