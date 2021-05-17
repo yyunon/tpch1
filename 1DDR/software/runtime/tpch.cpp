@@ -132,9 +132,9 @@ int main(int argc, char **argv)
 {
 #endif //SV_TEST
 
-  int32_t num_strings = 4;
+  int32_t num_strings = 10;
   int32_t num_chars = 1;
-  int32_t num_rows = 4;
+  int32_t num_rows = 10;
   printf("\n\ttpch - Regular Expression matcher FPGA circuit generator - runtime\n\n");
   // Check number of arguments.
   if (argc != 4)
