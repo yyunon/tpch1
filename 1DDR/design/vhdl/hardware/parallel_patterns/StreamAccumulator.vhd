@@ -205,7 +205,7 @@ begin
       hash_operation    <= '0';
       --Output logic, will stream the hash and bit table 
       hash_out_valid_s0 <= '0';
-      hash_last_s       <= '0';
+      hash_last_s1      <= '0';
       bit_address_valid <= '0';
       --key_in_data_s     <= (others => '0'); -- to input key for reading data from hash table
 
@@ -225,14 +225,19 @@ begin
       elsif hash_out_ready_s = '1' and hash_out_enable = '1' then
         if count_reg_out < unsigned(num_entries) then
           -- It takes 1 clk cycles to read the hash key and 1 clk cycles to read data.
-          hash_out_valid_s0 <= '1';
+          if count_reg_out < unsigned(num_entries) - 1 then
+            hash_out_valid_s0 <= '1';
+          else
+            hash_out_valid_s0 <= '0';
+          end if;
 
           bit_address_valid <= '1';
           bit_address_in    <= std_logic_vector(count_reg_out); -- Read the key list
           --key_in_data_s     <= bit_address_out;                 -- to input key for reading data from hash table
           count_reg_out := count_reg_out + 1;
-        elsif count_reg_out = unsigned(num_entries) then
-          hash_last_s <= '1';
+          if count_reg_out = unsigned(num_entries) then
+            hash_last_s1 <= '1';
+          end if;
         end if;
       end if;
 
@@ -263,7 +268,7 @@ begin
       hash_out_valid_s    <= hash_out_valid_s1;
 
       --hash_last_s1        <= hash_last_s2;
-      --hash_last_s         <= hash_last_s1;
+      hash_last_s         <= hash_last_s1;
       -------------------------------------------
     end if;
 
