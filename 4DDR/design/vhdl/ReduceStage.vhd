@@ -3,14 +3,14 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
---library ieee_proposed;
---use ieee_proposed.fixed_pkg.all;
+library ieee_proposed;
+use ieee_proposed.fixed_pkg.all;
 
 library work;
 use work.ParallelPatterns_pkg.all;
 use work.Stream_pkg.all;
 use work.Tpch_pkg.all;
-USE work.fixed_generic_pkg_mod.ALL;
+--USE work.fixed_generic_pkg_mod.ALL;
 
 entity ReduceStage is
   generic (
@@ -229,8 +229,9 @@ begin
   probe_valid              <= cntrl_out_slice_in_valid;
   cntrl_out_slice_in_ready <= probe_ready;
 
-  cntrl_out_slice : StreamSlice
+  cntrl_out_slice : StreamBuffer
   generic map(
+    MIN_DEPTH  => 0,
     DATA_WIDTH => (NUM_SUMS + 1) * 64 + 16 + 1
   )
   port map(
