@@ -98,6 +98,8 @@ architecture Behavioral of TypeConverter is
   signal ops_ready        : std_logic;
   signal ops_last         : std_logic;
   signal ops_data         : std_logic_vector(DATA_WIDTH - 1 downto 0);
+
+  signal fixtofloat_valid : std_logic;
 begin
 
   op_in_sync : StreamBuffer
@@ -179,12 +181,13 @@ begin
       s_axis_a_tdata         => ops_data,
       s_axis_a_tuser(0)      => ops_dvalid,
       s_axis_a_tlast         => ops_last,
-      m_axis_result_tvalid   => conv_data_valid,
+      m_axis_result_tvalid   => fixtofloat_valid,
       m_axis_result_tready   => conv_data_ready,
       m_axis_result_tdata    => conv_data,
       m_axis_result_tuser(0) => conv_data_dvalid,
       m_axis_result_tlast    => conv_data_last
     );
+    conv_data_valid <= fixtofloat_valid and enable;-- The converter will return valid on even though it is not. To solve this we also wait for enable signal
   end generate;
 
 end Behavioral;

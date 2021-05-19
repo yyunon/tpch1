@@ -224,6 +224,7 @@ architecture Behavioral of PU is
   end record;
   type sregs_record is record
     state : state_type;
+    len   : unsigned(31 downto 0);
   end record;
   type buf_out_record is record
     ready : std_logic;
@@ -396,42 +397,49 @@ architecture Behavioral of PU is
   --
   signal sum_qty_ready                       : std_logic := '0';
   signal sum_qty_valid                       : std_logic := '0';
+  signal sum_qty_valid_s                     : std_logic := '0';
   signal sum_qty_last                        : std_logic;
   signal sum_qty_dvalid                      : std_logic;
   signal sum_qty_data                        : std_logic_vector(63 downto 0);
 
   signal avg_qty_ready                       : std_logic := '0';
   signal avg_qty_valid                       : std_logic := '0';
+  signal avg_qty_valid_s                     : std_logic := '0';
   signal avg_qty_last                        : std_logic;
   signal avg_qty_dvalid                      : std_logic;
   signal avg_qty_data                        : std_logic_vector(63 downto 0);
 
   signal sum_base_price_ready                : std_logic := '0';
   signal sum_base_price_valid                : std_logic := '0';
+  signal sum_base_price_valid_s              : std_logic := '0';
   signal sum_base_price_last                 : std_logic;
   signal sum_base_price_dvalid               : std_logic;
   signal sum_base_price_data                 : std_logic_vector(63 downto 0);
 
   signal avg_price_ready                     : std_logic := '0';
   signal avg_price_valid                     : std_logic := '0';
+  signal avg_price_valid_s                   : std_logic := '0';
   signal avg_price_last                      : std_logic;
   signal avg_price_dvalid                    : std_logic;
   signal avg_price_data                      : std_logic_vector(63 downto 0);
 
   signal sum_disc_price_ready                : std_logic := '0';
   signal sum_disc_price_valid                : std_logic := '0';
+  signal sum_disc_price_valid_s              : std_logic := '0';
   signal sum_disc_price_last                 : std_logic;
   signal sum_disc_price_dvalid               : std_logic;
   signal sum_disc_price_data                 : std_logic_vector(63 downto 0);
 
   signal sum_charge_ready                    : std_logic := '0';
   signal sum_charge_valid                    : std_logic := '0';
+  signal sum_charge_valid_s                  : std_logic := '0';
   signal sum_charge_last                     : std_logic;
   signal sum_charge_dvalid                   : std_logic;
   signal sum_charge_data                     : std_logic_vector(63 downto 0);
 
   signal avg_disc_ready                      : std_logic := '0';
   signal avg_disc_valid                      : std_logic := '0';
+  signal avg_disc_valid_s                    : std_logic := '0';
   signal avg_disc_last                       : std_logic;
   signal avg_disc_dvalid                     : std_logic;
   signal avg_disc_data                       : std_logic_vector(63 downto 0);
@@ -1120,10 +1128,10 @@ begin
   len_returnflag_o_valid  <= returnflag_o_chars_valid;
 
   --Number output streams
-  --l_sum_qty_valid         <= sum_qty_valid;
   --sum_qty_ready           <= l_sum_qty_ready;
   --l_sum_qty_dvalid        <= '1';
   l_sum_qty_last          <= sum_qty_last;
+  l_sum_qty_valid         <= sum_qty_valid_s;
   --l_sum_qty               <= sum_qty_data;
   sum_qty_converter : TypeConverter
   generic map(
@@ -1144,17 +1152,17 @@ begin
     in_ready   => sum_qty_ready,
     in_last    => out_data_last_s,
     in_data    => sum_qty_data,
-    out_valid  => l_sum_qty_valid,
+    out_valid  => sum_qty_valid_s,
     out_dvalid => l_sum_qty_dvalid,
     out_ready  => l_sum_qty_ready,
     out_last   => sum_qty_last,
     out_data   => l_sum_qty
   );
 
-  --l_sum_base_price_valid  <= sum_base_price_valid;
   --sum_base_price_ready    <= l_sum_base_price_ready;
   --l_sum_base_price_dvalid <= '1';
-  l_sum_base_price_last <= sum_base_price_last;
+  l_sum_base_price_last  <= sum_base_price_last;
+  l_sum_base_price_valid <= sum_base_price_valid_s;
   --l_sum_base_price        <= sum_base_price_data;
   sum_base_price_converter : TypeConverter
   generic map(
@@ -1175,18 +1183,18 @@ begin
     in_ready   => sum_base_price_ready,
     in_last    => out_data_last_s,
     in_data    => sum_base_price_data,
-    out_valid  => l_sum_base_price_valid,
+    out_valid  => sum_base_price_valid_s,
     out_dvalid => l_sum_base_price_dvalid,
     out_ready  => l_sum_base_price_ready,
     out_last   => sum_base_price_last,
     out_data   => l_sum_base_price
   );
 
-  --l_sum_disc_price_valid  <= sum_disc_price_valid;
   --sum_disc_price_ready    <= l_sum_disc_price_ready;
   --l_sum_disc_price_dvalid <= '1';
   --l_sum_disc_price_last   <= out_data_last_s;
-  l_sum_disc_price_last <= sum_disc_price_last;
+  l_sum_disc_price_last  <= sum_disc_price_last;
+  l_sum_disc_price_valid <= sum_disc_price_valid_s;
   --l_sum_disc_price        <= sum_disc_price_data;
   sum_disc_price_converter : TypeConverter
   generic map(
@@ -1207,17 +1215,17 @@ begin
     in_ready   => sum_disc_price_ready,
     in_last    => out_data_last_s,
     in_data    => sum_disc_price_data,
-    out_valid  => l_sum_disc_price_valid,
+    out_valid  => sum_disc_price_valid_s,
     out_dvalid => l_sum_disc_price_dvalid,
     out_ready  => l_sum_disc_price_ready,
     out_last   => sum_disc_price_last,
     out_data   => l_sum_disc_price
   );
 
-  --l_sum_charge_valid      <= sum_charge_valid;
   --sum_charge_ready        <= l_sum_charge_ready;
   --l_sum_charge_dvalid     <= '1';
-  l_sum_charge_last <= sum_charge_last;
+  l_sum_charge_last  <= sum_charge_last;
+  l_sum_charge_valid <= sum_charge_valid_s;
   --l_sum_charge            <= sum_charge_data;
   sum_charge_converter : TypeConverter
   generic map(
@@ -1238,17 +1246,17 @@ begin
     in_ready   => sum_charge_ready,
     in_last    => out_data_last_s,
     in_data    => sum_charge_data,
-    out_valid  => l_sum_charge_valid,
+    out_valid  => sum_charge_valid_s,
     out_dvalid => l_sum_charge_dvalid,
     out_ready  => l_sum_charge_ready,
     out_last   => sum_charge_last,
     out_data   => l_sum_charge
   );
 
-  --l_avg_qty_valid         <= avg_qty_valid;
   --avg_qty_ready           <= l_avg_qty_ready;
   --l_avg_qty_dvalid        <= '1';
-  l_avg_qty_last <= avg_qty_last;
+  l_avg_qty_last  <= avg_qty_last;
+  l_avg_qty_valid <= avg_qty_valid_s;
   --l_avg_qty               <= avg_qty_data;
   avg_qty_converter : TypeConverter
   generic map(
@@ -1269,17 +1277,17 @@ begin
     in_ready   => avg_qty_ready,
     in_last    => out_data_last_s,
     in_data    => avg_qty_data,
-    out_valid  => l_avg_qty_valid,
+    out_valid  => avg_qty_valid_s,
     out_dvalid => l_avg_qty_dvalid,
     out_ready  => l_avg_qty_ready,
     out_last   => avg_qty_last,
     out_data   => l_avg_qty
   );
 
-  --l_avg_price_valid       <= avg_price_valid;
+  l_avg_price_valid <= avg_price_valid_s;
   --avg_price_ready         <= l_avg_price_ready;
   --l_avg_price_dvalid      <= '1';
-  l_avg_price_last <= avg_price_last;
+  l_avg_price_last  <= avg_price_last;
   --l_avg_price             <= avg_price_data;
   avg_price_converter : TypeConverter
   generic map(
@@ -1300,7 +1308,7 @@ begin
     in_ready   => avg_price_ready,
     in_last    => out_data_last_s,
     in_data    => avg_price_data,
-    out_valid  => l_avg_price_valid,
+    out_valid  => avg_price_valid_s,
     out_dvalid => l_avg_price_dvalid,
     out_ready  => l_avg_price_ready,
     out_last   => avg_price_last,
@@ -1309,8 +1317,8 @@ begin
 
   --l_avg_disc_valid        <= avg_disc_valid;
   --avg_disc_ready          <= l_avg_disc_ready;
-  --l_avg_disc_dvalid       <= '1';
-  l_avg_disc_last <= avg_disc_last;
+  l_avg_disc_last  <= avg_disc_last;
+  l_avg_disc_valid <= avg_disc_valid_s;
   --l_avg_disc              <= avg_disc_data;
   avg_disc_converter : TypeConverter
   generic map(
@@ -1331,7 +1339,7 @@ begin
     in_ready   => avg_disc_ready,
     in_last    => out_data_last_s,
     in_data    => avg_disc_data,
-    out_valid  => l_avg_disc_valid,
+    out_valid  => avg_disc_valid_s,
     out_dvalid => l_avg_disc_dvalid,
     out_ready  => l_avg_disc_ready,
     out_last   => avg_disc_last,
@@ -1426,7 +1434,7 @@ begin
 
   l_returnflag_o_chars_last <= returnflag_key_stream_out_last;
   l_linestatus_o_chars_last <= linestatus_key_stream_out_last;
-  key_stream_out_last       <= out_data_last_s and sum_qty_last and sum_base_price_last and sum_disc_price_last and sum_charge_last and avg_qty_last and avg_price_last and avg_disc_last;
+  key_stream_out_last       <= sum_qty_last and sum_base_price_last and sum_disc_price_last and sum_charge_last and avg_qty_last and avg_price_last and avg_disc_last and sum_qty_valid_s and sum_base_price_valid_s and sum_disc_price_valid_s and sum_charge_valid_s and avg_qty_valid_s and avg_price_valid_s and avg_disc_valid_s;
   -- Holds the interfacing logic.
   chars_proc :
   process (rs,

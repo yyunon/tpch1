@@ -93,6 +93,8 @@ architecture Behavioral of StreamAccumulator is
   signal hash_out_valid_s2   : std_logic;
   signal hash_out_valid_s0   : std_logic;
 
+  signal hash_out_enable_s   : std_logic;
+
   signal out_valid_s1        : std_logic;
   signal out_valid_s2        : std_logic;
   signal out_valid_s         : std_logic;
@@ -136,7 +138,7 @@ begin
 
   hash_out_buffer : StreamBuffer
   generic map(
-    MIN_DEPTH  => 2,
+    MIN_DEPTH  => 0,
     DATA_WIDTH => (NUM_LANES + 1) * DATA_WIDTH + NUM_KEYS * 8 + 1
   )
   port map(
@@ -249,9 +251,8 @@ begin
         --out_valid_s <= '1';
         count_reg     := to_unsigned(0, 64);
         count_reg_out := to_unsigned(0, 16);
+        hash_out_enable_s <= '0';
         data              <= (others => '0');
-        hash_out_ready_s1 <= '0';
-        hash_out_ready_s2 <= '0';
       end if;
 
       -- Aggreagate out registers--------------

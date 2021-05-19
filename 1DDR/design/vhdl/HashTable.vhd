@@ -175,14 +175,18 @@ begin
   -- Seq process
   seq_proc :
   process (clk) is
+    variable num_runs : unsigned(31 downto 0) := to_unsigned(0, 32);
   begin
     if rising_edge(clk) then
       --operation_s  <= operation;
       state        <= state_next;
       hash_pointer <= hash_pointer_next;
       if reset = '1' then
-        state        <= STATE_IDLE;
-        hash_pointer <= to_unsigned(0, NUM_KEYS * ADDRESS_WIDTH);
+        state <= STATE_IDLE;
+        if num_runs = to_unsigned(0, 32) then
+          hash_pointer <= to_unsigned(0, NUM_KEYS * ADDRESS_WIDTH);
+        end if;
+        num_runs := num_runs + 1;
       end if;
     end if;
   end process;
