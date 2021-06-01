@@ -11,8 +11,8 @@ library work;
 use work.Stream_pkg.all;
 use work.ParallelPatterns_pkg.all;
 use work.Tpch_pkg.all;
-
 use work.fixed_generic_pkg_mod.all;
+
 -- In the first prototype generate different hws for each op.
 entity FILTER is
   generic (

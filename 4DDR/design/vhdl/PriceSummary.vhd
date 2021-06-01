@@ -494,6 +494,7 @@ begin
     l_count_order_last          => l_count_order_last,
     l_count_order               => l_count_order,
     --Status regs
+    result                      => result,
     output_first_idx            => output_first_idx,
     output_last_idx             => output_last_idx,
     cmd_in_valid                => pu_cmd_in_valid,
@@ -984,7 +985,7 @@ begin
         state    <= STATE_IDLE;
         status_1 <= (others => '0');
         status_2 <= (others => '0');
-        result   <= (others => '0');
+        --result   <= (others => '0');
         rhigh    <= (others => '0');
         rlow     <= (others => '0');
         r1       <= (others => '0');
