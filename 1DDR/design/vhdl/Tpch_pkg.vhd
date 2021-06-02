@@ -256,6 +256,7 @@ package Tpch_pkg is
       l_count_order               : out std_logic_vector(63 downto 0);
 
       --Status regs
+      result                      : out std_logic_vector(63 downto 0);
       output_first_idx            : out std_logic_vector(31 downto 0);
       output_last_idx             : out std_logic_vector(31 downto 0);
       cmd_in_valid                : in std_logic;

@@ -204,9 +204,9 @@ begin
     if acc_in_dvalid = '1' then
       out_data <= acc_in_data;
     else
-      out_data       <= acc_out_data_s;
-      key_out_data   <= acc_key_data_s;
-      count_out_data <= acc_count_data_s;
+      out_data <= acc_out_data_s;
+      --key_out_data   <= acc_key_data_s;
+      --count_out_data <= acc_count_data_s;
     end if;
   end process;
 

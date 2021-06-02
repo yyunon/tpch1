@@ -7,14 +7,10 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use ieee.std_logic_misc.all;
 
-library ieee_proposed;
-use ieee_proposed.fixed_pkg.all;
-
 library work;
 use work.Tpch_pkg.all;
 use work.Stream_pkg.all;
 use work.ParallelPatterns_pkg.all;
---use work.fixed_generic_pkg_mod.all;
 
 entity PriceSummary is
   generic (
@@ -494,6 +490,7 @@ begin
     l_count_order_last          => l_count_order_last,
     l_count_order               => l_count_order,
     --Status regs
+    result                      => result,
     output_first_idx            => output_first_idx,
     output_last_idx             => output_last_idx,
     cmd_in_valid                => pu_cmd_in_valid,
@@ -971,20 +968,20 @@ begin
   -- Sequential part:
   sequential_proc : process (kcd_clk)
     variable result_out_data : std_logic_vector(DATA_WIDTH - 1 downto 0);
-    variable temp_acc        : sfixed(FIXED_LEFT_INDEX + (EPC - 1) downto FIXED_RIGHT_INDEX);
+    --variable temp_acc        : sfixed(FIXED_LEFT_INDEX + (EPC - 1) downto FIXED_RIGHT_INDEX);
   begin
     -- On the rising edge of the kernel clock:
     if rising_edge(kcd_clk) then
       -- Register the next state.
       state <= state_next;
       result_out_data := (others => '0');
-      temp_acc        := (others => '0');
+      --temp_acc        := (others => '0');
 
       if kcd_reset = '1' or reset = '1' then
         state    <= STATE_IDLE;
         status_1 <= (others => '0');
         status_2 <= (others => '0');
-        result   <= (others => '0');
+        --result   <= (others => '0');
         rhigh    <= (others => '0');
         rlow     <= (others => '0');
         r1       <= (others => '0');

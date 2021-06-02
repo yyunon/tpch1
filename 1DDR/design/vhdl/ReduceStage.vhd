@@ -10,7 +10,7 @@ library work;
 use work.ParallelPatterns_pkg.all;
 use work.Stream_pkg.all;
 use work.Tpch_pkg.all;
---USE work.fixed_generic_pkg_mod.ALL;
+--use work.fixed_generic_pkg_mod.all;
 
 entity ReduceStage is
   generic (

@@ -132,7 +132,7 @@ begin
   --output_count  <= std_logic_vector(to_unsigned(1, 1));
 
   writer_process_len :
-  process (r, enable, output_ready) is
+  process (r, input_length, enable, output_ready) is
     variable v : regs_record;
     variable o : out_record;
   begin
