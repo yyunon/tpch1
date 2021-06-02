@@ -546,7 +546,7 @@ begin
       probe14 => (511 downto 496 => '0') & l_sum_base_price & l_sum_qty & disc_price_reduce_in_data & charge_reduce_in_data & num_entries & l_linestatus_o_chars & l_returnflag_o_chars & key_stream_chars & conv_l_discount & conv_l_extendedprice & conv_l_quantity,
       probe15               => l_avg_disc,
       probe16(0)            => buf_filter_out_last,
-      probe17               => l_avg_disc_valid & l_avg_disc_last,
+      probe17               => l_avg_disc_ready & l_avg_disc_valid & l_avg_disc_last,
       probe18               => l_sum_qty_ready & l_sum_base_price_ready & l_sum_disc_price_ready,
       probe19 => (others => '0'),
       probe20 => (others => '0'),
