@@ -531,7 +531,7 @@ begin
       clk                   => clk,
       probe0(0)             => l_avg_price_valid,
       probe1                => l_avg_price,
-      probe2 => (others => '0'),
+      probe2                => len_linestatus_o_valid & len_returnflag_o_valid,
       probe3(0)             => cmd_in_valid,
       probe4(0)             => cmd_in_ready,
       probe5                => l_count_order,
@@ -540,13 +540,13 @@ begin
       probe8(0)             => l_quantity_ready,
       probe9(0)             => l_shipdate_ready,
       probe10(511 downto 0) => sum_base_price_data & avg_qty_data & avg_price_data & avg_disc_data & l_tax & l_discount & l_extendedprice & l_quantity,
-      probe11 => (others => '0'),
-      probe12 => (others => '0'),
-      probe13 => (others => '0'),
-      probe14 => (511 downto 368 => '0') & disc_price_reduce_in_data & charge_reduce_in_data & num_entries & l_linestatus_o_chars & l_returnflag_o_chars & key_stream_chars & conv_l_discount & conv_l_extendedprice & conv_l_quantity,
-      probe15 => (others => '0'),
+      probe11(0)            => l_sum_qty_valid,
+      probe12(0)            => l_sum_base_price_valid,
+      probe13(0)            => l_sum_charge_valid,
+      probe14 => (511 downto 496 => '0') & l_sum_base_price & l_sum_qty & disc_price_reduce_in_data & charge_reduce_in_data & num_entries & l_linestatus_o_chars & l_returnflag_o_chars & key_stream_chars & conv_l_discount & conv_l_extendedprice & conv_l_quantity,
+      probe15               => l_avg_disc,
       probe16(0)            => buf_filter_out_last,
-      probe17 => (others => '0'),
+      probe17               => l_avg_disc_valid & l_avg_disc_last,
       probe18 => (others => '0'),
       probe19 => (others => '0'),
       probe20 => (others => '0'),
@@ -572,7 +572,7 @@ begin
       probe40(0)            => interface_in_valid,
       probe41(0)            => interface_in_ready,
       probe42(0)            => enable_interface,
-      probe43(0)            => len_linestatus_o_valid
+      probe43(0)            => key_stream_out_last
     );
   end generate;
   l_returnflag_ready       <= l_returnflag_chars_ready_x;
