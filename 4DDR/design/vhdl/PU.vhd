@@ -263,20 +263,20 @@ architecture Behavioral of PU is
   constant TAX_CONVERTER_IN_DEPTH            : integer                       := 2;
   constant TAX_CONVERTER_OUT_DEPTH           : integer                       := 8;
 
-  constant output_converter_type             : string                        := "none";
-  constant SUM_QTY_CONVERTER_IN_DEPTH        : integer                       := 0;
+  constant output_converter_type             : string                        := "xilinx";
+  constant SUM_QTY_CONVERTER_IN_DEPTH        : integer                       := 2;
   constant SUM_QTY_CONVERTER_OUT_DEPTH       : integer                       := 2;
-  constant SUM_BASE_CONVERTER_IN_DEPTH       : integer                       := 0;
+  constant SUM_BASE_CONVERTER_IN_DEPTH       : integer                       := 2;
   constant SUM_BASE_CONVERTER_OUT_DEPTH      : integer                       := 2;
-  constant SUM_DISC_CONVERTER_IN_DEPTH       : integer                       := 0;
+  constant SUM_DISC_CONVERTER_IN_DEPTH       : integer                       := 2;
   constant SUM_DISC_CONVERTER_OUT_DEPTH      : integer                       := 2;
-  constant SUM_CHARGE_CONVERTER_IN_DEPTH     : integer                       := 0;
+  constant SUM_CHARGE_CONVERTER_IN_DEPTH     : integer                       := 2;
   constant SUM_CHARGE_CONVERTER_OUT_DEPTH    : integer                       := 2;
-  constant AVG_QTY_CONVERTER_IN_DEPTH        : integer                       := 0;
+  constant AVG_QTY_CONVERTER_IN_DEPTH        : integer                       := 2;
   constant AVG_QTY_CONVERTER_OUT_DEPTH       : integer                       := 2;
-  constant AVG_PRICE_CONVERTER_IN_DEPTH      : integer                       := 0;
+  constant AVG_PRICE_CONVERTER_IN_DEPTH      : integer                       := 2;
   constant AVG_PRICE_CONVERTER_OUT_DEPTH     : integer                       := 2;
-  constant AVG_DISC_CONVERTER_IN_DEPTH       : integer                       := 0;
+  constant AVG_DISC_CONVERTER_IN_DEPTH       : integer                       := 2;
   constant AVG_DISC_CONVERTER_OUT_DEPTH      : integer                       := 2;
   --------------------------------------------------------------------------
   -- Filter in out buffers2
@@ -1128,229 +1128,229 @@ begin
   len_linestatus_o_valid  <= linestatus_o_chars_valid;
   len_returnflag_o_valid  <= returnflag_o_chars_valid;
 
-  avg_disc_last           <= out_data_last_s;
-  avg_qty_last            <= out_data_last_s;
-  avg_price_last          <= out_data_last_s;
-  sum_disc_price_last     <= out_data_last_s;
-  sum_charge_last         <= out_data_last_s;
-  sum_base_price_last     <= out_data_last_s;
-  sum_qty_last            <= out_data_last_s;
+  --avg_disc_last           <= out_data_last_s;
+  --avg_qty_last            <= out_data_last_s;
+  --avg_price_last          <= out_data_last_s;
+  --sum_disc_price_last     <= out_data_last_s;
+  --sum_charge_last         <= out_data_last_s;
+  --sum_base_price_last     <= out_data_last_s;
+  --sum_qty_last            <= out_data_last_s;
   --Number output streams
-  sum_qty_ready           <= l_sum_qty_ready;
-  l_sum_qty_dvalid        <= '1';
+  --sum_qty_ready           <= l_sum_qty_ready;
+  --l_sum_qty_dvalid        <= '1';
   l_sum_qty_last          <= sum_qty_last;
-  l_sum_qty_valid         <= sum_qty_valid;
-  l_sum_qty               <= sum_qty_data;
-  --sum_qty_converter : TypeConverter
-  --generic map(
-  --  FIXED_LEFT_INDEX  => FIXED_LEFT_INDEX,
-  --  FIXED_RIGHT_INDEX => FIXED_RIGHT_INDEX,
-  --  DATA_WIDTH        => DATA_WIDTH,
-  --  INPUT_MIN_DEPTH   => SUM_QTY_CONVERTER_IN_DEPTH,
-  --  OUTPUT_MIN_DEPTH  => SUM_QTY_CONVERTER_OUT_DEPTH,
-  --  CONVERTER_TYPE    => "Fix2Float",
-  --  CONVERTER_IP      => output_converter_type
-  --)
-  --port map(
-  --  clk        => clk,
-  --  enable     => enable_interface,
-  --  reset      => reset,
-  --  in_valid   => sum_qty_valid,
-  --  in_dvalid  => '1',
-  --  in_ready   => sum_qty_ready,
-  --  in_last    => out_data_last_s,
-  --  in_data    => sum_qty_data,
-  --  out_valid  => sum_qty_valid_s,
-  --  out_dvalid => l_sum_qty_dvalid,
-  --  out_ready  => l_sum_qty_ready,
-  --  out_last   => sum_qty_last,
-  --  out_data   => l_sum_qty
-  --);
-  sum_base_price_ready    <= l_sum_base_price_ready;
-  l_sum_base_price_dvalid <= '1';
+  l_sum_qty_valid         <= sum_qty_valid_s;
+  --l_sum_qty               <= sum_qty_data;
+  sum_qty_converter : TypeConverter
+  generic map(
+    FIXED_LEFT_INDEX  => FIXED_LEFT_INDEX,
+    FIXED_RIGHT_INDEX => FIXED_RIGHT_INDEX,
+    DATA_WIDTH        => DATA_WIDTH,
+    INPUT_MIN_DEPTH   => SUM_QTY_CONVERTER_IN_DEPTH,
+    OUTPUT_MIN_DEPTH  => SUM_QTY_CONVERTER_OUT_DEPTH,
+    CONVERTER_TYPE    => "Fix2Float",
+    CONVERTER_IP      => output_converter_type
+  )
+  port map(
+    clk        => clk,
+    enable     => enable_interface,
+    reset      => reset,
+    in_valid   => sum_qty_valid,
+    in_dvalid  => '1',
+    in_ready   => sum_qty_ready,
+    in_last    => out_data_last_s,
+    in_data    => sum_qty_data,
+    out_valid  => sum_qty_valid_s,
+    out_dvalid => l_sum_qty_dvalid,
+    out_ready  => l_sum_qty_ready,
+    out_last   => sum_qty_last,
+    out_data   => l_sum_qty
+  );
+  --sum_base_price_ready    <= l_sum_base_price_ready;
+  --l_sum_base_price_dvalid <= '1';
   l_sum_base_price_last   <= sum_base_price_last;
-  l_sum_base_price_valid  <= sum_base_price_valid;
-  l_sum_base_price        <= sum_base_price_data;
-  --sum_base_price_converter : TypeConverter
-  --generic map(
-  --  FIXED_LEFT_INDEX  => FIXED_LEFT_INDEX,
-  --  FIXED_RIGHT_INDEX => FIXED_RIGHT_INDEX,
-  --  DATA_WIDTH        => DATA_WIDTH,
-  --  INPUT_MIN_DEPTH   => SUM_BASE_CONVERTER_IN_DEPTH,
-  --  OUTPUT_MIN_DEPTH  => SUM_BASE_CONVERTER_OUT_DEPTH,
-  --  CONVERTER_TYPE    => "Fix2Float",
-  --  CONVERTER_IP      => output_converter_type
-  --)
-  --port map(
-  --  clk        => clk,
-  --  enable     => enable_interface,
-  --  reset      => reset,
-  --  in_valid   => sum_base_price_valid,
-  --  in_dvalid  => '1',
-  --  in_ready   => sum_base_price_ready,
-  --  in_last    => out_data_last_s,
-  --  in_data    => sum_base_price_data,
-  --  out_valid  => sum_base_price_valid_s,
-  --  out_dvalid => l_sum_base_price_dvalid,
-  --  out_ready  => l_sum_base_price_ready,
-  --  out_last   => sum_base_price_last,
-  --  out_data   => l_sum_base_price
-  --);
+  l_sum_base_price_valid  <= sum_base_price_valid_s;
+  --l_sum_base_price        <= sum_base_price_data;
+  sum_base_price_converter : TypeConverter
+  generic map(
+    FIXED_LEFT_INDEX  => FIXED_LEFT_INDEX,
+    FIXED_RIGHT_INDEX => FIXED_RIGHT_INDEX,
+    DATA_WIDTH        => DATA_WIDTH,
+    INPUT_MIN_DEPTH   => SUM_BASE_CONVERTER_IN_DEPTH,
+    OUTPUT_MIN_DEPTH  => SUM_BASE_CONVERTER_OUT_DEPTH,
+    CONVERTER_TYPE    => "Fix2Float",
+    CONVERTER_IP      => output_converter_type
+  )
+  port map(
+    clk        => clk,
+    enable     => enable_interface,
+    reset      => reset,
+    in_valid   => sum_base_price_valid,
+    in_dvalid  => '1',
+    in_ready   => sum_base_price_ready,
+    in_last    => out_data_last_s,
+    in_data    => sum_base_price_data,
+    out_valid  => sum_base_price_valid_s,
+    out_dvalid => l_sum_base_price_dvalid,
+    out_ready  => l_sum_base_price_ready,
+    out_last   => sum_base_price_last,
+    out_data   => l_sum_base_price
+  );
 
-  sum_disc_price_ready    <= l_sum_disc_price_ready;
-  l_sum_disc_price_dvalid <= '1';
+  --sum_disc_price_ready    <= l_sum_disc_price_ready;
+  --l_sum_disc_price_dvalid <= '1';
   l_sum_disc_price_last   <= sum_disc_price_last;
-  l_sum_disc_price_valid  <= sum_disc_price_valid;
-  l_sum_disc_price        <= sum_disc_price_data;
-  --sum_disc_price_converter : TypeConverter
-  --generic map(
-  --  FIXED_LEFT_INDEX  => FIXED_LEFT_INDEX,
-  --  FIXED_RIGHT_INDEX => FIXED_RIGHT_INDEX,
-  --  DATA_WIDTH        => DATA_WIDTH,
-  --  INPUT_MIN_DEPTH   => SUM_DISC_CONVERTER_IN_DEPTH,
-  --  OUTPUT_MIN_DEPTH  => SUM_DISC_CONVERTER_OUT_DEPTH,
-  --  CONVERTER_TYPE    => "Fix2Float",
-  --  CONVERTER_IP      => output_converter_type
-  --)
-  --port map(
-  --  clk        => clk,
-  --  enable     => enable_interface,
-  --  reset      => reset,
-  --  in_valid   => sum_disc_price_valid,
-  --  in_dvalid  => '1',
-  --  in_ready   => sum_disc_price_ready,
-  --  in_last    => out_data_last_s,
-  --  in_data    => sum_disc_price_data,
-  --  out_valid  => sum_disc_price_valid_s,
-  --  out_dvalid => l_sum_disc_price_dvalid,
-  --  out_ready  => l_sum_disc_price_ready,
-  --  out_last   => sum_disc_price_last,
-  --  out_data   => l_sum_disc_price
-  --);
+  l_sum_disc_price_valid  <= sum_disc_price_valid_s;
+  --l_sum_disc_price        <= sum_disc_price_data;
+  sum_disc_price_converter : TypeConverter
+  generic map(
+    FIXED_LEFT_INDEX  => FIXED_LEFT_INDEX,
+    FIXED_RIGHT_INDEX => FIXED_RIGHT_INDEX,
+    DATA_WIDTH        => DATA_WIDTH,
+    INPUT_MIN_DEPTH   => SUM_DISC_CONVERTER_IN_DEPTH,
+    OUTPUT_MIN_DEPTH  => SUM_DISC_CONVERTER_OUT_DEPTH,
+    CONVERTER_TYPE    => "Fix2Float",
+    CONVERTER_IP      => output_converter_type
+  )
+  port map(
+    clk        => clk,
+    enable     => enable_interface,
+    reset      => reset,
+    in_valid   => sum_disc_price_valid,
+    in_dvalid  => '1',
+    in_ready   => sum_disc_price_ready,
+    in_last    => out_data_last_s,
+    in_data    => sum_disc_price_data,
+    out_valid  => sum_disc_price_valid_s,
+    out_dvalid => l_sum_disc_price_dvalid,
+    out_ready  => l_sum_disc_price_ready,
+    out_last   => sum_disc_price_last,
+    out_data   => l_sum_disc_price
+  );
 
-  sum_charge_ready        <= l_sum_charge_ready;
-  l_sum_charge_dvalid     <= '1';
+  --sum_charge_ready        <= l_sum_charge_ready;
+  --l_sum_charge_dvalid     <= '1';
   l_sum_charge_last       <= sum_charge_last;
-  l_sum_charge_valid      <= sum_charge_valid;
-  l_sum_charge            <= sum_charge_data;
-  --sum_charge_converter : TypeConverter
-  --generic map(
-  --  FIXED_LEFT_INDEX  => FIXED_LEFT_INDEX,
-  --  FIXED_RIGHT_INDEX => FIXED_RIGHT_INDEX,
-  --  DATA_WIDTH        => DATA_WIDTH,
-  --  INPUT_MIN_DEPTH   => SUM_CHARGE_CONVERTER_IN_DEPTH,
-  --  OUTPUT_MIN_DEPTH  => SUM_CHARGE_CONVERTER_OUT_DEPTH,
-  --  CONVERTER_TYPE    => "Fix2Float",
-  --  CONVERTER_IP      => output_converter_type
-  --)
-  --port map(
-  --  clk        => clk,
-  --  enable     => enable_interface,
-  --  reset      => reset,
-  --  in_valid   => sum_charge_valid,
-  --  in_dvalid  => '1',
-  --  in_ready   => sum_charge_ready,
-  --  in_last    => out_data_last_s,
-  --  in_data    => sum_charge_data,
-  --  out_valid  => sum_charge_valid_s,
-  --  out_dvalid => l_sum_charge_dvalid,
-  --  out_ready  => l_sum_charge_ready,
-  --  out_last   => sum_charge_last,
-  --  out_data   => l_sum_charge
-  --);
+  l_sum_charge_valid      <= sum_charge_valid_s;
+  --l_sum_charge            <= sum_charge_data;
+  sum_charge_converter : TypeConverter
+  generic map(
+    FIXED_LEFT_INDEX  => FIXED_LEFT_INDEX,
+    FIXED_RIGHT_INDEX => FIXED_RIGHT_INDEX,
+    DATA_WIDTH        => DATA_WIDTH,
+    INPUT_MIN_DEPTH   => SUM_CHARGE_CONVERTER_IN_DEPTH,
+    OUTPUT_MIN_DEPTH  => SUM_CHARGE_CONVERTER_OUT_DEPTH,
+    CONVERTER_TYPE    => "Fix2Float",
+    CONVERTER_IP      => output_converter_type
+  )
+  port map(
+    clk        => clk,
+    enable     => enable_interface,
+    reset      => reset,
+    in_valid   => sum_charge_valid,
+    in_dvalid  => '1',
+    in_ready   => sum_charge_ready,
+    in_last    => out_data_last_s,
+    in_data    => sum_charge_data,
+    out_valid  => sum_charge_valid_s,
+    out_dvalid => l_sum_charge_dvalid,
+    out_ready  => l_sum_charge_ready,
+    out_last   => sum_charge_last,
+    out_data   => l_sum_charge
+  );
 
-  avg_qty_ready           <= l_avg_qty_ready;
-  l_avg_qty_dvalid        <= '1';
+  --avg_qty_ready           <= l_avg_qty_ready;
+  --l_avg_qty_dvalid        <= '1';
   l_avg_qty_last          <= avg_qty_last;
-  l_avg_qty_valid         <= avg_qty_valid;
-  l_avg_qty               <= avg_qty_data;
-  --avg_qty_converter : TypeConverter
-  --generic map(
-  --  FIXED_LEFT_INDEX  => FIXED_LEFT_INDEX,
-  --  FIXED_RIGHT_INDEX => FIXED_RIGHT_INDEX,
-  --  DATA_WIDTH        => DATA_WIDTH,
-  --  INPUT_MIN_DEPTH   => AVG_QTY_CONVERTER_IN_DEPTH,
-  --  OUTPUT_MIN_DEPTH  => AVG_QTY_CONVERTER_OUT_DEPTH,
-  --  CONVERTER_TYPE    => "Fix2Float",
-  --  CONVERTER_IP      => output_converter_type
-  --)
-  --port map(
-  --  clk        => clk,
-  --  enable     => enable_interface,
-  --  reset      => reset,
-  --  in_valid   => avg_qty_valid,
-  --  in_dvalid  => '1',
-  --  in_ready   => avg_qty_ready,
-  --  in_last    => out_data_last_s,
-  --  in_data    => avg_qty_data,
-  --  out_valid  => avg_qty_valid_s,
-  --  out_dvalid => l_avg_qty_dvalid,
-  --  out_ready  => l_avg_qty_ready,
-  --  out_last   => avg_qty_last,
-  --  out_data   => l_avg_qty
-  --);
+  l_avg_qty_valid         <= avg_qty_valid_s;
+  --l_avg_qty               <= avg_qty_data;
+  avg_qty_converter : TypeConverter
+  generic map(
+    FIXED_LEFT_INDEX  => FIXED_LEFT_INDEX,
+    FIXED_RIGHT_INDEX => FIXED_RIGHT_INDEX,
+    DATA_WIDTH        => DATA_WIDTH,
+    INPUT_MIN_DEPTH   => AVG_QTY_CONVERTER_IN_DEPTH,
+    OUTPUT_MIN_DEPTH  => AVG_QTY_CONVERTER_OUT_DEPTH,
+    CONVERTER_TYPE    => "Fix2Float",
+    CONVERTER_IP      => output_converter_type
+  )
+  port map(
+    clk        => clk,
+    enable     => enable_interface,
+    reset      => reset,
+    in_valid   => avg_qty_valid,
+    in_dvalid  => '1',
+    in_ready   => avg_qty_ready,
+    in_last    => out_data_last_s,
+    in_data    => avg_qty_data,
+    out_valid  => avg_qty_valid_s,
+    out_dvalid => l_avg_qty_dvalid,
+    out_ready  => l_avg_qty_ready,
+    out_last   => avg_qty_last,
+    out_data   => l_avg_qty
+  );
 
-  l_avg_price_valid       <= avg_price_valid;
-  avg_price_ready         <= l_avg_price_ready;
-  l_avg_price_dvalid      <= '1';
+  --avg_price_ready         <= l_avg_price_ready;
+  --l_avg_price_dvalid      <= '1';
   l_avg_price_last        <= avg_price_last;
-  l_avg_price             <= avg_price_data;
-  --avg_price_converter : TypeConverter
-  --generic map(
-  --  FIXED_LEFT_INDEX  => FIXED_LEFT_INDEX,
-  --  FIXED_RIGHT_INDEX => FIXED_RIGHT_INDEX,
-  --  DATA_WIDTH        => DATA_WIDTH,
-  --  INPUT_MIN_DEPTH   => AVG_PRICE_CONVERTER_IN_DEPTH,
-  --  OUTPUT_MIN_DEPTH  => AVG_PRICE_CONVERTER_OUT_DEPTH,
-  --  CONVERTER_TYPE    => "Fix2Float",
-  --  CONVERTER_IP      => output_converter_type
-  --)
-  --port map(
-  --  clk        => clk,
-  --  enable     => enable_interface,
-  --  reset      => reset,
-  --  in_valid   => avg_price_valid,
-  --  in_dvalid  => '1',
-  --  in_ready   => avg_price_ready,
-  --  in_last    => out_data_last_s,
-  --  in_data    => avg_price_data,
-  --  out_valid  => avg_price_valid_s,
-  --  out_dvalid => l_avg_price_dvalid,
-  --  out_ready  => l_avg_price_ready,
-  --  out_last   => avg_price_last,
-  --  out_data   => l_avg_price
-  --);
+  l_avg_price_valid       <= avg_price_valid_s;
+  --l_avg_price             <= avg_price_data;
+  avg_price_converter : TypeConverter
+  generic map(
+    FIXED_LEFT_INDEX  => FIXED_LEFT_INDEX,
+    FIXED_RIGHT_INDEX => FIXED_RIGHT_INDEX,
+    DATA_WIDTH        => DATA_WIDTH,
+    INPUT_MIN_DEPTH   => AVG_PRICE_CONVERTER_IN_DEPTH,
+    OUTPUT_MIN_DEPTH  => AVG_PRICE_CONVERTER_OUT_DEPTH,
+    CONVERTER_TYPE    => "Fix2Float",
+    CONVERTER_IP      => output_converter_type
+  )
+  port map(
+    clk        => clk,
+    enable     => enable_interface,
+    reset      => reset,
+    in_valid   => avg_price_valid,
+    in_dvalid  => '1',
+    in_ready   => avg_price_ready,
+    in_last    => out_data_last_s,
+    in_data    => avg_price_data,
+    out_valid  => avg_price_valid_s,
+    out_dvalid => l_avg_price_dvalid,
+    out_ready  => l_avg_price_ready,
+    out_last   => avg_price_last,
+    out_data   => l_avg_price
+  );
 
-  l_avg_disc_valid        <= avg_disc_valid;
-  avg_disc_ready          <= l_avg_disc_ready;
+  --l_avg_disc_valid        <= avg_disc_valid;
+  --avg_disc_ready          <= l_avg_disc_ready;
   l_avg_disc_last         <= avg_disc_last;
-  l_avg_disc_valid        <= avg_disc_valid;
-  l_avg_disc              <= avg_disc_data;
-  --avg_disc_converter : TypeConverter
-  --generic map(
-  --  FIXED_LEFT_INDEX  => FIXED_LEFT_INDEX,
-  --  FIXED_RIGHT_INDEX => FIXED_RIGHT_INDEX,
-  --  DATA_WIDTH        => DATA_WIDTH,
-  --  INPUT_MIN_DEPTH   => AVG_DISC_CONVERTER_IN_DEPTH,
-  --  OUTPUT_MIN_DEPTH  => AVG_DISC_CONVERTER_OUT_DEPTH,
-  --  CONVERTER_TYPE    => "Fix2Float",
-  --  CONVERTER_IP      => output_converter_type
-  --)
-  --port map(
-  --  clk        => clk,
-  --  enable     => enable_interface,
-  --  reset      => reset,
-  --  in_valid   => avg_disc_valid,
-  --  in_dvalid  => '1',
-  --  in_ready   => avg_disc_ready,
-  --  in_last    => out_data_last_s,
-  --  in_data    => avg_disc_data,
-  --  out_valid  => avg_disc_valid_s,
-  --  out_dvalid => l_avg_disc_dvalid,
-  --  out_ready  => l_avg_disc_ready,
-  --  out_last   => avg_disc_last,
-  --  out_data   => l_avg_disc
-  --);
+  l_avg_disc_valid        <= avg_disc_valid_s;
+  --l_avg_disc              <= avg_disc_data;
+  avg_disc_converter : TypeConverter
+  generic map(
+    FIXED_LEFT_INDEX  => FIXED_LEFT_INDEX,
+    FIXED_RIGHT_INDEX => FIXED_RIGHT_INDEX,
+    DATA_WIDTH        => DATA_WIDTH,
+    INPUT_MIN_DEPTH   => AVG_DISC_CONVERTER_IN_DEPTH,
+    OUTPUT_MIN_DEPTH  => AVG_DISC_CONVERTER_OUT_DEPTH,
+    CONVERTER_TYPE    => "Fix2Float",
+    CONVERTER_IP      => output_converter_type
+  )
+  port map(
+    clk        => clk,
+    enable     => enable_interface,
+    reset      => reset,
+    in_valid   => avg_disc_valid,
+    in_dvalid  => '1',
+    in_ready   => avg_disc_ready,
+    in_last    => out_data_last_s,
+    in_data    => avg_disc_data,
+    out_valid  => avg_disc_valid_s,
+    out_dvalid => l_avg_disc_dvalid,
+    out_ready  => l_avg_disc_ready,
+    out_last   => avg_disc_last,
+    out_data   => l_avg_disc
+  );
 
   l_count_order_valid     <= count_order_valid;
   count_order_ready       <= l_count_order_ready;
@@ -1441,7 +1441,7 @@ begin
   result                    <= (63 downto 16 => '0') & std_logic_vector(unsigned(num_entries) - 1);
   l_returnflag_o_chars_last <= returnflag_key_stream_out_last;
   l_linestatus_o_chars_last <= linestatus_key_stream_out_last;
-  key_stream_out_last       <= sum_qty_last and sum_base_price_last and sum_disc_price_last and sum_charge_last and avg_qty_last and avg_price_last and avg_disc_last and sum_qty_valid and sum_base_price_valid and sum_disc_price_valid and sum_charge_valid and avg_qty_valid and avg_price_valid and avg_disc_valid;
+  key_stream_out_last       <= sum_qty_last and sum_base_price_last and sum_disc_price_last and sum_charge_last and avg_qty_last and avg_price_last and avg_disc_last and sum_qty_valid_s and sum_base_price_valid_s and sum_disc_price_valid_s and sum_charge_valid_s and avg_qty_valid_s and avg_price_valid_s and avg_disc_valid_s;
   -- Holds the interfacing logic.
   chars_proc :
   process (rs,
