@@ -32,15 +32,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="106348334fs"></ZoomStartTime>
-      <ZoomEndTime time="106629535fs"></ZoomEndTime>
-      <Cursor1Time time="106488234fs"></Cursor1Time>
+      <ZoomStartTime time="59670500fs"></ZoomStartTime>
+      <ZoomEndTime time="61084501fs"></ZoomEndTime>
+      <Cursor1Time time="60564000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="311"></NameColumnWidth>
-      <ValueColumnWidth column_width="71"></ValueColumnWidth>
+      <NameColumnWidth column_width="300"></NameColumnWidth>
+      <ValueColumnWidth column_width="66"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="3360" />
+   <WVObjectSize size="3340" />
    <wvobject fp_name="divider14320" type="divider">
       <obj_property name="label">FPGA</obj_property>
       <obj_property name="DisplayName">label</obj_property>
@@ -10889,7 +10889,6 @@
    <wvobject type="array" fp_name="/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/l_count_order">
       <obj_property name="ElementShortName">l_count_order[63:0]</obj_property>
       <obj_property name="ObjectShortName">l_count_order[63:0]</obj_property>
-      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/output_first_idx">
       <obj_property name="ElementShortName">output_first_idx[31:0]</obj_property>
@@ -11527,102 +11526,6 @@
       <obj_property name="ElementShortName">len_returnflag_o_length[31:0]</obj_property>
       <obj_property name="ObjectShortName">len_returnflag_o_length[31:0]</obj_property>
    </wvobject>
-   <wvobject type="logic" fp_name="/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/dly_linestatus_o_valid">
-      <obj_property name="ElementShortName">dly_linestatus_o_valid</obj_property>
-      <obj_property name="ObjectShortName">dly_linestatus_o_valid</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/dly_linestatus_o_ready">
-      <obj_property name="ElementShortName">dly_linestatus_o_ready</obj_property>
-      <obj_property name="ObjectShortName">dly_linestatus_o_ready</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/dly_linestatus_o_dvalid">
-      <obj_property name="ElementShortName">dly_linestatus_o_dvalid</obj_property>
-      <obj_property name="ObjectShortName">dly_linestatus_o_dvalid</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/dly_linestatus_o_last">
-      <obj_property name="ElementShortName">dly_linestatus_o_last</obj_property>
-      <obj_property name="ObjectShortName">dly_linestatus_o_last</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/dly_linestatus_o_length">
-      <obj_property name="ElementShortName">dly_linestatus_o_length[31:0]</obj_property>
-      <obj_property name="ObjectShortName">dly_linestatus_o_length[31:0]</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/dly_linestatus_o_count">
-      <obj_property name="ElementShortName">dly_linestatus_o_count[0:0]</obj_property>
-      <obj_property name="ObjectShortName">dly_linestatus_o_count[0:0]</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/dly_linestatus_o_chars_valid">
-      <obj_property name="ElementShortName">dly_linestatus_o_chars_valid</obj_property>
-      <obj_property name="ObjectShortName">dly_linestatus_o_chars_valid</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/dly_linestatus_o_chars_ready">
-      <obj_property name="ElementShortName">dly_linestatus_o_chars_ready</obj_property>
-      <obj_property name="ObjectShortName">dly_linestatus_o_chars_ready</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/dly_linestatus_o_chars_dvalid">
-      <obj_property name="ElementShortName">dly_linestatus_o_chars_dvalid</obj_property>
-      <obj_property name="ObjectShortName">dly_linestatus_o_chars_dvalid</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/dly_linestatus_o_chars_last">
-      <obj_property name="ElementShortName">dly_linestatus_o_chars_last</obj_property>
-      <obj_property name="ObjectShortName">dly_linestatus_o_chars_last</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/dly_linestatus_o_chars">
-      <obj_property name="ElementShortName">dly_linestatus_o_chars[7:0]</obj_property>
-      <obj_property name="ObjectShortName">dly_linestatus_o_chars[7:0]</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/dly_linestatus_o_chars_count">
-      <obj_property name="ElementShortName">dly_linestatus_o_chars_count[0:0]</obj_property>
-      <obj_property name="ObjectShortName">dly_linestatus_o_chars_count[0:0]</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/dly_returnflag_o_valid">
-      <obj_property name="ElementShortName">dly_returnflag_o_valid</obj_property>
-      <obj_property name="ObjectShortName">dly_returnflag_o_valid</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/dly_returnflag_o_ready">
-      <obj_property name="ElementShortName">dly_returnflag_o_ready</obj_property>
-      <obj_property name="ObjectShortName">dly_returnflag_o_ready</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/dly_returnflag_o_dvalid">
-      <obj_property name="ElementShortName">dly_returnflag_o_dvalid</obj_property>
-      <obj_property name="ObjectShortName">dly_returnflag_o_dvalid</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/dly_returnflag_o_last">
-      <obj_property name="ElementShortName">dly_returnflag_o_last</obj_property>
-      <obj_property name="ObjectShortName">dly_returnflag_o_last</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/dly_returnflag_o_length">
-      <obj_property name="ElementShortName">dly_returnflag_o_length[31:0]</obj_property>
-      <obj_property name="ObjectShortName">dly_returnflag_o_length[31:0]</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/dly_returnflag_o_count">
-      <obj_property name="ElementShortName">dly_returnflag_o_count[0:0]</obj_property>
-      <obj_property name="ObjectShortName">dly_returnflag_o_count[0:0]</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/dly_returnflag_o_chars_valid">
-      <obj_property name="ElementShortName">dly_returnflag_o_chars_valid</obj_property>
-      <obj_property name="ObjectShortName">dly_returnflag_o_chars_valid</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/dly_returnflag_o_chars_ready">
-      <obj_property name="ElementShortName">dly_returnflag_o_chars_ready</obj_property>
-      <obj_property name="ObjectShortName">dly_returnflag_o_chars_ready</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/dly_returnflag_o_chars_dvalid">
-      <obj_property name="ElementShortName">dly_returnflag_o_chars_dvalid</obj_property>
-      <obj_property name="ObjectShortName">dly_returnflag_o_chars_dvalid</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/dly_returnflag_o_chars_last">
-      <obj_property name="ElementShortName">dly_returnflag_o_chars_last</obj_property>
-      <obj_property name="ObjectShortName">dly_returnflag_o_chars_last</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/dly_returnflag_o_chars">
-      <obj_property name="ElementShortName">dly_returnflag_o_chars[7:0]</obj_property>
-      <obj_property name="ObjectShortName">dly_returnflag_o_chars[7:0]</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/dly_returnflag_o_chars_count">
-      <obj_property name="ElementShortName">dly_returnflag_o_chars_count[0:0]</obj_property>
-      <obj_property name="ObjectShortName">dly_returnflag_o_chars_count[0:0]</obj_property>
-   </wvobject>
    <wvobject type="logic" fp_name="/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/buf_in_out_data_valid_s">
       <obj_property name="ElementShortName">buf_in_out_data_valid_s</obj_property>
       <obj_property name="ObjectShortName">buf_in_out_data_valid_s</obj_property>
@@ -11734,6 +11637,18 @@
    <wvobject type="logic" fp_name="/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/enable_interface">
       <obj_property name="ElementShortName">enable_interface</obj_property>
       <obj_property name="ObjectShortName">enable_interface</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/returnflag_key_stream_out_last">
+      <obj_property name="ElementShortName">returnflag_key_stream_out_last</obj_property>
+      <obj_property name="ObjectShortName">returnflag_key_stream_out_last</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/linestatus_key_stream_out_last">
+      <obj_property name="ElementShortName">linestatus_key_stream_out_last</obj_property>
+      <obj_property name="ObjectShortName">linestatus_key_stream_out_last</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/key_stream_out_last">
+      <obj_property name="ElementShortName">key_stream_out_last</obj_property>
+      <obj_property name="ObjectShortName">key_stream_out_last</obj_property>
    </wvobject>
    <wvobject type="other" fp_name="/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/FIXED_LEFT_INDEX">
       <obj_property name="ElementShortName">FIXED_LEFT_INDEX</obj_property>
@@ -20672,38 +20587,6 @@
       <obj_property name="ElementShortName">in_dvalid</obj_property>
       <obj_property name="ObjectShortName">in_dvalid</obj_property>
    </wvobject>
-   <wvobject type="logic" fp_name="/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/avg_discount_reduce_stage/reduce_cntrl/accumulator/hash_out_valid">
-      <obj_property name="ElementShortName">hash_out_valid</obj_property>
-      <obj_property name="ObjectShortName">hash_out_valid</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/avg_discount_reduce_stage/reduce_cntrl/accumulator/hash_out_last">
-      <obj_property name="ElementShortName">hash_out_last</obj_property>
-      <obj_property name="ObjectShortName">hash_out_last</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/avg_discount_reduce_stage/reduce_cntrl/accumulator/hash_out_ready">
-      <obj_property name="ElementShortName">hash_out_ready</obj_property>
-      <obj_property name="ObjectShortName">hash_out_ready</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/avg_discount_reduce_stage/reduce_cntrl/accumulator/hash_out_enable">
-      <obj_property name="ElementShortName">hash_out_enable</obj_property>
-      <obj_property name="ObjectShortName">hash_out_enable</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/avg_discount_reduce_stage/reduce_cntrl/accumulator/hash_out_data">
-      <obj_property name="ElementShortName">hash_out_data[319:0]</obj_property>
-      <obj_property name="ObjectShortName">hash_out_data[319:0]</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/avg_discount_reduce_stage/reduce_cntrl/accumulator/hash_key_out_data">
-      <obj_property name="ElementShortName">hash_key_out_data[15:0]</obj_property>
-      <obj_property name="ObjectShortName">hash_key_out_data[15:0]</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/avg_discount_reduce_stage/reduce_cntrl/accumulator/hash_count_data">
-      <obj_property name="ElementShortName">hash_count_data[63:0]</obj_property>
-      <obj_property name="ObjectShortName">hash_count_data[63:0]</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/avg_discount_reduce_stage/reduce_cntrl/accumulator/hash_len_data">
-      <obj_property name="ElementShortName">hash_len_data[15:0]</obj_property>
-      <obj_property name="ObjectShortName">hash_len_data[15:0]</obj_property>
-   </wvobject>
    <wvobject fp_name="divider44153" type="divider">
       <obj_property name="label">OUT DATA</obj_property>
       <obj_property name="DisplayName">label</obj_property>
@@ -22106,6 +21989,42 @@
       <obj_property name="label">HASH_OUT_DATA</obj_property>
       <obj_property name="DisplayName">label</obj_property>
       <obj_property name="BkColor">#FFFFFF</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/avg_discount_reduce_stage/reduce_cntrl/accumulator/hash_out_valid">
+      <obj_property name="ElementShortName">hash_out_valid</obj_property>
+      <obj_property name="ObjectShortName">hash_out_valid</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/avg_discount_reduce_stage/reduce_cntrl/accumulator/hash_out_last">
+      <obj_property name="ElementShortName">hash_out_last</obj_property>
+      <obj_property name="ObjectShortName">hash_out_last</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/avg_discount_reduce_stage/reduce_cntrl/accumulator/hash_out_ready">
+      <obj_property name="ElementShortName">hash_out_ready</obj_property>
+      <obj_property name="ObjectShortName">hash_out_ready</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/avg_discount_reduce_stage/reduce_cntrl/accumulator/hash_out_enable">
+      <obj_property name="ElementShortName">hash_out_enable</obj_property>
+      <obj_property name="ObjectShortName">hash_out_enable</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/avg_discount_reduce_stage/reduce_cntrl/accumulator/hash_out_data">
+      <obj_property name="ElementShortName">hash_out_data[319:0]</obj_property>
+      <obj_property name="ObjectShortName">hash_out_data[319:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/avg_discount_reduce_stage/reduce_cntrl/accumulator/hash_out_enable_s">
+      <obj_property name="ElementShortName">hash_out_enable_s</obj_property>
+      <obj_property name="ObjectShortName">hash_out_enable_s</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/avg_discount_reduce_stage/reduce_cntrl/accumulator/hash_key_out_data">
+      <obj_property name="ElementShortName">hash_key_out_data[15:0]</obj_property>
+      <obj_property name="ObjectShortName">hash_key_out_data[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/avg_discount_reduce_stage/reduce_cntrl/accumulator/hash_count_data">
+      <obj_property name="ElementShortName">hash_count_data[63:0]</obj_property>
+      <obj_property name="ObjectShortName">hash_count_data[63:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/avg_discount_reduce_stage/reduce_cntrl/accumulator/hash_len_data">
+      <obj_property name="ElementShortName">hash_len_data[15:0]</obj_property>
+      <obj_property name="ObjectShortName">hash_len_data[15:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/tb/card/fpga/CL/FLETCHER_TOP_INST/PriceSummary_Mantle_inst/PriceSummary_Nucleus_inst/PriceSummary_inst/processing_unit_0/avg_discount_reduce_stage/reduce_cntrl/accumulator/hash_out_data_s">
       <obj_property name="ElementShortName">hash_out_data_s[383:0]</obj_property>

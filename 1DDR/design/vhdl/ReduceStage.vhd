@@ -231,7 +231,7 @@ begin
 
   cntrl_out_slice : StreamBuffer
   generic map(
-    MIN_DEPTH  => 0,
+    MIN_DEPTH  => 2,
     DATA_WIDTH => (NUM_SUMS + 1) * 64 + 16 + 1
   )
   port map(

@@ -1128,6 +1128,13 @@ begin
   len_linestatus_o_valid  <= linestatus_o_chars_valid;
   len_returnflag_o_valid  <= returnflag_o_chars_valid;
 
+  --avg_disc_last           <= out_data_last_s;
+  --avg_qty_last            <= out_data_last_s;
+  --avg_price_last          <= out_data_last_s;
+  --sum_disc_price_last     <= out_data_last_s;
+  --sum_charge_last         <= out_data_last_s;
+  --sum_base_price_last     <= out_data_last_s;
+  --sum_qty_last            <= out_data_last_s;
   --Number output streams
   --sum_qty_ready           <= l_sum_qty_ready;
   --l_sum_qty_dvalid        <= '1';
@@ -1159,11 +1166,10 @@ begin
     out_last   => sum_qty_last,
     out_data   => l_sum_qty
   );
-
   --sum_base_price_ready    <= l_sum_base_price_ready;
   --l_sum_base_price_dvalid <= '1';
-  l_sum_base_price_last  <= sum_base_price_last;
-  l_sum_base_price_valid <= sum_base_price_valid_s;
+  l_sum_base_price_last   <= sum_base_price_last;
+  l_sum_base_price_valid  <= sum_base_price_valid_s;
   --l_sum_base_price        <= sum_base_price_data;
   sum_base_price_converter : TypeConverter
   generic map(
@@ -1193,9 +1199,8 @@ begin
 
   --sum_disc_price_ready    <= l_sum_disc_price_ready;
   --l_sum_disc_price_dvalid <= '1';
-  --l_sum_disc_price_last   <= out_data_last_s;
-  l_sum_disc_price_last  <= sum_disc_price_last;
-  l_sum_disc_price_valid <= sum_disc_price_valid_s;
+  l_sum_disc_price_last   <= sum_disc_price_last;
+  l_sum_disc_price_valid  <= sum_disc_price_valid_s;
   --l_sum_disc_price        <= sum_disc_price_data;
   sum_disc_price_converter : TypeConverter
   generic map(
@@ -1225,8 +1230,8 @@ begin
 
   --sum_charge_ready        <= l_sum_charge_ready;
   --l_sum_charge_dvalid     <= '1';
-  l_sum_charge_last  <= sum_charge_last;
-  l_sum_charge_valid <= sum_charge_valid_s;
+  l_sum_charge_last       <= sum_charge_last;
+  l_sum_charge_valid      <= sum_charge_valid_s;
   --l_sum_charge            <= sum_charge_data;
   sum_charge_converter : TypeConverter
   generic map(
@@ -1256,8 +1261,8 @@ begin
 
   --avg_qty_ready           <= l_avg_qty_ready;
   --l_avg_qty_dvalid        <= '1';
-  l_avg_qty_last  <= avg_qty_last;
-  l_avg_qty_valid <= avg_qty_valid_s;
+  l_avg_qty_last          <= avg_qty_last;
+  l_avg_qty_valid         <= avg_qty_valid_s;
   --l_avg_qty               <= avg_qty_data;
   avg_qty_converter : TypeConverter
   generic map(
@@ -1285,10 +1290,10 @@ begin
     out_data   => l_avg_qty
   );
 
-  l_avg_price_valid <= avg_price_valid_s;
   --avg_price_ready         <= l_avg_price_ready;
   --l_avg_price_dvalid      <= '1';
-  l_avg_price_last  <= avg_price_last;
+  l_avg_price_last        <= avg_price_last;
+  l_avg_price_valid       <= avg_price_valid_s;
   --l_avg_price             <= avg_price_data;
   avg_price_converter : TypeConverter
   generic map(
@@ -1318,8 +1323,8 @@ begin
 
   --l_avg_disc_valid        <= avg_disc_valid;
   --avg_disc_ready          <= l_avg_disc_ready;
-  l_avg_disc_last  <= avg_disc_last;
-  l_avg_disc_valid <= avg_disc_valid_s;
+  l_avg_disc_last         <= avg_disc_last;
+  l_avg_disc_valid        <= avg_disc_valid_s;
   --l_avg_disc              <= avg_disc_data;
   avg_disc_converter : TypeConverter
   generic map(
