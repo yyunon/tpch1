@@ -98,13 +98,16 @@ architecture Behavioral of ReduceStage is
   signal cntrl_out_slice_in_count_data : std_logic_vector(DATA_WIDTH - 1 downto 0);
   signal cntrl_out_slice_in_key_data   : std_logic_vector(15 downto 0);
 
+  signal count_fixed_pt                : sfixed(FIXED_LEFT_INDEX downto FIXED_RIGHT_INDEX) := to_sfixed(1, FIXED_LEFT_INDEX, FIXED_RIGHT_INDEX);
   -- avg. count and agg. output
+  signal out_valid_s1                  : std_logic;
   signal out_valid_s                   : std_logic;
   signal out_ready_s                   : std_logic := '0';
   signal out_last_s                    : std_logic;
   signal key_out_data_s                : std_logic_vector(15 downto 0);
   signal count_out_data_s              : std_logic_vector(DATA_WIDTH - 1 downto 0);
-  constant ZERO                        : std_logic_vector(DATA_WIDTH - 1 downto 0) := (others => '0');
+  constant ZERO                        : sfixed(FIXED_LEFT_INDEX downto FIXED_RIGHT_INDEX) := to_sfixed(0, FIXED_LEFT_INDEX, FIXED_RIGHT_INDEX);
+  --constant ZERO                        : std_logic_vector(DATA_WIDTH - 1 downto 0)         := (others => '0');
   signal out_data_s                    : std_logic_vector(NUM_SUMS * DATA_WIDTH - 1 downto 0);
   signal avg_out_data_s                : std_logic_vector(NUM_AVGS * DATA_WIDTH - 1 downto 0);
 
@@ -195,6 +198,24 @@ begin
     out_data  => op_s_in_data
 
   );
+  --dly : StreamBuffer
+  --generic map(
+  --  DATA_WIDTH => NUM_KEYS * 8 + NUM_SUMS * 64 + 1,
+  --  MIN_DEPTH      => 4
+  --)
+  --port map(
+  --  clk       => clk,
+  --  reset     => reset,
+
+  --  in_valid  => dly_in_valid,
+  --  in_ready  => dly_in_ready,
+  --  in_data   => dly_in_data,
+
+  --  out_valid => op_s_in_valid,
+  --  out_ready => op_s_in_ready,
+  --  out_data  => op_s_in_data
+
+  --);
   key_in_data_s <= op_s_in_data(NUM_KEYS * 8 - 1 downto 0);
 
   operator : SumOp
@@ -252,48 +273,55 @@ begin
     out_data(63 downto 0)                                       => count_out_data_s
   );
 
-  out_ready_s <= out_ready;
-  out_valid   <= out_valid_s;
-  out_last    <= out_last_s;
-  out_data    <= key_out_data_s & out_data_s & avg_out_data_s & count_out_data_s;
+  --out_ready_s <= out_ready;
+  --out_valid   <= out_valid_s;
+  --out_last    <= out_last_s;
+  --out_data <= key_out_data_s & out_data_s & avg_out_data_s & count_out_data_s;
   --count_out_data <= count_out_data_s;
 
-  avg_proc :
-  process (out_valid_s, out_data_s, count_out_data_s) is
-    variable temp_buffer_1             : sfixed(FIXED_LEFT_INDEX downto FIXED_RIGHT_INDEX);
-    variable temp_buffer_quantity      : sfixed(FIXED_LEFT_INDEX downto FIXED_RIGHT_INDEX);
-    variable temp_buffer_extendedprice : sfixed(FIXED_LEFT_INDEX downto FIXED_RIGHT_INDEX);
-    variable temp_buffer_discount      : sfixed(FIXED_LEFT_INDEX downto FIXED_RIGHT_INDEX);
-    variable temp_buffer_2             : sfixed(FIXED_LEFT_INDEX downto FIXED_RIGHT_INDEX) := to_sfixed(1, FIXED_LEFT_INDEX, FIXED_RIGHT_INDEX);
-    variable divide_out_quantity       : sfixed(FIXED_LEFT_INDEX - FIXED_RIGHT_INDEX downto FIXED_RIGHT_INDEX - FIXED_LEFT_INDEX - 1);
-    variable divide_out_extendedprice  : sfixed(FIXED_LEFT_INDEX - FIXED_RIGHT_INDEX downto FIXED_RIGHT_INDEX - FIXED_LEFT_INDEX - 1);
-    variable divide_out_discount       : sfixed(FIXED_LEFT_INDEX - FIXED_RIGHT_INDEX downto FIXED_RIGHT_INDEX - FIXED_LEFT_INDEX - 1);
-    variable avg_vec                   : std_logic_vector(NUM_AVGS * DATA_WIDTH - 1 downto 0);
-    variable count_var                 : integer;
-  begin
-    if out_valid_s = '1' and (count_out_data_s /= ZERO) then
-      count_var                 := to_integer(unsigned(count_out_data_s));
-      temp_buffer_quantity      := to_sfixed(out_data_s(191 downto 128), temp_buffer_1'high, temp_buffer_1'low);
-      temp_buffer_extendedprice := to_sfixed(out_data_s(127 downto 64), temp_buffer_1'high, temp_buffer_1'low);
-      temp_buffer_discount      := to_sfixed(out_data_s(63 downto 0), temp_buffer_1'high, temp_buffer_1'low);
-      temp_buffer_2             := to_sfixed(count_var, temp_buffer_2'high, temp_buffer_2'low);
-      if count_var /= 0 then
-        divide_out_quantity      := temp_buffer_quantity / temp_buffer_2;
-        divide_out_extendedprice := temp_buffer_extendedprice / temp_buffer_2;
-        divide_out_discount      := temp_buffer_discount / temp_buffer_2;
-        avg_vec(191 downto 128)  := to_slv(resize(arg => divide_out_quantity, left_index => FIXED_LEFT_INDEX, right_index => FIXED_RIGHT_INDEX, round_style => fixed_round_style, overflow_style => fixed_overflow_style));
-        avg_vec(127 downto 64)   := to_slv(resize(arg => divide_out_extendedprice, left_index => FIXED_LEFT_INDEX, right_index => FIXED_RIGHT_INDEX, round_style => fixed_round_style, overflow_style => fixed_overflow_style));
-        avg_vec(63 downto 0)     := to_slv(resize(arg => divide_out_discount, left_index => FIXED_LEFT_INDEX, right_index => FIXED_RIGHT_INDEX, round_style => fixed_round_style, overflow_style => fixed_overflow_style));
-      else
-        avg_vec(191 downto 128) := to_slv(temp_buffer_quantity);
-        avg_vec(127 downto 64)  := to_slv(temp_buffer_extendedprice);
-        avg_vec(63 downto 0)    := to_slv(temp_buffer_discount);
-      end if;
-      avg_out_data_s <= avg_vec;
-    else
-      avg_out_data_s <= (others => '0');
-    end if;
+  avg_out_slice : StreamBuffer
+  generic map(
+    MIN_DEPTH  => 2,
+    DATA_WIDTH => (NUM_AVGS + NUM_SUMS + 1) * 64 + 16 + 1
+  )
+  port map(
+    clk                                                                                  => clk,
+    reset                                                                                => reset,
+    in_valid                                                                             => out_valid_s,
+    in_ready                                                                             => out_ready_s,
+    in_data((NUM_SUMS + NUM_AVGS) * 64 + 16 + 64)                                        => out_last_s,
+    in_data((NUM_SUMS + NUM_AVGS) * 64 + 15 + 64 downto (NUM_SUMS + NUM_AVGS) * 64 + 64) => key_out_data_s,
+    in_data((NUM_SUMS + NUM_AVGS) * 64 + 63 downto NUM_AVGS * 64 + 64)                   => out_data_s,
+    in_data(NUM_AVGS * 64 + 63 downto 64)                                                => avg_out_data_s,
+    in_data(63 downto 0)                                                                 => count_out_data_s,
 
-  end process;
+    out_valid                                                                            => out_valid,
+    out_ready                                                                            => out_ready,
+    out_data((NUM_SUMS + NUM_AVGS + 1) * 64 + 16)                                        => out_last,
+    out_data((NUM_SUMS + NUM_AVGS + 1) * 64 + 15 downto 0)                               => out_data
+  );
+
+  count_fixed_pt <= to_sfixed(to_integer(unsigned(count_out_data_s)), count_fixed_pt'high, count_fixed_pt'low);
+  avg_circuit :
+  for i in 0 to NUM_AVGS - 1 generate
+    avg_proc :
+    process (out_valid_s, out_data_s((i + 1) * 64 - 1 downto i * 64), count_fixed_pt) is
+      variable temp_buffer   : sfixed(FIXED_LEFT_INDEX downto FIXED_RIGHT_INDEX);
+      variable temp_buffer_2 : sfixed(FIXED_LEFT_INDEX downto FIXED_RIGHT_INDEX) := to_sfixed(1, FIXED_LEFT_INDEX, FIXED_RIGHT_INDEX);
+      variable divide_out    : sfixed(FIXED_LEFT_INDEX - FIXED_RIGHT_INDEX + 1 downto FIXED_RIGHT_INDEX - FIXED_LEFT_INDEX);
+      variable avg_vec       : std_logic_vector(DATA_WIDTH - 1 downto 0);
+    begin
+      temp_buffer := to_sfixed(out_data_s((i + 1) * 64 - 1 downto i * 64), temp_buffer'high, temp_buffer'low);
+      --avg_vec     := to_slv(temp_buffer);
+      avg_out_data_s((i + 1) * 64 - 1 downto i * 64) <= (others => '0');
+      if out_valid_s = '1' and (count_fixed_pt /= ZERO) then
+        --divide_out := temp_buffer / count_fixed_pt;
+        divide_out := divide(l => temp_buffer, r => count_fixed_pt, round_style => fixed_round_style, guard_bits => fixed_guard_bits);
+        avg_vec    := to_slv(resize(arg => divide_out, left_index => FIXED_LEFT_INDEX, right_index => FIXED_RIGHT_INDEX, round_style => fixed_round_style, overflow_style => fixed_overflow_style));
+        avg_out_data_s((i + 1) * 64 - 1 downto i * 64) <= avg_vec;
+      end if;
+
+    end process;
+  end generate;
 
 end Behavioral;

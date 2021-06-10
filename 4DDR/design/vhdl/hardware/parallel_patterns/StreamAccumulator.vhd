@@ -278,7 +278,7 @@ begin
   -- Output data vector is always the accumulator register.
   hash_data_s <= hash_out_data_s((NUM_LANES + 1) * DATA_WIDTH - 1 downto 64) when hash_out_enable = '1' else
     (others => '0'); -- Read port always enabled.
-  hash_count_data_s <= std_logic_vector(unsigned(hash_out_data_s(63 downto 0)) + 1) when hash_out_enable = '1' else
+  hash_count_data_s <= std_logic_vector(unsigned(hash_out_data_s(63 downto 0))) when hash_out_enable = '1' else
     (others => '0'); -- First 64 bits for count data..
 
 end Behavioral;
