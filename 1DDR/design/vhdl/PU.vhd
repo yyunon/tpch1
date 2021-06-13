@@ -247,37 +247,37 @@ architecture Behavioral of PU is
 
   -- Constants
   -- Merger inout buffers 
-  constant SUM_CHARGE_MERGER_IN_DEPTH        : integer                       := 2;
-  constant SUM_CHARGE_MERGER_OUT_DEPTH       : integer                       := 2;
+  constant SUM_CHARGE_MERGER_IN_DEPTH        : integer                       := 16;
+  constant SUM_CHARGE_MERGER_OUT_DEPTH       : integer                       := 16;
 
-  constant SUM_DISC_MERGER_IN_DEPTH          : integer                       := 2;
-  constant SUM_DISC_MERGER_OUT_DEPTH         : integer                       := 2;
+  constant SUM_DISC_MERGER_IN_DEPTH          : integer                       := 16;
+  constant SUM_DISC_MERGER_OUT_DEPTH         : integer                       := 16;
 
   -- Converter inout buffers 
   constant EXTENDEDPRICE_CONVERTER_IN_DEPTH  : integer                       := 2;
-  constant EXTENDEDPRICE_CONVERTER_OUT_DEPTH : integer                       := 8;
+  constant EXTENDEDPRICE_CONVERTER_OUT_DEPTH : integer                       := 16;
   constant DISCOUNT_CONVERTER_IN_DEPTH       : integer                       := 2;
-  constant DISCOUNT_CONVERTER_OUT_DEPTH      : integer                       := 8;
+  constant DISCOUNT_CONVERTER_OUT_DEPTH      : integer                       := 16;
   constant QUANTITY_CONVERTER_IN_DEPTH       : integer                       := 2;
-  constant QUANTITY_CONVERTER_OUT_DEPTH      : integer                       := 8;
+  constant QUANTITY_CONVERTER_OUT_DEPTH      : integer                       := 16;
   constant TAX_CONVERTER_IN_DEPTH            : integer                       := 2;
-  constant TAX_CONVERTER_OUT_DEPTH           : integer                       := 8;
+  constant TAX_CONVERTER_OUT_DEPTH           : integer                       := 16;
 
   constant output_converter_type             : string                        := "xilinx";
-  constant SUM_QTY_CONVERTER_IN_DEPTH        : integer                       := 2;
-  constant SUM_QTY_CONVERTER_OUT_DEPTH       : integer                       := 2;
-  constant SUM_BASE_CONVERTER_IN_DEPTH       : integer                       := 2;
-  constant SUM_BASE_CONVERTER_OUT_DEPTH      : integer                       := 2;
-  constant SUM_DISC_CONVERTER_IN_DEPTH       : integer                       := 2;
-  constant SUM_DISC_CONVERTER_OUT_DEPTH      : integer                       := 2;
-  constant SUM_CHARGE_CONVERTER_IN_DEPTH     : integer                       := 2;
-  constant SUM_CHARGE_CONVERTER_OUT_DEPTH    : integer                       := 2;
-  constant AVG_QTY_CONVERTER_IN_DEPTH        : integer                       := 2;
-  constant AVG_QTY_CONVERTER_OUT_DEPTH       : integer                       := 2;
-  constant AVG_PRICE_CONVERTER_IN_DEPTH      : integer                       := 2;
-  constant AVG_PRICE_CONVERTER_OUT_DEPTH     : integer                       := 2;
-  constant AVG_DISC_CONVERTER_IN_DEPTH       : integer                       := 2;
-  constant AVG_DISC_CONVERTER_OUT_DEPTH      : integer                       := 2;
+  constant SUM_QTY_CONVERTER_IN_DEPTH        : integer                       := 8;
+  constant SUM_QTY_CONVERTER_OUT_DEPTH       : integer                       := 8;
+  constant SUM_BASE_CONVERTER_IN_DEPTH       : integer                       := 8;
+  constant SUM_BASE_CONVERTER_OUT_DEPTH      : integer                       := 8;
+  constant SUM_DISC_CONVERTER_IN_DEPTH       : integer                       := 8;
+  constant SUM_DISC_CONVERTER_OUT_DEPTH      : integer                       := 8;
+  constant SUM_CHARGE_CONVERTER_IN_DEPTH     : integer                       := 8;
+  constant SUM_CHARGE_CONVERTER_OUT_DEPTH    : integer                       := 8;
+  constant AVG_QTY_CONVERTER_IN_DEPTH        : integer                       := 8;
+  constant AVG_QTY_CONVERTER_OUT_DEPTH       : integer                       := 8;
+  constant AVG_PRICE_CONVERTER_IN_DEPTH      : integer                       := 8;
+  constant AVG_PRICE_CONVERTER_OUT_DEPTH     : integer                       := 8;
+  constant AVG_DISC_CONVERTER_IN_DEPTH       : integer                       := 8;
+  constant AVG_DISC_CONVERTER_OUT_DEPTH      : integer                       := 8;
   --------------------------------------------------------------------------
   -- Filter in out buffers2
   constant COMPARE_FILTER_IN_DEPTH           : integer                       := 2; --DATE
@@ -1063,7 +1063,7 @@ begin
   --Reduce output slice
   reduce_out_slice : StreamBuffer
   generic map(
-    MIN_DEPTH  => 2,
+    MIN_DEPTH  => 0,
     DATA_WIDTH => 16 + 9 * 64 + 1 -- last bit
   )
   port map(
