@@ -57,7 +57,7 @@ architecture Behavioral of TypeConverter is
     );
   end component;
   --
-  component floating_point_0
+  component floating_point_0_2
     port (
       aclk                 : in std_logic;
       s_axis_a_tvalid      : in std_logic;
@@ -156,7 +156,7 @@ begin
 
   xilinx_converterfpfx :
   if CONVERTER_TYPE = "Float2Fix" and CONVERTER_IP = "xilinx" generate
-    data_converter : floating_point_0
+    data_converter : floating_point_0_2
     port map(
       aclk                   => clk,
       s_axis_a_tvalid        => ops_valid,
