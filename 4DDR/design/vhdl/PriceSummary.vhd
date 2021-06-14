@@ -301,7 +301,7 @@ architecture Implementation of PriceSummary is
   constant DATA_WIDTH            : integer := 64;
   constant LEN_WIDTH             : integer := 8;
   constant EPC                   : integer := 8;
-  constant FIXED_LEFT_INDEX      : integer := 31;
+  constant FIXED_LEFT_INDEX      : integer := 45;
   constant FIXED_RIGHT_INDEX     : integer := FIXED_LEFT_INDEX - (DATA_WIDTH - 1);
 
   constant SYNC_IN_BUFFER_DEPTH  : integer := 0;

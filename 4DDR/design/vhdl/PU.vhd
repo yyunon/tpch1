@@ -264,20 +264,20 @@ architecture Behavioral of PU is
   constant TAX_CONVERTER_OUT_DEPTH           : integer                       := 8;
 
   constant output_converter_type             : string                        := "xilinx";
-  constant SUM_QTY_CONVERTER_IN_DEPTH        : integer                       := 2;
-  constant SUM_QTY_CONVERTER_OUT_DEPTH       : integer                       := 2;
-  constant SUM_BASE_CONVERTER_IN_DEPTH       : integer                       := 2;
-  constant SUM_BASE_CONVERTER_OUT_DEPTH      : integer                       := 2;
-  constant SUM_DISC_CONVERTER_IN_DEPTH       : integer                       := 2;
-  constant SUM_DISC_CONVERTER_OUT_DEPTH      : integer                       := 2;
-  constant SUM_CHARGE_CONVERTER_IN_DEPTH     : integer                       := 2;
-  constant SUM_CHARGE_CONVERTER_OUT_DEPTH    : integer                       := 2;
-  constant AVG_QTY_CONVERTER_IN_DEPTH        : integer                       := 2;
-  constant AVG_QTY_CONVERTER_OUT_DEPTH       : integer                       := 2;
-  constant AVG_PRICE_CONVERTER_IN_DEPTH      : integer                       := 2;
-  constant AVG_PRICE_CONVERTER_OUT_DEPTH     : integer                       := 2;
-  constant AVG_DISC_CONVERTER_IN_DEPTH       : integer                       := 2;
-  constant AVG_DISC_CONVERTER_OUT_DEPTH      : integer                       := 2;
+  constant SUM_QTY_CONVERTER_IN_DEPTH        : integer                       := 8;
+  constant SUM_QTY_CONVERTER_OUT_DEPTH       : integer                       := 8;
+  constant SUM_BASE_CONVERTER_IN_DEPTH       : integer                       := 8;
+  constant SUM_BASE_CONVERTER_OUT_DEPTH      : integer                       := 8;
+  constant SUM_DISC_CONVERTER_IN_DEPTH       : integer                       := 8;
+  constant SUM_DISC_CONVERTER_OUT_DEPTH      : integer                       := 8;
+  constant SUM_CHARGE_CONVERTER_IN_DEPTH     : integer                       := 8;
+  constant SUM_CHARGE_CONVERTER_OUT_DEPTH    : integer                       := 8;
+  constant AVG_QTY_CONVERTER_IN_DEPTH        : integer                       := 8;
+  constant AVG_QTY_CONVERTER_OUT_DEPTH       : integer                       := 8;
+  constant AVG_PRICE_CONVERTER_IN_DEPTH      : integer                       := 8;
+  constant AVG_PRICE_CONVERTER_OUT_DEPTH     : integer                       := 8;
+  constant AVG_DISC_CONVERTER_IN_DEPTH       : integer                       := 8;
+  constant AVG_DISC_CONVERTER_OUT_DEPTH      : integer                       := 8;
   --------------------------------------------------------------------------
   -- Filter in out buffers2
   constant COMPARE_FILTER_IN_DEPTH           : integer                       := 2; --DATE
