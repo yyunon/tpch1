@@ -70,7 +70,9 @@ entity MergeOp is
 end MergeOp;
 
 architecture Behavioral of MergeOp is
-  constant ONE                 : sfixed(fixed_left_index downto fixed_right_index) := to_sfixed(1, FIXED_LEFT_INDEX, FIXED_RIGHT_INDEX);
+  constant RESIZE_OFFSET_L     : integer             := 40;
+  constant RESIZE_OFFSET_R     : integer             := - 10;
+  constant ONE                 : sfixed(2 downto -1) := to_sfixed(1, 2, -1);
 
   signal out_s_valid           : std_logic;
   signal out_s_ready           : std_logic;
@@ -211,17 +213,20 @@ begin
     op2_data <= buf_data_s(2 * DATA_WIDTH - 1 downto DATA_WIDTH);
     mult_process :
     process (op1_data, op2_data, ops_valid, out_s_ready) is
-      variable temp_buffer_1 : sfixed(fixed_left_index downto fixed_right_index);
+      variable temp_buffer_1 : sfixed(fixed_left_index - RESIZE_OFFSET_L downto fixed_right_index - RESIZE_OFFSET_R);
       variable temp_buffer_2 : sfixed(fixed_left_index downto fixed_right_index);
-      variable temp_buffer_3 : sfixed(fixed_left_index + 1 downto fixed_right_index);
+      variable temp_buffer_d : sfixed(fixed_left_index downto fixed_right_index);
+
+      variable temp_buffer_3 : sfixed(fixed_left_index - RESIZE_OFFSET_L + 1 downto fixed_right_index - RESIZE_OFFSET_R);
       variable temp_buffer_4 : sfixed(fixed_left_index downto fixed_right_index);
-      variable temp_res      : sfixed(2 * fixed_left_index + 1 downto 2 * fixed_right_index);
+      variable temp_res      : sfixed(2 * fixed_left_index - RESIZE_OFFSET_L + 2 downto 2 * fixed_right_index - RESIZE_OFFSET_R);
     begin
-      temp_buffer_1 := to_sfixed(op1_data, temp_buffer_1'high, temp_buffer_1'low);
+      temp_buffer_d := to_sfixed(op1_data, temp_buffer_d'high, temp_buffer_d'low);
+      temp_buffer_1 := resize(arg => temp_buffer_d, left_index => fixed_left_index - RESIZE_OFFSET_L, right_index => fixed_right_index - RESIZE_OFFSET_R, round_style => fixed_round_style, overflow_style => fixed_overflow_style);
       temp_buffer_2 := to_sfixed(op2_data, temp_buffer_2'high, temp_buffer_2'low);
       temp_buffer_3 := ONE - temp_buffer_1;
-      temp_buffer_4 := resize(arg => temp_buffer_3, left_index => fixed_left_index, right_index => fixed_right_index, round_style => fixed_round_style, overflow_style => fixed_overflow_style);
-      temp_res      := temp_buffer_4 * temp_buffer_2;
+      --temp_buffer_4 := resize(arg => temp_buffer_3, left_index => fixed_left_index, right_index => fixed_right_index, round_style => fixed_round_style, overflow_style => fixed_overflow_style);
+      temp_res      := temp_buffer_2 * temp_buffer_3;
       ops_data <= to_slv(resize(arg => temp_res, left_index => fixed_left_index, right_index => fixed_right_index, round_style => fixed_round_style, overflow_style => fixed_overflow_style));
     end process;
     ops_dvalid  <= buf_dvalid_s;
@@ -256,29 +261,37 @@ begin
 
     mult_process :
     process (op1_data, op2_data, op3_data, ops_valid, out_s_ready) is
-      variable temp_buffer_1 : sfixed(fixed_left_index downto fixed_right_index);
-      variable temp_buffer_2 : sfixed(fixed_left_index downto fixed_right_index);
+      variable temp_buffer_t : sfixed(fixed_left_index downto fixed_right_index );
+      variable temp_buffer_d : sfixed(fixed_left_index downto fixed_right_index );
+      variable temp_buffer_1 : sfixed(fixed_left_index - RESIZE_OFFSET_L downto fixed_right_index - RESIZE_OFFSET_R);
+      variable temp_buffer_2 : sfixed(fixed_left_index - RESIZE_OFFSET_L downto fixed_right_index - RESIZE_OFFSET_R);
       variable temp_buffer_3 : sfixed(fixed_left_index downto fixed_right_index);
-      variable temp_buffer_4 : sfixed(fixed_left_index + 1 downto fixed_right_index);
-      variable temp_buffer_5 : sfixed(fixed_left_index + 1 downto fixed_right_index);
+
+      variable temp_buffer_4 : sfixed(fixed_left_index - RESIZE_OFFSET_L + 1 downto fixed_right_index - RESIZE_OFFSET_R);
+      variable temp_buffer_5 : sfixed(fixed_left_index - RESIZE_OFFSET_L + 1 downto fixed_right_index - RESIZE_OFFSET_R);
       variable temp_buffer_6 : sfixed(fixed_left_index downto fixed_right_index);
       variable temp_buffer_7 : sfixed(fixed_left_index downto fixed_right_index);
+
       variable temp_res      : sfixed(2 * fixed_left_index + 1 downto 2 * fixed_right_index);
       variable temp_res_2    : sfixed(2 * fixed_left_index + 1 downto 2 * fixed_right_index);
-      variable temp_res_3    : sfixed(2 * fixed_left_index + 1 downto 2 * fixed_right_index);
+      variable temp_res_3    : sfixed(3 * fixed_left_index - 2 * RESIZE_OFFSET_L + 4 downto 3 * fixed_right_index - 2 * RESIZE_OFFSET_R);
       variable temp_res_4    : sfixed(fixed_left_index downto fixed_right_index);
-      variable temp_res_5    : sfixed(2 * fixed_left_index + 1 downto 2 * fixed_right_index);
+      variable temp_res_5    : sfixed(2 * fixed_left_index - RESIZE_OFFSET_L + 2 downto 2 * fixed_right_index - RESIZE_OFFSET_R);
     begin
-      temp_buffer_1 := to_sfixed(op1_data, temp_buffer_1'high, temp_buffer_1'low);
-      temp_buffer_2 := to_sfixed(op2_data, temp_buffer_2'high, temp_buffer_2'low);
+      temp_buffer_t := to_sfixed(op1_data, temp_buffer_t'high, temp_buffer_t'low);
+      temp_buffer_1 := resize(arg => temp_buffer_t, left_index => fixed_left_index - RESIZE_OFFSET_L, right_index => fixed_right_index - RESIZE_OFFSET_R, round_style => fixed_round_style, overflow_style => fixed_overflow_style);
+      temp_buffer_d := to_sfixed(op2_data, temp_buffer_d'high, temp_buffer_d'low);
+      temp_buffer_2 := resize(arg => temp_buffer_d, left_index => fixed_left_index - RESIZE_OFFSET_L, right_index => fixed_right_index - RESIZE_OFFSET_R, round_style => fixed_round_style, overflow_style => fixed_overflow_style);
+
       temp_buffer_3 := to_sfixed(op3_data, temp_buffer_3'high, temp_buffer_3'low);
+
       temp_buffer_4 := ONE + temp_buffer_1;
       temp_buffer_5 := ONE - temp_buffer_2;
-      temp_buffer_6 := resize(arg => temp_buffer_4, left_index => fixed_left_index, right_index => fixed_right_index, round_style => fixed_round_style, overflow_style => fixed_overflow_style);
-      temp_buffer_7 := resize(arg => temp_buffer_5, left_index => fixed_left_index, right_index => fixed_right_index, round_style => fixed_round_style, overflow_style => fixed_overflow_style);
-      temp_res_5    := temp_buffer_6 * temp_buffer_7;
-      temp_res_4    := resize(arg => temp_res_5, left_index => fixed_left_index, right_index => fixed_right_index, round_style => fixed_round_style, overflow_style => fixed_overflow_style);
-      temp_res_3    := temp_buffer_3 * temp_res_4;
+      --temp_buffer_6 := resize(arg => temp_buffer_4, left_index => fixed_left_index, right_index => fixed_right_index, round_style => fixed_round_style, overflow_style => fixed_overflow_style);
+      --temp_buffer_7 := resize(arg => temp_buffer_5, left_index => fixed_left_index, right_index => fixed_right_index, round_style => fixed_round_style, overflow_style => fixed_overflow_style);
+      temp_res_5    := temp_buffer_3 * temp_buffer_4;
+      --temp_res_4    := resize(arg => temp_res_5, left_index => fixed_left_index, right_index => fixed_right_index, round_style => fixed_round_style, overflow_style => fixed_overflow_style);
+      temp_res_3    := temp_buffer_5 * temp_res_5;
       ops_data <= to_slv(resize(arg => temp_res_3, left_index => fixed_left_index, right_index => fixed_right_index, round_style => fixed_round_style, overflow_style => fixed_overflow_style));
     end process;
     ops_dvalid  <= buf_dvalid_s;

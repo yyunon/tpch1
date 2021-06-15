@@ -301,7 +301,7 @@ begin
     out_data((NUM_SUMS + NUM_AVGS + 1) * 64 + 15 downto 0)                               => out_data
   );
 
-  count_fixed_pt <= to_sfixed(to_integer(unsigned(count_out_data_s)), count_fixed_pt'high, count_fixed_pt'low);
+  count_fixed_pt <= to_sfixed(to_integer(signed(count_out_data_s)), count_fixed_pt'high, count_fixed_pt'low);
   avg_circuit :
   for i in 0 to NUM_AVGS - 1 generate
     avg_proc :
@@ -315,8 +315,8 @@ begin
       --avg_vec     := to_slv(temp_buffer);
       avg_out_data_s((i + 1) * 64 - 1 downto i * 64) <= (others => '0');
       if out_valid_s = '1' and (count_fixed_pt /= ZERO) then
-        --divide_out := temp_buffer / count_fixed_pt;
-        divide_out := divide(l => temp_buffer, r => count_fixed_pt, round_style => fixed_round_style, guard_bits => fixed_guard_bits);
+        divide_out := temp_buffer / count_fixed_pt;
+        --divide_out := divide(l => temp_buffer, r => count_fixed_pt, round_style => fixed_round_style, guard_bits => fixed_guard_bits);
         avg_vec    := to_slv(resize(arg => divide_out, left_index => FIXED_LEFT_INDEX, right_index => FIXED_RIGHT_INDEX, round_style => fixed_round_style, overflow_style => fixed_overflow_style));
         avg_out_data_s((i + 1) * 64 - 1 downto i * 64) <= avg_vec;
       end if;
