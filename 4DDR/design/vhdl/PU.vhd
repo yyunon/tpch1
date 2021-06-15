@@ -1063,7 +1063,7 @@ begin
   --Reduce output slice
   reduce_out_slice : StreamBuffer
   generic map(
-    MIN_DEPTH  => 2,
+    MIN_DEPTH  => 0,
     DATA_WIDTH => 16 + 9 * 64 + 1 -- last bit
   )
   port map(
