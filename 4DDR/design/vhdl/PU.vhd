@@ -410,6 +410,11 @@ architecture Behavioral of PU is
   signal avg_qty_dvalid                      : std_logic;
   signal avg_qty_data                        : std_logic_vector(63 downto 0);
 
+  signal avg_qty_ready_out                   : std_logic := '0';
+  signal avg_qty_valid_out                   : std_logic := '0';
+  signal avg_qty_last_out                    : std_logic;
+  signal avg_qty_data_out                    : std_logic_vector(63 downto 0);
+
   signal sum_base_price_ready                : std_logic := '0';
   signal sum_base_price_valid                : std_logic := '0';
   signal sum_base_price_valid_s              : std_logic := '0';
@@ -423,6 +428,11 @@ architecture Behavioral of PU is
   signal avg_price_last                      : std_logic;
   signal avg_price_dvalid                    : std_logic;
   signal avg_price_data                      : std_logic_vector(63 downto 0);
+
+  signal avg_price_ready_out                 : std_logic := '0';
+  signal avg_price_valid_out                 : std_logic := '0';
+  signal avg_price_last_out                  : std_logic;
+  signal avg_price_data_out                  : std_logic_vector(63 downto 0);
 
   signal sum_disc_price_ready                : std_logic := '0';
   signal sum_disc_price_valid                : std_logic := '0';
@@ -444,6 +454,11 @@ architecture Behavioral of PU is
   signal avg_disc_last                       : std_logic;
   signal avg_disc_dvalid                     : std_logic;
   signal avg_disc_data                       : std_logic_vector(63 downto 0);
+
+  signal avg_disc_ready_out                  : std_logic := '0';
+  signal avg_disc_valid_out                  : std_logic := '0';
+  signal avg_disc_last_out                   : std_logic;
+  signal avg_disc_data_out                   : std_logic_vector(63 downto 0);
 
   signal count_order_ready                   : std_logic := '0';
   signal count_order_valid                   : std_logic := '0';
@@ -1261,6 +1276,72 @@ begin
     out_data   => l_sum_charge
   );
 
+  disc_avg_op : AvgOp
+  generic map(
+    FIXED_LEFT_INDEX  => FIXED_LEFT_INDEX,
+    FIXED_RIGHT_INDEX => FIXED_RIGHT_INDEX,
+    DATA_WIDTH        => DATA_WIDTH
+  )
+  port map(
+    clk       => clk,
+    reset     => reset,
+
+    ops_valid => avg_disc_valid,
+    ops_ready => avg_disc_ready,
+    ops_last  => out_data_last_s,
+
+    op1_data  => avg_disc_data,
+    op2_data  => count_order_data,
+
+    out_valid => avg_disc_valid_out,
+    out_ready => avg_disc_ready_out,
+    out_last  => avg_disc_last_out,
+    out_data  => avg_disc_data_out
+  );
+  price_avg_op : AvgOp
+  generic map(
+    FIXED_LEFT_INDEX  => FIXED_LEFT_INDEX,
+    FIXED_RIGHT_INDEX => FIXED_RIGHT_INDEX,
+    DATA_WIDTH        => DATA_WIDTH
+  )
+  port map(
+    clk       => clk,
+    reset     => reset,
+
+    ops_valid => avg_price_valid,
+    ops_ready => avg_price_ready,
+    ops_last  => out_data_last_s,
+
+    op1_data  => avg_price_data,
+    op2_data  => count_order_data,
+
+    out_valid => avg_price_valid_out,
+    out_ready => avg_price_ready_out,
+    out_last  => avg_price_last_out,
+    out_data  => avg_price_data_out
+  );
+  qty_avg_op : AvgOp
+  generic map(
+    FIXED_LEFT_INDEX  => FIXED_LEFT_INDEX,
+    FIXED_RIGHT_INDEX => FIXED_RIGHT_INDEX,
+    DATA_WIDTH        => DATA_WIDTH
+  )
+  port map(
+    clk       => clk,
+    reset     => reset,
+
+    ops_valid => avg_qty_valid,
+    ops_ready => avg_qty_ready,
+    ops_last  => out_data_last_s,
+
+    op1_data  => avg_qty_data,
+    op2_data  => count_order_data,
+
+    out_valid => avg_qty_valid_out,
+    out_ready => avg_qty_ready_out,
+    out_last  => avg_qty_last_out,
+    out_data  => avg_qty_data_out
+  );
   --avg_qty_ready           <= l_avg_qty_ready;
   --l_avg_qty_dvalid        <= '1';
   l_avg_qty_last  <= avg_qty_last;
@@ -1280,11 +1361,11 @@ begin
     clk        => clk,
     enable     => enable_interface,
     reset      => reset,
-    in_valid   => avg_qty_valid,
+    in_valid   => avg_qty_valid_out,
     in_dvalid  => '1',
-    in_ready   => avg_qty_ready,
-    in_last    => out_data_last_s,
-    in_data    => avg_qty_data,
+    in_ready   => avg_qty_ready_out,
+    in_last    => avg_qty_last_out,
+    in_data    => avg_qty_data_out,
     out_valid  => avg_qty_valid_s,
     out_dvalid => l_avg_qty_dvalid,
     out_ready  => l_avg_qty_ready,
@@ -1311,11 +1392,11 @@ begin
     clk        => clk,
     enable     => enable_interface,
     reset      => reset,
-    in_valid   => avg_price_valid,
+    in_valid   => avg_price_valid_out,
     in_dvalid  => '1',
-    in_ready   => avg_price_ready,
-    in_last    => out_data_last_s,
-    in_data    => avg_price_data,
+    in_ready   => avg_price_ready_out,
+    in_last    => avg_price_last_out,
+    in_data    => avg_price_data_out,
     out_valid  => avg_price_valid_s,
     out_dvalid => l_avg_price_dvalid,
     out_ready  => l_avg_price_ready,
@@ -1342,11 +1423,11 @@ begin
     clk        => clk,
     enable     => enable_interface,
     reset      => reset,
-    in_valid   => avg_disc_valid,
+    in_valid   => avg_disc_valid_out,
     in_dvalid  => '1',
-    in_ready   => avg_disc_ready,
-    in_last    => out_data_last_s,
-    in_data    => avg_disc_data,
+    in_ready   => avg_disc_ready_out,
+    in_last    => avg_disc_last_out,
+    in_data    => avg_disc_data_out,
     out_valid  => avg_disc_valid_s,
     out_dvalid => l_avg_disc_dvalid,
     out_ready  => l_avg_disc_ready,

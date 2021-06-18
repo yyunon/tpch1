@@ -3,14 +3,14 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
---library ieee_proposed;
---use ieee_proposed.fixed_pkg.all;
+library ieee_proposed;
+use ieee_proposed.fixed_pkg.all;
 
 library work;
 use work.ParallelPatterns_pkg.all;
 use work.Stream_pkg.all;
 use work.Tpch_pkg.all;
-use work.fixed_generic_pkg_mod.all;
+--use work.fixed_generic_pkg_mod.all;
 
 entity ReduceStage is
   generic (
@@ -252,7 +252,7 @@ begin
 
   cntrl_out_slice : StreamBuffer
   generic map(
-    MIN_DEPTH  => 0,
+    MIN_DEPTH  => 2,
     DATA_WIDTH => (NUM_SUMS + 1) * 64 + 16 + 1
   )
   port map(
@@ -281,7 +281,7 @@ begin
 
   avg_out_slice : StreamBuffer
   generic map(
-    MIN_DEPTH  => 0,
+    MIN_DEPTH  => 2,
     DATA_WIDTH => (NUM_AVGS + NUM_SUMS + 1) * 64 + 16 + 1
   )
   port map(
@@ -301,6 +301,7 @@ begin
     out_data((NUM_SUMS + NUM_AVGS + 1) * 64 + 15 downto 0)                               => out_data
   );
 
+  -- Remove this later
   count_fixed_pt <= to_sfixed(to_integer(signed(count_out_data_s)), count_fixed_pt'high, count_fixed_pt'low);
   avg_circuit :
   for i in 0 to NUM_AVGS - 1 generate
@@ -313,13 +314,13 @@ begin
     begin
       temp_buffer := to_sfixed(out_data_s((i + 1) * 64 - 1 downto i * 64), temp_buffer'high, temp_buffer'low);
       --avg_vec     := to_slv(temp_buffer);
-      avg_out_data_s((i + 1) * 64 - 1 downto i * 64) <= (others => '0');
-      if out_valid_s = '1' and (count_fixed_pt /= ZERO) then
-        divide_out := temp_buffer / count_fixed_pt;
-        --divide_out := divide(l => temp_buffer, r => count_fixed_pt, round_style => fixed_round_style, guard_bits => fixed_guard_bits);
-        avg_vec    := to_slv(resize(arg => divide_out, left_index => FIXED_LEFT_INDEX, right_index => FIXED_RIGHT_INDEX, round_style => fixed_round_style, overflow_style => fixed_overflow_style));
-        avg_out_data_s((i + 1) * 64 - 1 downto i * 64) <= avg_vec;
-      end if;
+      --avg_out_data_s((i + 1) * 64 - 1 downto i * 64) <= (others => '0');
+      --if out_valid_s = '1' and (count_fixed_pt /= ZERO) then
+      --  divide_out := temp_buffer / count_fixed_pt;
+      --divide_out := divide(l => temp_buffer, r => count_fixed_pt, round_style => fixed_round_style, guard_bits => fixed_guard_bits);
+      avg_vec     := to_slv(resize(arg => temp_buffer, left_index => FIXED_LEFT_INDEX, right_index => FIXED_RIGHT_INDEX, round_style => fixed_round_style, overflow_style => fixed_overflow_style));
+      avg_out_data_s((i + 1) * 64 - 1 downto i * 64) <= avg_vec;
+      --end if;
 
     end process;
   end generate;
