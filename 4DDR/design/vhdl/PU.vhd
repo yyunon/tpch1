@@ -466,6 +466,14 @@ architecture Behavioral of PU is
   signal count_order_dvalid                  : std_logic;
   signal count_order_data                    : std_logic_vector(63 downto 0);
 
+  signal count_order_avg_op_valid_1          : std_logic := '0';
+  signal count_order_avg_op_valid_2          : std_logic := '0';
+  signal count_order_avg_op_valid_3          : std_logic := '0';
+
+  signal count_order_avg_op_ready_1          : std_logic := '0';
+  signal count_order_avg_op_ready_2          : std_logic := '0';
+  signal count_order_avg_op_ready_3          : std_logic := '0';
+
   signal linestatus_o_chars_ready            : std_logic := '0';
   signal linestatus_o_chars_valid            : std_logic := '0';
   signal linestatus_o_chars_last             : std_logic;
@@ -1096,35 +1104,41 @@ begin
   sync_output_streams : StreamSync
   generic map(
     NUM_INPUTS  => 1,
-    NUM_OUTPUTS => 10
+    NUM_OUTPUTS => 13
   )
   port map(
-    clk          => clk,
-    reset        => reset,
-    in_valid(0)  => out_data_valid_s,
-    in_ready(0)  => out_data_ready_s,
+    clk           => clk,
+    reset         => reset,
+    in_valid(0)   => out_data_valid_s,
+    in_ready(0)   => out_data_ready_s,
 
-    out_valid(0) => sum_qty_valid,
-    out_valid(1) => avg_qty_valid,
-    out_valid(2) => sum_base_price_valid,
-    out_valid(3) => avg_price_valid,
-    out_valid(4) => sum_disc_price_valid,
-    out_valid(5) => sum_charge_valid,
-    out_valid(6) => avg_disc_valid,
-    out_valid(7) => count_order_valid,
-    out_valid(8) => returnflag_o_chars_valid,
-    out_valid(9) => linestatus_o_chars_valid,
+    out_valid(0)  => sum_qty_valid,
+    out_valid(1)  => avg_qty_valid,
+    out_valid(2)  => sum_base_price_valid,
+    out_valid(3)  => avg_price_valid,
+    out_valid(4)  => sum_disc_price_valid,
+    out_valid(5)  => sum_charge_valid,
+    out_valid(6)  => avg_disc_valid,
+    out_valid(7)  => count_order_valid,
+    out_valid(8)  => returnflag_o_chars_valid,
+    out_valid(9)  => linestatus_o_chars_valid,
+    out_valid(10) => count_order_avg_op_valid_1,
+    out_valid(11) => count_order_avg_op_valid_2,
+    out_valid(12) => count_order_avg_op_valid_3,
 
-    out_ready(0) => sum_qty_ready,
-    out_ready(1) => avg_qty_ready,
-    out_ready(2) => sum_base_price_ready,
-    out_ready(3) => avg_price_ready,
-    out_ready(4) => sum_disc_price_ready,
-    out_ready(5) => sum_charge_ready,
-    out_ready(6) => avg_disc_ready,
-    out_ready(7) => count_order_ready,
-    out_ready(8) => returnflag_o_chars_ready,
-    out_ready(9) => linestatus_o_chars_ready
+    out_ready(0)  => sum_qty_ready,
+    out_ready(1)  => avg_qty_ready,
+    out_ready(2)  => sum_base_price_ready,
+    out_ready(3)  => avg_price_ready,
+    out_ready(4)  => sum_disc_price_ready,
+    out_ready(5)  => sum_charge_ready,
+    out_ready(6)  => avg_disc_ready,
+    out_ready(7)  => count_order_ready,
+    out_ready(8)  => returnflag_o_chars_ready,
+    out_ready(9)  => linestatus_o_chars_ready,
+    out_ready(10) => count_order_avg_op_ready_1,
+    out_ready(11) => count_order_avg_op_ready_2,
+    out_ready(12) => count_order_avg_op_ready_3
   );
   -- Well, this does not look good!!
   --reduce_in_data  <= disc_price_reduce_in_data & charge_reduce_in_data & conv_l_quantity & conv_l_extendedprice & conv_l_discount;
@@ -1283,20 +1297,25 @@ begin
     DATA_WIDTH        => DATA_WIDTH
   )
   port map(
-    clk       => clk,
-    reset     => reset,
+    clk        => clk,
+    reset      => reset,
 
-    ops_valid => avg_disc_valid,
-    ops_ready => avg_disc_ready,
-    ops_last  => out_data_last_s,
+    op1_valid  => avg_disc_valid,
+    op1_ready  => avg_disc_ready,
+    op1_dvalid => '1',
+    op1_data   => avg_disc_data,
+    op1_last   => out_data_last_s,
 
-    op1_data  => avg_disc_data,
-    op2_data  => count_order_data,
+    op2_valid  => count_order_avg_op_valid_1,
+    op2_ready  => count_order_avg_op_ready_1,
+    op2_dvalid => '1',
+    op2_data   => count_order_data,
+    op2_last   => out_data_last_s,
 
-    out_valid => avg_disc_valid_out,
-    out_ready => avg_disc_ready_out,
-    out_last  => avg_disc_last_out,
-    out_data  => avg_disc_data_out
+    out_valid  => avg_disc_valid_out,
+    out_ready  => avg_disc_ready_out,
+    out_last   => avg_disc_last_out,
+    out_data   => avg_disc_data_out
   );
   price_avg_op : AvgOp
   generic map(
@@ -1305,20 +1324,25 @@ begin
     DATA_WIDTH        => DATA_WIDTH
   )
   port map(
-    clk       => clk,
-    reset     => reset,
+    clk        => clk,
+    reset      => reset,
 
-    ops_valid => avg_price_valid,
-    ops_ready => avg_price_ready,
-    ops_last  => out_data_last_s,
+    op1_valid  => avg_price_valid,
+    op1_ready  => avg_price_ready,
+    op1_dvalid => '1',
+    op1_data   => avg_price_data,
+    op1_last   => out_data_last_s,
 
-    op1_data  => avg_price_data,
-    op2_data  => count_order_data,
+    op2_valid  => count_order_avg_op_valid_2,
+    op2_ready  => count_order_avg_op_ready_2,
+    op2_dvalid => '1',
+    op2_data   => count_order_data,
+    op2_last   => out_data_last_s,
 
-    out_valid => avg_price_valid_out,
-    out_ready => avg_price_ready_out,
-    out_last  => avg_price_last_out,
-    out_data  => avg_price_data_out
+    out_valid  => avg_price_valid_out,
+    out_ready  => avg_price_ready_out,
+    out_last   => avg_price_last_out,
+    out_data   => avg_price_data_out
   );
   qty_avg_op : AvgOp
   generic map(
@@ -1327,20 +1351,25 @@ begin
     DATA_WIDTH        => DATA_WIDTH
   )
   port map(
-    clk       => clk,
-    reset     => reset,
+    clk        => clk,
+    reset      => reset,
 
-    ops_valid => avg_qty_valid,
-    ops_ready => avg_qty_ready,
-    ops_last  => out_data_last_s,
+    op1_valid  => avg_qty_valid,
+    op1_ready  => avg_qty_ready,
+    op1_dvalid => '1',
+    op1_data   => avg_qty_data,
+    op1_last   => out_data_last_s,
 
-    op1_data  => avg_qty_data,
-    op2_data  => count_order_data,
+    op2_valid  => count_order_avg_op_valid_3,
+    op2_ready  => count_order_avg_op_ready_3,
+    op2_dvalid => '1',
+    op2_data   => count_order_data,
+    op2_last   => out_data_last_s,
 
-    out_valid => avg_qty_valid_out,
-    out_ready => avg_qty_ready_out,
-    out_last  => avg_qty_last_out,
-    out_data  => avg_qty_data_out
+    out_valid  => avg_qty_valid_out,
+    out_ready  => avg_qty_ready_out,
+    out_last   => avg_qty_last_out,
+    out_data   => avg_qty_data_out
   );
   --avg_qty_ready           <= l_avg_qty_ready;
   --l_avg_qty_dvalid        <= '1';
@@ -1524,7 +1553,7 @@ begin
   result                    <= (63 downto 16 => '0') & std_logic_vector(unsigned(num_entries) - 1);
   l_returnflag_o_chars_last <= returnflag_key_stream_out_last;
   l_linestatus_o_chars_last <= linestatus_key_stream_out_last;
-  key_stream_out_last       <= sum_qty_last and sum_base_price_last and sum_disc_price_last and sum_charge_last and avg_qty_last and avg_price_last and avg_disc_last and sum_qty_valid_s and sum_base_price_valid_s and sum_disc_price_valid_s and sum_charge_valid_s and avg_qty_valid_s and avg_price_valid_s and avg_disc_valid_s;
+  key_stream_out_last       <= avg_qty_last and avg_qty_valid_s;--sum_qty_last and sum_base_price_last and sum_disc_price_last and sum_charge_last and avg_qty_last and avg_price_last and avg_disc_last; --and sum_qty_valid_s and sum_base_price_valid_s and sum_disc_price_valid_s and sum_charge_valid_s and avg_qty_valid_s and avg_price_valid_s and avg_disc_valid_s;
   -- Holds the interfacing logic.
   chars_proc :
   process (rs,

@@ -338,24 +338,29 @@ package Tpch_pkg is
     port (
 
       -- Rising-edge sensitive clock.
-      clk       : in std_logic;
+      clk        : in std_logic;
 
       -- Active-high synchronous reset.
-      reset     : in std_logic;
+      reset      : in std_logic;
 
       --OP1 Input stream.
-      ops_valid : in std_logic;
-      ops_ready : out std_logic;
-      ops_last  : in std_logic;
+      op1_valid  : in std_logic;
+      op1_ready  : out std_logic;
+      op1_dvalid : in std_logic;
+      op1_data   : in std_logic_vector(DATA_WIDTH - 1 downto 0);
+      op1_last   : in std_logic;
 
-      op1_data  : in std_logic_vector(DATA_WIDTH - 1 downto 0);
-      op2_data  : in std_logic_vector(DATA_WIDTH - 1 downto 0);
+      op2_valid  : in std_logic;
+      op2_ready  : out std_logic;
+      op2_dvalid : in std_logic;
+      op2_data   : in std_logic_vector(DATA_WIDTH - 1 downto 0);
+      op2_last   : in std_logic;
 
       -- Output stream.
-      out_valid : out std_logic;
-      out_ready : in std_logic;
-      out_last  : out std_logic;
-      out_data  : out std_logic_vector(DATA_WIDTH - 1 downto 0)
+      out_valid  : out std_logic;
+      out_ready  : in std_logic;
+      out_last   : out std_logic;
+      out_data   : out std_logic_vector(DATA_WIDTH - 1 downto 0)
     );
   end component;
 
